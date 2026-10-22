@@ -1,0 +1,1508 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#10203a">
+<title>万龙,启动! · 行程攻略</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E%E2%9D%84%EF%B8%8F%3C/text%3E%3C/svg%3E">
+<style>
+:root{
+  --bg:#eef2f7; --card:#ffffff; --ink:#20242e; --muted:#7b8394; --line:#e4e9f1;
+  --accent:#1889e0; --accent-deep:#0f6bb8; --accent-weak:#eaf4fd;
+  --ok:#1a9e5c; --ok-bg:#e7f6ed;
+  --warn:#c07807; --warn-bg:#fff4e0;
+  --radius:14px;
+  --shadow:0 1px 2px rgba(16,24,40,.04), 0 4px 10px rgba(16,24,40,.05), 0 12px 28px rgba(16,24,40,.08);
+  --chip-h:52px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{-webkit-text-size-adjust:100%;scroll-behavior:smooth}
+body{
+  background:var(--bg); color:var(--ink);
+  font-family:"Segoe UI","Microsoft YaHei","PingFang SC","Helvetica Neue",Arial,sans-serif;
+  font-size:15px; line-height:1.65;
+}
+a{color:var(--accent-deep)}
+.wrap{max-width:1080px;margin:0 auto;padding:0 14px}
+section{padding:18px 0 2px;scroll-margin-top:calc(var(--chip-h) + 8px)}
+[id^="transport-"]{scroll-margin-top:calc(var(--chip-h) + 10px)}   /* 交通卡锚点:跳转时避开吸顶导航 */
+
+/* ---------- 顶部横幅 ---------- */
+.hero{
+  color:#fff; padding:30px 16px 26px; position:relative; overflow:hidden;
+  background:
+    radial-gradient(circle at 18% 30%, rgba(255,255,255,.14) 0 2px, transparent 3px),
+    radial-gradient(circle at 62% 68%, rgba(255,255,255,.10) 0 1.5px, transparent 2.5px),
+    radial-gradient(circle at 84% 22%, rgba(255,255,255,.16) 0 2px, transparent 3px),
+    radial-gradient(ellipse 600px 300px at 85% -40%, rgba(110,180,255,.30), transparent),
+    radial-gradient(ellipse 400px 240px at 0% 130%, rgba(120,220,235,.12), transparent),
+    linear-gradient(135deg,#0e1c31 0%,#173257 55%,#1e4a7d 100%);
+}
+.hero .tag{display:inline-block;font-size:12px;letter-spacing:2px;color:#9fc3ea;border:1px solid rgba(160,200,240,.35);
+  border-radius:999px;padding:3px 12px;margin-bottom:10px;white-space:pre-wrap}
+.hero h1{font-size:30px;font-weight:800;letter-spacing:6px;white-space:pre-line}
+.hero .sub{margin-top:8px;font-size:14px;color:#b9cbe4;white-space:pre-line}
+.hero .sub b{color:#fff;font-weight:600}
+/* 行程要点胶囊:欢迎页内、倒计时下方(紧贴行程总览) */
+.hero-chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:16px}
+.hero-chips:not(:has(span)){display:none;margin:0}   /* 没有胶囊时整块隐藏,不留空白 */
+.hchip-row{display:contents}   /* 移动端:行包装透明,胶囊自然流式换行 */
+.hero-chips span{font-size:12.5px;background:rgba(255,255,255,.10);border:1px solid rgba(255,255,255,.16);
+  border-radius:999px;padding:4px 12px;color:#dce9f8}
+/* ---------- 倒计时(极简排版) ---------- */
+.countdown{margin:20px auto 0;display:block;width:fit-content;max-width:100%;padding:17px 24px 16px;
+  background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.10);border-radius:14px}
+.cd-head{font-size:12px;font-weight:500;letter-spacing:2.5px;color:rgba(196,214,236,.62);
+  margin-bottom:12px}
+.cd-units{display:flex;align-items:stretch}
+.cd-unit{display:flex;flex-direction:column;align-items:center;padding:0 18px}
+.cd-unit:first-child{padding-left:0}
+.cd-unit:last-child{padding-right:0}
+.cd-unit + .cd-unit{border-left:1px solid rgba(255,255,255,.10)}
+.cd-unit b{font-size:30px;font-weight:400;line-height:1;color:#fff;
+  font-variant-numeric:tabular-nums;letter-spacing:.5px}
+.cd-unit span{font-size:11px;letter-spacing:2px;color:rgba(196,214,236,.55);margin-top:8px}
+.cd-msg{font-size:16px;font-weight:500;color:#dce9f8}
+
+/* ---------- 吸顶导航 ---------- */
+#chipbar{
+  position:sticky; top:0; z-index:50;
+  background:rgba(255,255,255,.92); backdrop-filter:blur(10px); -webkit-backdrop-filter:blur(10px);
+  border-bottom:1px solid var(--line);
+  padding:8px 0 8px 14px;
+  padding-top:max(8px, env(safe-area-inset-top));
+  padding-left:max(14px, env(safe-area-inset-left));
+}
+.chips{display:flex;gap:8px;overflow-x:auto;scrollbar-width:none;-webkit-overflow-scrolling:touch}
+.chips::-webkit-scrollbar{display:none}
+.chips a{
+  flex:none;font-size:13.5px;color:#4a5468;text-decoration:none;background:#f1f4f9;
+  border:1px solid var(--line);border-radius:999px;padding:7px 15px;min-height:36px;
+  display:inline-flex;align-items:center;transition:all .15s;
+}
+.chips a.on{background:var(--accent);border-color:var(--accent);color:#fff;font-weight:600}
+
+/* ---------- 分区标题 ---------- */
+.sec-head{display:flex;align-items:center;gap:12px;margin-bottom:10px}
+.sec-ico{width:42px;height:42px;flex:none;border-radius:12px;background:var(--accent-weak);
+  display:flex;align-items:center;justify-content:center;font-size:21px}
+.sec-txt{display:flex;align-items:baseline;flex-wrap:wrap;gap:6px 10px;min-width:0}
+.sec-head h2{font-size:20px;font-weight:800}
+.sec-sub{display:none}   /* 暂隐藏板块副标题,页面更简洁;想恢复改回 display:block 即可 */
+
+/* ---------- 通用卡片 / 徽章 ---------- */
+.card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);
+  box-shadow:var(--shadow);padding:16px}
+.grid{display:grid;grid-template-columns:1fr;gap:12px}
+@media(min-width:680px){.grid.g2{grid-template-columns:1fr 1fr}.grid.g3{grid-template-columns:repeat(3,1fr)}}
+@media(min-width:920px){.grid.g4{grid-template-columns:repeat(4,1fr)}}
+.badge{display:inline-flex;align-items:center;font-size:11.5px;font-weight:600;border-radius:999px;
+  padding:2.5px 10px;white-space:nowrap;line-height:1.5}
+.b-ok{background:var(--ok-bg);color:var(--ok)}
+.b-todo{background:var(--warn-bg);color:var(--warn)}
+.b-tbd{background:#eef1f6;color:#6d7688}
+.b-ref{background:var(--accent-weak);color:var(--accent-deep)}
+.tip{font-size:12.5px;color:var(--muted);margin-top:10px;padding-top:10px;border-top:1px dashed var(--line);white-space:pre-line}
+
+/* ---------- 总览 ---------- */
+.ov-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.ov-grid.w3{grid-template-columns:repeat(3,1fr)}   /* 天气三卡一行 */
+@media(min-width:680px){.ov-grid{grid-template-columns:repeat(3,1fr)}}
+.ov-card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px;box-shadow:var(--shadow)}
+.ov-card .k{font-size:12px;color:var(--muted);display:flex;align-items:center;gap:2px}
+.ov-card .v{font-size:14.5px;font-weight:700;margin-top:4px}
+.ov-card .v small{display:block;font-size:12px;font-weight:400;color:var(--muted);margin-top:2px;white-space:pre-line}
+.ov-go{margin-left:auto;font-size:15px;line-height:1;color:var(--muted)}
+.ov-link{display:block;text-decoration:none;color:inherit;-webkit-tap-highlight-color:transparent}
+.ov-link:active{background:#f4f8fc;border-color:#cfe4f6}
+
+/* ---------- 每日行程(时间轴) ---------- */
+.day{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);
+  margin-bottom:14px;overflow:hidden}
+.day summary{list-style:none;cursor:pointer;display:flex;align-items:center;gap:12px;padding:14px 16px}
+.day summary::-webkit-details-marker{display:none}
+.day .d-num{width:44px;height:44px;flex:none;border-radius:12px;display:flex;flex-direction:column;
+  align-items:center;justify-content:center;background:linear-gradient(135deg,#173257,#1e4a7d);color:#fff}
+.day .d-num b{font-size:15px;line-height:1.1}
+.day .d-num span{font-size:10px;opacity:.8}
+.day .d-title{flex:1;min-width:0}
+.day .d-title b{font-size:16px}
+.day .d-title .d-sub{font-size:12px;color:var(--muted)}
+.day .d-arrow{width:30px;height:30px;flex:none;border-radius:50%;background:#f1f4f9;
+  display:flex;align-items:center;justify-content:center;transition:transform .2s,background .2s}
+.day .d-arrow svg{width:16px;height:16px;stroke:#4a5468;fill:none;stroke-width:2.4;
+  stroke-linecap:round;stroke-linejoin:round}
+.day[open] .d-arrow{transform:rotate(180deg);background:#e8eef7}
+.day .d-body{padding:2px 16px 14px}
+.trow{display:flex;gap:12px;padding:11px 0;border-top:1px dashed var(--line);align-items:flex-start}
+.trow:first-child{border-top:none}
+.ttime{min-width:56px;font-weight:800;font-size:14px;color:var(--accent-deep);font-variant-numeric:tabular-nums;padding-top:1px}
+.tbody{flex:1;min-width:0}
+.twhat{font-size:14.5px;font-weight:600}
+.tnote{font-size:12.5px;color:var(--muted);margin-top:2px}
+.trow .badge{margin-top:3px}
+
+/* ---------- 航班 ---------- */
+.fcard{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);
+  padding:16px;margin-bottom:14px}
+.fhead{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:14px;position:relative}
+.fdir{font-size:13px;font-weight:700;color:var(--accent-deep);background:var(--accent-weak);
+  border-radius:999px;padding:3px 12px}
+.fno{font-size:16px;font-weight:800;letter-spacing:.5px}
+.fairline{font-size:11.5px;font-weight:600;color:#7d8aa0;background:#f1f4f9;border-radius:999px;
+  padding:2px 10px;letter-spacing:.3px}
+.fdate{font-size:13px;color:var(--muted)}
+.fhead .badge{position:absolute;top:1px;right:4px}
+.fcard.has-zoom .fhead .badge{right:42px}
+.froute{display:flex;align-items:center;gap:8px;background:#f7fafd;border:1px solid var(--line);
+  border-radius:12px;padding:14px 12px}
+.fport{flex:1;min-width:0;text-align:center}
+.ftime{font-size:26px;font-weight:800;font-variant-numeric:tabular-nums;letter-spacing:1px}
+.fair{font-size:12.5px;color:var(--ink);margin-top:2px}
+.fcode{font-size:11px;color:var(--muted);letter-spacing:2px}
+.fmid{flex:none;text-align:center;padding:0 6px;min-width:64px}
+.fplane{font-size:18px;color:var(--accent)}
+.fdur{font-size:11px;color:var(--muted);margin-top:2px}
+/* 经停/途径站:两行居中,如 苏州北 19:15 / [头像] 上车 */
+.fstop{font-size:11px;font-weight:700;color:var(--accent-deep);margin-top:4px;text-align:center}
+.fstop .fstop-t{white-space:nowrap}
+.fstop em{display:flex;align-items:center;justify-content:center;font-style:normal;font-size:10px;
+  font-weight:600;color:#fff;background:var(--accent);border-radius:999px;padding:1px 8px;
+  margin:4px auto 0;width:fit-content;letter-spacing:.5px}
+.fstop em img{width:21px;height:21px;border-radius:50%;object-fit:cover;
+  border:1.5px solid #fff;box-shadow:0 1px 2px rgba(16,24,40,.22);
+  vertical-align:-5px;margin:-3px 3px -3px 0}   /* 放大但用负边距抵消布局高度,胶囊高度不变,头像微凸出边缘 */
+/* 出发站下方的层叠头像排(乘机人) */
+.fstack{display:flex;justify-content:center;margin-top:7px;padding-left:9px}
+.fstack img,.fstack .fava-tbd{width:25px;height:25px;border-radius:50%;object-fit:cover;
+  border:2px solid var(--card);box-shadow:0 1px 3px rgba(16,24,40,.18)}
+.fstack img + img,.fstack img + .fava-tbd,.fstack .fava-tbd + img,
+.fstack .fava-tbd + .fava-tbd{margin-left:-9px}
+.fstack .fava-tbd{background:#e8eef7;display:flex;align-items:center;justify-content:center;font-size:13px}
+/* 通用成员头像占位(👤)与各容器里的尺寸 */
+.avt{background:#e8eef7;display:inline-flex;align-items:center;justify-content:center;
+  border-radius:50%;font-size:13px}
+/* 分组卡里的头像行(涉及人/住宿人):标签左、头像排右 */
+.avrow{display:inline-flex;align-items:center}
+.avrow .mimg,.avrow .avt{width:26px;height:26px;border-radius:50%;object-fit:cover;
+  border:2px solid var(--card);box-shadow:0 1px 3px rgba(16,24,40,.18)}
+.avrow .mimg + .mimg,.avrow .mimg + .avt,.avrow .avt + .mimg,.avrow .avt + .avt{margin-left:-8px}
+/* 详情弹窗里的头像排 */
+.pstack{display:flex;justify-content:center;align-items:center;flex-wrap:wrap;margin-top:4px}
+.pstack .mimg,.pstack .avt{width:32px;height:32px;border-radius:50%;object-fit:cover;
+  border:2px solid #fff;box-shadow:0 1px 3px rgba(16,24,40,.18)}
+.pstack .mimg + .mimg,.pstack .mimg + .avt,.pstack .avt + .mimg,.pstack .avt + .avt{margin-left:-10px}
+/* 时间轴正文/备注里的行内小头像 */
+.twhat .mimg,.tnote .mimg{width:16px;height:16px;border-radius:50%;object-fit:cover;
+  vertical-align:-3px;margin:0 1px}
+
+/* ---------- 头像悬浮气泡:桌面悬停 / 手机长按约半秒 显示名字 ---------- */
+#avaTip{position:fixed;z-index:200;transform:translate(-50%,calc(-100% - 7px));
+  background:rgba(17,24,39,.92);color:#fff;font-size:12px;font-weight:600;
+  border-radius:999px;padding:4px 11px;pointer-events:none;opacity:0;
+  transition:opacity .15s;white-space:nowrap;max-width:70vw;overflow:hidden;text-overflow:ellipsis}
+#avaTip.show{opacity:1}
+#avaTip::after{content:"";position:absolute;left:50%;top:100%;transform:translateX(-50%);
+  border:5px solid transparent;border-top-color:rgba(17,24,39,.92)}
+.fmeta{display:grid;grid-template-columns:1fr;gap:6px;margin-top:12px;font-size:13.5px}
+/* 宽屏自适应:一条信息占满整行,多条(如备注)才分列 */
+@media(min-width:680px){.fmeta{grid-template-columns:repeat(auto-fit,minmax(0,1fr))}}
+.fmeta div{color:#4a5468}
+.fmeta b{color:var(--ink)}
+
+/* ---------- 人员 ---------- */
+.mgrid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+@media(min-width:680px){.mgrid{grid-template-columns:repeat(3,1fr)}}
+@media(min-width:920px){.mgrid{grid-template-columns:repeat(4,1fr)}}
+.mcard{background:var(--card);border:1px solid var(--line);border-radius:12px;box-shadow:var(--shadow);
+  padding:12px 8px 11px;text-align:center;position:relative}
+.mcard.tbd{border-style:dashed;box-shadow:none;background:#fbfcfe}
+.mava{width:44px;height:44px;margin:0 auto 6px;border-radius:50%;background:var(--accent-weak);
+  display:flex;align-items:center;justify-content:center;font-size:21px;overflow:hidden}
+.mava img{width:100%;height:100%;object-fit:cover;display:block}
+.mcard.tbd .mava{background:#f0f2f7;opacity:.6}
+.mname{font-size:15px;font-weight:800}
+.mline{font-size:12px;color:#4a5468;margin-top:4px;word-break:break-all}
+.mline .wx-ico{width:12px;height:12px;vertical-align:-1.5px;margin-right:2px}
+.mcard .badge{margin-top:7px}
+
+/* ---------- 通用双栏内容卡(住宿/交通/雪具等) ---------- */
+.hcard{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);padding:16px}
+.hcard h3{font-size:16px;font-weight:800;display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.hcard .h-badge{margin-left:auto}   /* 卡级状态徽章推到标题行最右 */
+.hcard .h-avas{margin-left:auto;display:inline-flex;align-items:center}   /* 涉及人头像:标题行右端 */
+.hcard .h-avas .avrow .mimg,.hcard .h-avas .avrow .avt{width:24px;height:24px}
+.hcard .hdate{display:inline-flex;align-items:center;font-size:11.5px;font-weight:600;color:#5b6b83;
+  background:#f1f4f9;border:1px solid var(--line);border-radius:999px;padding:2px 10px;white-space:nowrap}
+.hcard:not(.has-zoom) h3{padding-right:2px}   /* 无放大按钮的卡:标题行不再预留右侧空位,胶囊贴右 */
+.hcard .h-sub{font-size:12.5px;color:var(--muted);margin:4px 0 10px}
+ul.dots{list-style:none}
+ul.dots li{padding:6px 0 6px 22px;position:relative;font-size:14px;border-top:1px dashed var(--line);
+  display:flex;flex-wrap:wrap;align-items:baseline;column-gap:8px}
+ul.dots li:first-child{border-top:none}
+ul.dots li::before{content:"";position:absolute;left:4px;top:13px;width:7px;height:7px;border-radius:50%;
+  background:var(--accent);opacity:.55}
+ul.dots li .li-main{flex:1;min-width:0;white-space:pre-line}
+ul.dots li .badge{margin-left:auto;flex:none}
+ul.dots li .li-note{flex-basis:100%;font-size:12px;color:var(--muted);margin-top:2px;white-space:pre-line}
+ul.dots li{line-height:1.5}
+/* 字段标签行:标签在整行(值+说明)中垂直居中;自适应宽度 + 右对齐值 + 复制按钮 */
+ul.dots li.lab{display:grid;grid-template-columns:auto minmax(0,1fr) auto;column-gap:8px;
+  align-items:center;row-gap:2px}
+ul.dots li.lab .li-lab{grid-row:1 / span 2;align-self:center;font-size:12px;color:#8a94a6;line-height:1.7}
+ul.dots li.lab .li-main{grid-column:2;grid-row:1;font-size:14.5px;font-weight:600;letter-spacing:.2px;
+  display:flex;align-items:center;justify-content:flex-end;text-align:right}   /* 值右对齐;多行值时每行也右对齐 */
+ul.dots li.lab .li-note{grid-column:2;grid-row:2;text-align:right;margin:0}
+ul.dots li.lab .li-cp{margin:0 5px 0 0}
+ul.dots li.lab::before{top:50%;transform:translateY(-50%)}  /* 圆点跟随字段名跨行垂直居中 */
+.li-cp{flex:none;align-self:center;width:22px;height:22px;margin-left:6px;border:none;background:none;
+  color:#a7b1c2;cursor:pointer;border-radius:6px;display:flex;align-items:center;justify-content:center;
+  padding:0;-webkit-tap-highlight-color:transparent}
+.li-cp:active{background:#eef2f8}
+.li-cp svg{width:13px;height:13px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.li-cp.done{color:#1a9e5c}
+/* 成员卡信息行里的复制按钮:行内小图标,随文字排列 */
+.mline .li-cp{display:inline-flex;vertical-align:-5px;margin-left:4px}
+/* ---------- 卡片滑入动效(滚动进入视口时上滑淡入,离开视口后复位、可反复触发) ---------- */
+@media(prefers-reduced-motion:no-preference){
+  .card-anim{opacity:0;transform:translateY(18px)}
+  .card-anim.in{opacity:1;transform:none;
+    transition:opacity .45s ease,transform .45s cubic-bezier(.22,.61,.36,1)}
+}
+/* 备选卡:整体一层蒙版弱化 + 文字调淡,不挡点击 */
+.hcard.is-alt::before{content:"";position:absolute;inset:0;border-radius:var(--radius);
+  background:rgba(100,116,139,.12);pointer-events:none;z-index:1}
+.hcard.is-alt h3,.hcard.is-alt .h-sub,.hcard.is-alt .dots{opacity:.72}
+/* 备选卡的详情弹窗:同样的蒙版 */
+.pop.alt{position:relative}
+.pop.alt::before{content:"";position:absolute;inset:0;border-radius:16px;
+  background:rgba(100,116,139,.12);pointer-events:none;z-index:5}
+.pop.alt .pop-head,.pop.alt .pop-tabs,.pop.alt .pop-body{opacity:.66}   /* 白底大字下 72% 观感不足,微压到 66% 与卡片弱化观感对齐 */
+/* ---------- 默认收起的卡片:只露两行,底部渐变暗示还有内容,箭头点击展开 ---------- */
+.hcard.is-clamp .dots{max-height:72px;overflow:hidden;
+  -webkit-mask-image:linear-gradient(180deg,#000 80%,transparent);
+  mask-image:linear-gradient(180deg,#000 80%,transparent);
+  transition:max-height .38s ease}
+.hcard.is-clamp.open .dots{max-height:none;-webkit-mask-image:none;mask-image:none}
+.clamp-more{display:flex;align-items:center;justify-content:center;width:100%;
+  margin:2px -16px -16px;padding:11px 16px 13px;border:none;border-top:1px dashed var(--line);
+  background:none;color:#8a94a6;cursor:pointer;font-family:inherit;
+  border-radius:0 0 var(--radius) var(--radius);-webkit-tap-highlight-color:transparent}
+.clamp-more:active{color:var(--accent)}
+.clamp-more svg{width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:2;
+  stroke-linecap:round;stroke-linejoin:round;transition:transform .32s ease}
+.hcard.is-clamp.open .clamp-more svg{transform:rotate(180deg)}
+
+/* ---------- 卡内子卡(如房型小卡):点击查看详情弹窗 ---------- */
+ul.dots li.subwrap{display:block;padding:2px 0}
+ul.dots li.subwrap::before{display:none}
+ul.dots li.subwrap.half{display:inline-block;width:calc(50% - 5px);vertical-align:top}
+ul.dots li.subwrap.half + li.subwrap.half{margin-left:10px}
+/* 子卡标题下的分组头像排(| 分隔的组,如两个小房间各 2 人) */
+.r-avas{display:flex;align-items:center;justify-content:center;margin-top:7px}
+.r-avas .avrow .mimg,.r-avas .avrow .avt{width:24px;height:24px}
+.r-avsep{color:#c3cad6;font-size:12px;margin:0 7px}
+.rcard{position:relative;margin:10px 0 2px;background:#f7fafd;border:1px solid var(--line);
+  border-radius:10px;padding:10px 12px;box-shadow:none;cursor:pointer}
+.rcard:active{background:#eef4fb}
+.rcard .r-t{font-size:14.5px;font-weight:800;padding-right:24px}
+.rcard .r-sub{font-size:12px;color:var(--muted);margin-top:2px;padding-right:24px;white-space:pre-line}
+.rcard .r-go{position:absolute;right:11px;top:50%;transform:translateY(-50%);
+  font-size:18px;color:#a7b1c2;line-height:1}
+.rcard.has-zoom .r-go{display:none}   /* 有放大按钮时右上是按钮,不再叠 › 箭头 */
+.rcard:not(.has-zoom):not(:has(.r-jump)) .r-go{display:none}   /* 无放大无跳转的小卡不显示箭头 */
+.rcard .r-tag{font-style:normal;font-size:10.5px;font-weight:700;color:#1a9e5c;background:#e7f6ed;
+  border-radius:999px;padding:2px 8px;margin-left:8px;vertical-align:1px}
+.rcard .tpc{margin-top:7px}
+.rcard .li-note{display:block;font-size:12px;color:var(--muted);margin-top:3px;white-space:pre-line}
+.rcard .zoom-btn{top:6px;right:6px;width:22px;height:22px}
+.rcard .zoom-btn svg{width:11px;height:11px}
+.rcard .r-jump{position:absolute;inset:0;z-index:3;border-radius:10px}   /* 整卡可点的透明跳转层 */
+.rcard .r-link{color:var(--accent-deep)}   /* 可跳转子卡的名称:主题色提示可点击 */
+.rcard > .badge{position:absolute;top:9px;right:10px;z-index:2}   /* 子卡右上角状态徽章,如 待定 */
+.rcard:has(> .badge) .r-go{display:none}   /* 有徽章时右上是徽章,隐藏 › 箭头 */
+.rcard:has(> .badge) .r-t{padding-right:56px}   /* 标题给徽章留位 */
+
+/* ---------- 交通路线卡 ---------- */
+.tcard{padding:16px 16px 8px}
+.tcard h3.troute{font-size:17px;font-weight:800;display:flex;align-items:center;flex-wrap:wrap;
+  margin-bottom:8px;padding-right:36px}
+.troute .rt-arrow{color:var(--accent);margin:0 8px;font-size:15px}
+.trow2{display:flex;align-items:flex-start;gap:12px;padding:12px 0;border-top:1px dashed var(--line);position:relative}
+/* 无图标行(同层选项,如③下的方案二):文字对齐上一行的名称列 */
+.trow2.no-ico{padding-left:52px}
+/* 组头行(如 方案一/方案二):加粗、不缩进,下面跟编号步骤 */
+.trow2.thead2{padding-top:13px}
+.thead2 .tname{font-size:15.5px;font-weight:800}
+/* 方案组包裹盒:组头+步骤整体一个虚线圆角盒,共用段放盒外 */
+.topt{border:1px dashed var(--line);border-radius:12px;padding:0 12px 2px;margin:10px 0 6px;background:#fbfcfe}
+.topt .trow2:first-child{border-top:none;padding-top:11px}
+.topt .trow2:last-child{padding-bottom:13px}
+/* 两案共用段(如 返程 MU5166):独立浅色圆角块,与上方方案组明显区分 */
+.trow2.tshared{border-top:none;margin:9px 0 3px;padding:13px 12px 12px;
+  background:#f8fafd;border:1px solid var(--line);border-radius:12px}
+.tcard h3.troute + .trow2{border-top:none}
+.tico{width:40px;height:40px;flex:none;border-radius:12px;background:var(--accent-weak);
+  display:flex;align-items:center;justify-content:center;font-size:20px}
+.tmain{flex:1;min-width:0}
+/* 首选/备选徽章:绝对定位在行右侧,与方式名同一行(避开顶部虚线的间隔) */
+.trow2 > .badge{position:absolute;right:0;top:13px;margin:0}
+.tname{font-size:15px;font-weight:700;display:flex;align-items:baseline;flex-wrap:wrap;gap:6px}
+.tname .tn{flex-basis:100%}   /* 名称独占一行,时长胶囊固定另起一行,避免挤压截断 */
+.tname .tdur{font-size:12px;font-weight:600;color:var(--accent-deep);background:var(--accent-weak);
+  border-radius:999px;padding:2px 9px;width:fit-content;max-width:100%}
+@media(max-width:380px){   /* 小屏:胶囊缩字号、无图标行缩进减小,尽量单行放下 */
+  .tname .tdur{font-size:11px;padding:2px 7px}
+  .trow2.no-ico{padding-left:44px}
+}
+.tnote{font-size:12.5px;color:var(--muted);margin-top:4px;line-height:1.55;white-space:pre-line}
+/* 交通说明:优势|劣势 标签,双列布局(优势左列/劣势右列) */
+.tpc{display:flex;flex-direction:row;gap:10px;align-items:flex-start;margin-top:5px}
+.tpc-col{flex:1;min-width:0;display:flex;flex-direction:column;gap:4px}
+.tcard .tpc,#gear .tpc{flex-direction:column}   /* 交通卡与雪具卡内的优劣势保持单列 */
+.tpro,.tcon{display:inline-flex;align-items:center;font-size:11.5px;font-weight:600;
+  border-radius:6px;padding:2.5px 9px;line-height:1.5;width:fit-content;max-width:100%}
+.tpro{color:#1f7a4f;background:#e7f5ee}
+.tcon{color:#a35638;background:#faefe9}
+
+/* ---------- 清单(条目双列网格,紧凑行高) ---------- */
+.ckgroup{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);
+  padding:12px 14px;margin-bottom:12px}
+.ckhead{display:flex;align-items:center;gap:8px;font-size:15.5px;font-weight:800;margin-bottom:8px}
+.ckprog{margin-left:auto;font-size:12px;font-weight:600;color:var(--muted);background:#f1f4f9;
+  border-radius:999px;padding:2px 10px;font-variant-numeric:tabular-nums}
+.ckitems{display:grid;grid-template-columns:1fr;gap:6px}
+.ckitem{display:flex;align-items:flex-start;gap:8px;padding:6px 9px;border:1px solid var(--line);
+  border-radius:10px;cursor:pointer;transition:background .15s;-webkit-tap-highlight-color:transparent}
+.ckitem:active{background:#f4f8fc}
+.ckitem input{width:18px;height:18px;flex:none;margin-top:2px;accent-color:var(--accent);cursor:pointer}
+.ckitem span{flex:1;font-size:13.5px;font-weight:600;line-height:1.35}
+.ckitem em{font-style:normal;font-size:11px;color:var(--muted);text-align:right;max-width:45%;line-height:1.35}
+.ckitem.wide{grid-column:1/-1}   /* 带长说明的条目占整行 */
+.ckitem.wide em{max-width:60%}
+.ckitem.done{background:#f6fbf8;border-color:#cdebd9}
+.ckitem.done span{text-decoration:line-through;color:var(--muted);font-weight:400}
+@media(min-width:680px){.ckitems{grid-template-columns:1fr 1fr}}
+.ckbar{height:6px;border-radius:999px;background:#edf1f6;overflow:hidden;margin-top:8px}
+.ckbar i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--accent),#4db1a9);border-radius:999px;transition:width .3s}
+.ck-ops{display:flex;gap:10px;margin-top:6px}
+.btn{font-size:13px;border:1px solid var(--line);background:#fff;color:#4a5468;border-radius:999px;
+  padding:7px 16px;cursor:pointer;min-height:36px}
+.btn:active{background:#f1f4f9}
+
+/* ---------- 页脚 / 返回顶部 ---------- */
+footer{padding:28px 0 calc(34px + env(safe-area-inset-bottom));text-align:center;color:var(--muted);font-size:12.5px}
+footer b{color:#4a5468}
+#totop{position:fixed;right:14px;bottom:calc(18px + env(safe-area-inset-bottom));z-index:60;width:44px;height:44px;
+  border-radius:50%;border:1px solid var(--line);background:rgba(255,255,255,.95);color:var(--accent-deep);
+  font-size:19px;box-shadow:var(--shadow);cursor:pointer;opacity:0;pointer-events:none;transition:opacity .2s;-webkit-tap-highlight-color:transparent}
+#totop.show{opacity:1;pointer-events:auto}
+
+/* ---------- 推荐应用 ---------- */
+.agrid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+@media(min-width:680px){.agrid{grid-template-columns:repeat(3,1fr)}}
+@media(min-width:920px){.agrid{grid-template-columns:repeat(4,1fr)}}
+.acard{background:var(--card);border:1px solid var(--line);border-radius:12px;box-shadow:var(--shadow);
+  padding:13px 10px;text-align:center;display:flex;flex-direction:column;align-items:center}
+.aico{width:44px;height:44px;margin:0 auto 7px;border-radius:12px;background:var(--accent-weak);
+  display:flex;align-items:center;justify-content:center;font-size:22px}
+.aname{font-size:14px;font-weight:800}
+.ausage{font-size:12px;color:#4a5468;margin-top:3px}
+.anote{font-size:11px;color:var(--muted);margin-top:3px;white-space:pre-line}
+.alink{display:inline-block;margin-top:auto;font-size:11.5px;font-weight:600;color:var(--accent-deep);
+  text-decoration:none;border:1px solid #cfe4f6;border-radius:999px;padding:2.5px 11px;background:var(--accent-weak)}
+.acard .ausage:has(+ .alink), .acard .anote:has(+ .alink){margin-bottom:8px}
+.alink:active{background:#ddeefb}
+
+/* ---------- 图片全屏查看(缩放/旋转/拖动) ---------- */
+.blk img{cursor:zoom-in}
+.imgview{position:fixed;inset:0;z-index:120;background:rgba(5,9,16,.98);display:none;
+  overflow:hidden;touch-action:none;-webkit-user-select:none;user-select:none}
+.imgview.open{display:block}
+.imgview img{position:absolute;left:50%;top:50%;max-width:none;max-height:none;
+  transform:translate(-50%,-50%);will-change:transform;touch-action:none;
+  -webkit-user-drag:none;user-select:none}
+.imgview img.anim{transition:transform .28s cubic-bezier(.2,.7,.3,1)}
+.imgview-bar{position:absolute;z-index:2;display:flex;
+  top:calc(14px + env(safe-area-inset-top));right:calc(14px + env(safe-area-inset-right))}
+.imgview-bar button{width:38px;height:38px;border:none;border-radius:50%;cursor:pointer;
+  background:rgba(255,255,255,.14);color:#fff;font-size:19px;line-height:1;
+  display:flex;align-items:center;justify-content:center;backdrop-filter:blur(6px);
+  -webkit-backdrop-filter:blur(6px)}
+.imgview-bar button:active{background:rgba(255,255,255,.28)}
+.imgview-ctrl{position:absolute;left:50%;transform:translateX(-50%);z-index:2;
+  bottom:calc(16px + env(safe-area-inset-bottom));display:flex;align-items:center;
+  background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.14);border-radius:999px;
+  padding:4px;backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px)}
+.imgview-ctrl button{width:40px;height:40px;border:none;background:none;color:#fff;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;border-radius:999px}
+.imgview-ctrl button:active{background:rgba(255,255,255,.16)}
+.imgview-ctrl svg{width:18px;height:18px;stroke:#fff;fill:none;stroke-width:1.9;
+  stroke-linecap:round;stroke-linejoin:round}
+.imgview-ctrl .zbtn{min-width:56px;font-size:13px;font-weight:600;
+  font-variant-numeric:tabular-nums;letter-spacing:.3px}
+
+/* ---------- 数据源入口与弹窗 ---------- */
+.src-wrap{display:flex;justify-content:flex-end}   /* 参考数据源:右下角,紧贴卡片 */
+/* 提示句 + 数据源入口同一行:提示句左、入口右,共用一条虚线 */
+.src-tip-row{display:flex;align-items:baseline;justify-content:space-between;gap:12px;
+  margin-top:10px;padding-top:10px;border-top:1px dashed var(--line)}
+.src-tip-row .tip{margin:0;padding:0;border-top:none}
+.src-tip-row .src-wrap{flex:none}
+.src-entry{display:inline-flex;align-items:center;gap:4px;margin:4px 2px 0;background:none;border:none;
+  font-size:12px;color:var(--muted);cursor:pointer;padding:0;font-family:inherit;
+  -webkit-tap-highlight-color:transparent}
+.src-entry:active{color:var(--accent-deep)}
+.src-mask{position:fixed;inset:0;z-index:80;background:rgba(15,23,42,.45);
+  display:none;align-items:flex-end;justify-content:center}
+.src-mask.open{display:flex}
+.src-modal{background:#fff;width:100%;max-width:560px;max-height:72vh;display:flex;flex-direction:column;
+  border-radius:18px 18px 0 0;box-shadow:0 -8px 40px rgba(16,24,40,.25);
+  padding-bottom:env(safe-area-inset-bottom);animation:srcUp .22s ease-out}
+@media(min-width:680px){
+  .src-mask{align-items:center}
+  .src-modal{border-radius:16px;animation:srcIn .18s ease-out}
+}
+@keyframes srcUp{from{transform:translateY(40px);opacity:0}to{transform:none;opacity:1}}
+@keyframes srcIn{from{transform:scale(.96);opacity:0}to{transform:none;opacity:1}}
+.src-head{display:flex;align-items:center;justify-content:space-between;padding:16px 18px 8px}
+.src-head b{font-size:16px}
+.src-close{width:34px;height:34px;flex:none;border:none;border-radius:50%;background:#f1f4f9;color:#4a5468;
+  font-size:18px;cursor:pointer;line-height:1}
+.src-list{overflow-y:auto;-webkit-overflow-scrolling:touch;padding:6px 14px 12px}
+.src-item{display:block;text-decoration:none;border:1px solid var(--line);border-radius:12px;
+  padding:11px 13px;margin:9px 0}
+.src-item:active{background:#f6fafd}
+.src-name{font-size:14.5px;font-weight:700;color:var(--ink);white-space:pre-line}
+.src-note{display:block;font-size:12px;color:var(--muted);margin-top:2px;font-weight:400;white-space:pre-line}
+.src-url{font-size:11.5px;color:var(--accent-deep);margin-top:4px;word-break:break-all;opacity:.75}
+
+/* ---------- 卡片放大弹窗(3:4,仅 × 关闭,内部滚动) ---------- */
+.hcard,.fcard,.day,.mcard,.phone,.ckgroup,.card,.ov-card{position:relative}
+.card-pop{cursor:pointer;-webkit-tap-highlight-color:transparent}
+.zoom-btn{position:absolute;top:10px;right:10px;width:30px;height:30px;border:none;border-radius:50%;
+  background:rgba(31,58,95,.08);color:#3a5b8c;font-size:14px;cursor:pointer;z-index:5;line-height:1;
+  display:flex;align-items:center;justify-content:center}
+.zoom-btn:active{background:rgba(31,58,95,.18)}
+.zoom-btn svg{width:15px;height:15px;stroke:currentColor;fill:none;stroke-width:2.2;stroke-linecap:round}
+.ov-card .zoom-btn svg{width:11px;height:11px}
+.ov-card .zoom-btn{width:22px;height:22px;font-size:11px;top:6px;right:6px}
+.day .zoom-btn{top:auto;bottom:12px}
+.fcard .fhead{padding-right:14px}
+.fcard.has-zoom .fhead{padding-right:42px}
+.hcard h3{padding-right:34px}
+.ckgroup .ckhead{padding-right:40px}
+
+.pop-mask{position:fixed;inset:0;z-index:90;background:rgba(15,23,42,.55);display:none;
+  align-items:center;justify-content:center;padding:12px}
+.pop-mask.open{display:flex}
+.pop{background:#fff;border-radius:16px;display:flex;flex-direction:column;overflow:hidden;
+  box-shadow:0 20px 60px rgba(16,24,40,.35);animation:popIn .18s ease-out;
+  width:min(94vw,480px,calc((100vh - 24px)*.75),calc((100dvh - 24px)*.75));
+  aspect-ratio:3/4;max-height:calc(100dvh - 24px)}
+@keyframes popIn{from{transform:scale(.94);opacity:0}to{transform:none;opacity:1}}
+.pop-head{display:flex;align-items:center;gap:10px;padding:12px 14px;border-bottom:1px solid var(--line);flex:none}
+.pop-head::before{content:"";flex:none;width:34px}   /* 与关闭按钮等宽的占位,保证标题居中 */
+.pop-title{flex:1;min-width:0;font-size:16px;font-weight:800;text-align:center;white-space:normal;
+  line-height:1.35;overflow-wrap:anywhere;padding:1px 0}
+.pop-close{width:34px;height:34px;flex:none;border:none;border-radius:50%;background:#eef1f6;color:#4a5468;
+  font-size:19px;cursor:pointer;line-height:1}
+.pop-close:active{background:#e2e7ef}
+.pop-body{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;overscroll-behavior:contain;padding:14px}
+.pop-hint{margin-top:14px;padding:12px;border:1px dashed var(--line);border-radius:10px;
+  font-size:12.5px;color:var(--muted);text-align:center}
+.pop-more{margin-top:0;padding-top:0}
+/* 详情弹窗的多页签:固定在标题栏下方、滚动区之外(页签条占满一行) */
+.pop-tabs{display:flex;gap:8px;flex:none;background:#fff;
+  padding:12px 14px 12px;border-bottom:1px solid var(--line)}
+.pop-tab{flex:1;padding:9px 4px;border:1px solid var(--line);border-radius:10px;background:#f6f8fb;
+  color:#5b6b83;font-size:13.5px;font-weight:700;font-family:inherit;cursor:pointer;
+  -webkit-tap-highlight-color:transparent}
+.pop-tab:active{background:#eef2f8}
+.pop-tab.on{background:var(--accent);border-color:var(--accent);color:#fff}
+.pop-pane.hidden{display:none}
+/* 详情弹窗二级页签(如登机凭证下按人员分):胶囊小页签,随内容滚动 */
+.pop-subtabs{display:flex;gap:6px;flex-wrap:wrap;margin:2px 0 6px}
+.pop-subtab{padding:6px 15px;border:1px solid var(--line);border-radius:999px;background:#f6f8fb;
+  color:#5b6b83;font-size:12.5px;font-weight:700;font-family:inherit;cursor:pointer;
+  -webkit-tap-highlight-color:transparent}
+.pop-subtab:active{background:#eef2f8}
+.pop-subtab.on{background:var(--accent-weak);border-color:var(--accent);color:var(--accent-deep)}
+.pop-subpane.hidden{display:none}
+.pop-more > .blk{margin:12px 0}
+.pop-more > .blk[data-t="标题"]{margin-top:24px}
+.pop-more > .blk:first-child{margin-top:10px}
+.pop-more h4{font-size:17px;line-height:1.4;margin:0 0 6px;text-align:center}
+.blk{margin:12px 0}
+.blk p{font-size:14px;white-space:pre-line;color:#333a48;text-align:center}
+.blk img{width:100%;border-radius:10px;display:block}
+.blk video{width:100%;height:auto;border:none;border-radius:10px;display:block;background:#000}   /* 视频按自身比例(竖屏不压扁) */
+.blk iframe{width:100%;aspect-ratio:16/9;border:none;border-radius:10px;display:block;background:#000}
+.blk-cap{font-size:12px;color:var(--muted);margin-top:5px;text-align:center;white-space:pre-line}
+/* 字段行(如登机人员信息):左标签右值 + 复制按钮 */
+.blk[data-t="字段"]{margin:0}
+.pf-row{display:flex;align-items:center;gap:10px;padding:8px 8px 8px 14px;border:1px solid var(--line);
+  border-radius:10px;background:#fafcff;margin:0 0 7px}
+.pf-row:last-child{margin-bottom:0}
+.pf-lab{flex:none;font-size:12.5px;font-weight:600;color:var(--muted)}
+.pf-val{flex:1;min-width:0;font-size:14px;font-weight:600;color:var(--ink);
+  font-variant-numeric:tabular-nums;word-break:break-all;text-align:right}
+.tipbox{background:#f6f8fb;border:1px solid var(--line);border-radius:10px;padding:10px 12px;
+  font-size:13px;color:#4a5468;text-align:center}
+.lnkbtn{display:block;text-decoration:none;text-align:center;background:var(--accent-weak);color:var(--accent-deep);
+  border:1px solid #cfe4f6;border-radius:10px;padding:11px;font-size:14px;font-weight:700}
+.lnkbtn:active{background:#ddeefb}
+.lnkrow{display:grid;gap:8px;margin:12px 0}
+.pop-more > .lnkrow:first-child{margin-top:10px}
+.lnkrow .blk{margin:0}
+.lnkrow .lnkbtn{padding:11px 6px;font-size:13.5px}
+
+/* ================= 桌面端专属布局(≥920px 才生效,与移动端完全独立、互不影响) ================= */
+@media(min-width:920px){
+  /* 小红书式双列瀑布流:板块优先左右交替,流入较矮的列(JS 排列) */
+  .wrap{max-width:1200px;padding:0 28px}
+  .wrap.masonry{display:grid;grid-template-columns:1fr 1fr;gap:16px;align-items:start}
+  .wrap.masonry .mcol{display:flex;flex-direction:column;gap:16px;min-width:0}
+  .wrap.masonry>section{margin:0;padding-top:14px}
+  .hero{padding:52px 28px 44px}
+  .hero h1{font-size:42px;letter-spacing:9px}
+  .hero .sub{font-size:16px}
+  /* 欢迎页左右分栏:文本+胶囊在左,倒计时在右垂直居中 */
+  .hero .wrap{display:grid;grid-template-columns:minmax(0,1fr) auto;column-gap:56px;align-items:center}
+  .hero .tag,.hero h1,.hero .sub,.hero .hero-chips{grid-column:1}
+  .hero .tag{width:fit-content}   /* grid 子项会被块级化,inline-block 失效,必须显式收紧宽度 */
+  .hero .countdown{grid-column:2;grid-row:1/span 4;margin:0;align-self:center;padding:26px 38px 24px}
+  /* 胶囊两个一行:行内紧贴,行与行不对齐 */
+  .hero .hero-chips{display:flex;flex-direction:column;align-items:flex-start;gap:10px;margin-top:18px}
+  .hero .hchip-row{display:flex;gap:10px}
+  .hero .hero-chips span{width:fit-content}
+  .cd-unit{padding:0 26px}
+  .cd-unit b{font-size:44px}
+  .cd-unit span{font-size:13px}
+  .sec-head{margin-bottom:20px}
+  .sec-head h2{font-size:24px}
+  .sec-head .sec-sub{font-size:13.5px}
+  /* 列宽 ~560:板块内部一律单列,由页面级双列负责分栏;人员卡 2×2 等比放大铺满列宽 */
+  .grid{gap:14px}
+  .grid.g2,.grid.g3,.grid.g4{grid-template-columns:1fr}
+  .ov-grid{grid-template-columns:repeat(2,1fr);gap:14px}
+  .ov-grid.w3{grid-template-columns:repeat(3,1fr)}
+  .mgrid{grid-template-columns:repeat(2,1fr);gap:16px}
+  .mcard{padding:20px 16px}
+  .mava{width:64px;height:64px;margin-bottom:10px;font-size:30px}
+  .mname{font-size:18px}
+  .mline{font-size:13.5px;margin-top:6px}
+  .agrid{grid-template-columns:repeat(2,1fr);gap:14px}
+  .hcard h3{font-size:18px}
+  ul.dots li.lab .li-main{font-size:15.5px}
+  .pop{width:min(560px,calc((100vh - 40px)*.75),calc((100dvh - 40px)*.75));max-height:calc(100dvh - 40px)}
+  .pop-more h4{font-size:19px}
+  .tip{font-size:13px}
+}
+
+/* ---------- 打印 ---------- */
+@media print{
+  #chipbar,#totop,.src-entry,.src-mask,.pop-mask,.zoom-btn,.clamp-more{display:none!important}
+  body{background:#fff;font-size:12px}
+  .card-anim{opacity:1!important;transform:none!important}
+  .hcard.is-clamp .dots{max-height:none!important;-webkit-mask-image:none!important;mask-image:none!important}
+  .card,.hcard,.day,.fcard,.ckgroup{box-shadow:none;break-inside:avoid}
+  .day{page-break-inside:avoid}
+}
+</style>
+</head>
+<body>
+
+<!-- ================= 吸顶导航(置于页面最顶部) ================= -->
+<nav id="chipbar">
+  <div class="chips" id="chips">
+    <a href="#overview" class="on">📋 总览</a>
+    <a href="#days">🗓️ 行程</a>
+    <a href="#flights">🎫 高铁&amp;航班</a>
+    <a href="#members">👥 人员</a>
+    <a href="#transport">🚄 交通</a>
+    <a href="#stay">🏨 住宿</a>
+    <a href="#weather">❄️ 天气</a>
+    <a href="#resorts">🏔️ 雪场</a>
+    <a href="#gear">🎿 雪具</a>
+    <a href="#food">🍜 吃喝</a>
+  </div>
+</nav>
+
+<!-- ================= 头部横幅 ================= -->
+<header class="hero">
+  <div class="wrap">
+    <span class="tag">🏂 2026-27 雪季开板   崇礼 · 万龙</span>
+    <h1>万龙,启动!</h1>
+    
+    
+    <div class="countdown">
+      <div class="cd-head" id="cdHead">距出发还有</div>
+      <div class="cd-units" id="cdUnits">
+        <div class="cd-unit"><b id="cdDays">--</b><span>天</span></div>
+        <div class="cd-unit"><b id="cdHours">--</b><span>时</span></div>
+        <div class="cd-unit"><b id="cdMins">--</b><span>分</span></div>
+        <div class="cd-unit"><b id="cdSecs">--</b><span>秒</span></div>
+      </div>
+      <div class="cd-msg" id="cdMsg" hidden></div>
+    </div>
+  </div>
+</header>
+
+<div class="wrap">
+
+<!-- ================= 总览 ================= -->
+<section id="overview">
+  <div class="sec-head"><div class="sec-ico">📋</div><div class="sec-txt"><h2>行程总览</h2><span class="sec-sub">关键信息一屏速览</span></div></div>
+  <div class="ov-grid"><a class="ov-card ov-link" href="#members" aria-label="前往日期 · 人员"><div class="k">📅 日期 · 人员<span class="ov-go">›</span></div><div class="v">11.06(五)晚 – 11.08(日)<small> 3天2晚 · 6人(名单已确认)</small></div></a>
+<a class="ov-card ov-link" href="#days" aria-label="前往滑雪安排"><div class="k">🎿 滑雪安排<span class="ov-go">›</span></div><div class="v">两个滑雪日<small> 上午+下午 · 夜滑看情况</small></div></a>
+<a class="ov-card ov-link" href="#transport-go" aria-label="前往去程"><div class="k">🚄 去程<span class="ov-go">›</span></div><div class="v">G30 + D9271<small> 18:52 出发 · 次日 06:16 进山</small></div></a>
+<a class="ov-card ov-link" href="#transport-back" aria-label="前往返程"><div class="k">🛬 返程<span class="ov-go">›</span></div><div class="v">G7836 + MU5166<small> 17:32 出山 · 21:30 起飞回虹桥解散</small></div></a>
+<a class="ov-card ov-link" href="#stay" aria-label="前往住宿"><div class="k">🏨 住宿<span class="ov-go">›</span></div><div class="v">清河中转 + 盛龙公寓<small> 11/06 三选一待定 · 11/07 万龙(已确认)</small></div></a>
+<a class="ov-card ov-link" href="#resorts" aria-label="前往雪场"><div class="k">🏔️ 雪场<span class="ov-go">›</span></div><div class="v">万龙滑雪场(崇礼)<small> 10.23 已开板 · 日场 8:30–16:30</small></div></a></div>
+</section>
+<section id="days">
+  <div class="sec-head"><div class="sec-ico">🗓️</div><div class="sec-txt"><h2>每日行程</h2><span class="sec-sub">D1 出发中转 · D2/D3 滑雪(时间以最终车票为准)</span></div></div>
+  <details class="day" data-card="days|D1"><summary><div class="d-num"><b>1</b><span>DAY</span></div><div class="d-title"><b>11.06 周五</b><div class="d-sub">出发 · 中转</div></div><span class="d-arrow" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg></span></summary><div class="d-body"><div class="trow"><div class="ttime">18:52</div><div class="tbody"><div class="twhat">G30 上海虹桥发车 → 北京南(23:21 到)</div><div class="tnote"><img class="mimg" src="images/人员/Z&L.jpg" alt="Z&amp;L"> 苏州北 19:15 上车,同车次</div></div><span class="badge b-ok">已定</span></div><div class="trow"><div class="ttime">23:21</div><div class="tbody"><div class="twhat">抵达北京南 → 换乘地铁</div><div class="tnote">4号线大兴线(末班 23:35)→ 西直门换 13号线 → 清河站</div></div><span class="badge b-ok">已定</span></div><div class="trow"><div class="ttime">深夜</div><div class="tbody"><div class="twhat">入住清河站附近酒店</div><div class="tnote">三选一待定,店名可点击跳转(见「住宿」);次日 06:16 的车,尽早休息</div></div><span class="badge b-tbd">待定</span></div></div></details>
+<details class="day" data-card="days|D2"><summary><div class="d-num"><b>2</b><span>DAY</span></div><div class="d-title"><b>11.07 周六</b><div class="d-sub">进山 · 滑雪 Day1</div></div><span class="d-arrow" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg></span></summary><div class="d-body"><div class="trow"><div class="ttime">06:16</div><div class="tbody"><div class="twhat">D9271 清河站发车 → 太子城(07:29 到)</div><div class="tnote">全程约1小时13分,车上补觉;不想赶早可选方案二 G7831(07:45 发,见「交通」)</div></div><span class="badge b-ok">已定</span></div><div class="trow"><div class="ttime">早上</div><div class="tbody"><div class="twhat">雪场免费大巴 太子城 → 酒店下车点(约20分钟)</div><div class="tnote">办理入住 → 回房换装备</div></div><span class="badge b-ok">已定</span></div><div class="trow"><div class="ttime">早上</div><div class="tbody"><div class="twhat">租赁 / 取邮寄雪具</div><div class="tnote">租赁组办手续,邮寄组取寄存</div></div></div><div class="trow"><div class="ttime">上午</div><div class="tbody"><div class="twhat">滑雪 🎿</div><div class="tnote">已开放雪道以当日公告为准</div></div></div><div class="trow"><div class="ttime">中午</div><div class="tbody"><div class="twhat">午餐 + 休息</div><div class="tnote">大食堂(雪具大厅上方)</div></div></div><div class="trow"><div class="ttime">下午</div><div class="tbody"><div class="twhat">滑雪 🎿</div></div></div><div class="trow"><div class="ttime">晚上</div><div class="tbody"><div class="twhat">夜滑(18:30–21:30)或自由活动</div><div class="tnote">根据体力动态调整</div></div><span class="badge b-tbd">待定</span></div></div></details>
+<details class="day" data-card="days|D3"><summary><div class="d-num"><b>3</b><span>DAY</span></div><div class="d-title"><b>11.08 周日</b><div class="d-sub">滑雪 Day2 · 返程</div></div><span class="d-arrow" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg></span></summary><div class="d-body"><div class="trow"><div class="ttime">上午</div><div class="tbody"><div class="twhat">滑雪 🎿</div><div class="tnote">赶早,日场 8:30 开滑</div></div></div><div class="trow"><div class="ttime">中午</div><div class="tbody"><div class="twhat">午餐 + 休息</div><div class="tnote">中午前后办退房,行李寄存前台</div></div><span class="badge b-todo">待办</span></div><div class="trow"><div class="ttime">下午</div><div class="tbody"><div class="twhat">滑雪 · 收板</div><div class="tnote">约16:30 收板,前往上车点</div></div><span class="badge b-tbd">待定</span></div><div class="trow"><div class="ttime">17:00</div><div class="tbody"><div class="twhat">雪场免费大巴 → 太子城站</div><div class="tnote">上车点约17:00 发车,以现场为准;若选方案二则改乘 13:53 G7834 出山(见「交通」)</div></div><span class="badge b-tbd">待定</span></div><div class="trow"><div class="ttime">17:32</div><div class="tbody"><div class="twhat">G7836 太子城 → 清河(18:34 到)</div><div class="tnote">全程约1小时2分</div></div><span class="badge b-tbd">待定</span></div><div class="trow"><div class="ttime">18:34</div><div class="tbody"><div class="twhat">地铁 清河站 → 首都机场T2</div><div class="tnote">13号线→10号线内环→首都机场线,约1小时16分</div></div><span class="badge b-tbd">待定</span></div><div class="trow"><div class="ttime">21:30</div><div class="tbody"><div class="twhat">MU5166 起飞 → 上海虹桥</div><div class="tnote">预留值机托运时间</div></div><span class="badge b-ok">已定</span></div><div class="trow"><div class="ttime">深夜</div><div class="tbody"><div class="twhat">抵达虹桥 · 就地解散</div><div class="tnote">本次行程结束 🎉</div></div><span class="badge b-ref">参考</span></div></div></details>
+  
+</section>
+<section id="flights">
+  <div class="sec-head"><div class="sec-ico">🎫</div><div class="sec-txt"><h2>高铁 · 航班</h2><span class="sec-sub">G30 去程 · MU5166 返程 · 京张段见「交通」</span></div></div>
+  <div class="fcard" data-card="flights|G30"><div class="fhead"><span class="fdir">去程</span><span class="fno">G30</span><span class="fairline">复兴号</span><span class="fairline">CR400BF-BS</span><span class="fdate">11.06 周五</span><span class="badge b-ok">已定</span></div><div class="froute"><div class="fport"><div class="ftime">18:52</div><div class="fair">上海虹桥站</div><div class="fcode"></div><div class="fstack"><img class="mimg" src="images/人员/小郭.jpg" alt="小郭"><img class="mimg" src="images/人员/辣椒面.jpg" alt="辣椒面"><img class="mimg" src="images/人员/阿蒙.jpg" alt="阿蒙"><img class="mimg" src="images/人员/范达尔.jpg" alt="范达尔"><img class="mimg" src="images/人员/幽助.jpg" alt="幽助"></div></div><div class="fmid"><span class="fplane">🚄</span><div class="fdur">4 小时 29 分</div><div class="fstop"><div class="fstop-t">苏州北 19:15</div><em><img class="mimg" src="images/人员/Z&L.jpg" alt="Z&amp;L"> 上车</em></div></div><div class="fport"><div class="ftime">23:21</div><div class="fair">北京南站</div><div class="fcode"></div></div></div></div>
+<div class="fcard" data-card="flights|MU5166"><div class="fhead"><span class="fdir">返程</span><span class="fno">MU5166</span><span class="fairline">中国东方航空</span><span class="fairline">B777</span><span class="fdate">11.08 周日</span><span class="badge b-ok">已定</span></div><div class="froute"><div class="fport"><div class="ftime">21:30</div><div class="fair">北京首都 T2</div><div class="fcode">PEK</div><div class="fstack"><img class="mimg" src="images/人员/小郭.jpg" alt="小郭"><img class="mimg" src="images/人员/辣椒面.jpg" alt="辣椒面"><img class="mimg" src="images/人员/阿蒙.jpg" alt="阿蒙"><img class="mimg" src="images/人员/范达尔.jpg" alt="范达尔"><img class="mimg" src="images/人员/幽助.jpg" alt="幽助"><img class="mimg" src="images/人员/Z&L.jpg" alt="Z&amp;L"></div></div><div class="fmid"><span class="fplane">✈</span><div class="fdur">2 小时 25 分</div></div><div class="fport"><div class="ftime">23:55</div><div class="fair">上海虹桥</div><div class="fcode">SHA</div></div></div></div>
+</section>
+<section id="members">
+  <div class="sec-head"><div class="sec-ico">👥</div><div class="sec-txt"><h2>同行人员</h2><span class="sec-sub">6人 · 名单已确认</span></div></div>
+  <div class="mgrid">
+    <div class="mcard" data-card="members|幽助"><div class="mava"><img src="images/人员/幽助.jpg" alt=""></div><div class="mname">幽助</div></div>
+<div class="mcard" data-card="members|范达尔"><div class="mava"><img src="images/人员/范达尔.jpg" alt=""></div><div class="mname">范达尔</div></div>
+<div class="mcard" data-card="members|阿蒙"><div class="mava"><img src="images/人员/阿蒙.jpg" alt=""></div><div class="mname">阿蒙</div></div>
+<div class="mcard" data-card="members|辣椒面"><div class="mava"><img src="images/人员/辣椒面.jpg" alt=""></div><div class="mname">辣椒面</div></div>
+<div class="mcard" data-card="members|小郭"><div class="mava"><img src="images/人员/小郭.jpg" alt=""></div><div class="mname">小郭</div></div>
+<div class="mcard" data-card="members|Z&amp;L"><div class="mava"><img src="images/人员/Z&L.jpg" alt=""></div><div class="mname">Z&amp;L</div></div>
+  </div>
+</section>
+<section id="transport">
+  <div class="sec-head"><div class="sec-ico">🚄</div><div class="sec-txt"><h2>交通方案</h2><span class="sec-sub">去程 / 返程分段 · 时刻以车票为准</span></div></div>
+  <div class="grid"><div class="hcard tcard" id="transport-go" data-card="transport|🚄 去程 · 上海虹桥 → 万龙滑雪场"><h3 class="troute">🚄 去程 · 上海虹桥 → 万龙滑雪场</h3><div class="trow2"><div class="tico">🚄</div><div class="tmain"><div class="tname"><span class="tn">① G30 高铁</span><span class="tdur">上海虹桥 18:52 → 北京南 23:21</span></div><div class="tnote">全程约4小时29分
+<img class="mimg" src="images/人员/Z&L.jpg" alt="Z&amp;L"> 苏州北 19:15 上车,同车次</div></div><span class="badge b-ok">已定</span></div><div class="trow2"><div class="tico">🚇</div><div class="tmain"><div class="tname"><span class="tn">② 地铁</span><span class="tdur">北京南 → 清河站 约1小时</span></div><div class="tnote">4号线大兴线(末班 23:35)→ 西直门换 13号线</div><div class="tpc"><div class="tpc-col"><span class="tpro">✓ 23:21 下车即走,赶得上末班</span></div><div class="tpc-col"><span class="tcon">✗ 深夜换乘要掐点,别逗留</span></div></div></div><span class="badge b-ok">已定</span></div><div class="trow2 no-ico"><div class="tmain"><div class="tname"><span class="tn">备选 打车</span><span class="tdur">北京南 → 清河站</span></div><div class="tnote">没赶上末班地铁时的备选</div></div></div><div class="trow2"><div class="tico">😴</div><div class="tmain"><div class="tname"><span class="tn">睡觉</span><span class="tdur">清河站酒店过夜</span></div><div class="tnote">中转酒店三选一见「住宿」</div></div></div><div class="topt"><div class="trow2 thead2"><div class="tmain"><div class="tname"><span class="tn">方案一</span></div><div class="tpc"><div class="tpc-col"><span class="tpro">✓ 到得早,当天可滑时间更长</span></div><div class="tpc-col"><span class="tcon">✗ 时间很早,要赶06:16的车</span><span class="tcon">✗ 加班车,可能需要抢票</span></div></div></div><span class="badge b-tbd">待定</span></div><div class="trow2"><div class="tico">🚄</div><div class="tmain"><div class="tname"><span class="tn">③ D9271</span><span class="tdur">清河 06:16 → 太子城 07:29</span></div><div class="tnote">全程约1小时13分,车上补觉</div></div></div></div><div class="topt"><div class="trow2 thead2"><div class="tmain"><div class="tname"><span class="tn">方案二</span></div><div class="tpc"><div class="tpc-col"><span class="tpro">✓ 不用赶早</span><span class="tpro">✓ 选这趟的话,雪票买6小时日场票正好</span></div><div class="tpc-col"><span class="tcon">✗ 上雪时间比方案一晚约1.5小时</span></div></div></div><span class="badge b-tbd">待定</span></div><div class="trow2"><div class="tico">🚄</div><div class="tmain"><div class="tname"><span class="tn">③ G7831</span><span class="tdur">清河 07:45 → 太子城 08:52</span></div><div class="tnote">全程约1小时7分</div></div></div></div><div class="trow2 tshared"><div class="tico">🚌</div><div class="tmain"><div class="tname"><span class="tn">④ 雪场免费大巴</span><span class="tdur">太子城站 → 酒店下车点 约20分钟</span></div><div class="tnote">下车即到酒店,办理入住换装备;两个方案共用</div></div><span class="badge b-ok">已定</span></div></div>
+<div class="hcard tcard" id="transport-back" data-card="transport|🚄 返程 · 万龙滑雪场 → 上海虹桥"><h3 class="troute">🚄 返程 · 万龙滑雪场 → 上海虹桥</h3><div class="topt"><div class="trow2 thead2"><div class="tmain"><div class="tname"><span class="tn">方案一</span></div><div class="tpc"><div class="tpc-col"><span class="tpro">✓ 下午还能再滑两小时,当天滑得更久</span></div><div class="tpc-col"><span class="tcon">✗ 时间紧凑,要衔接好各段时间</span></div></div></div><span class="badge b-tbd">待定</span></div><div class="trow2"><div class="tico">🚌</div><div class="tmain"><div class="tname"><span class="tn">① 雪场免费大巴</span><span class="tdur">约17:00 发车 → 太子城站 约20分钟</span></div><div class="tnote">发车时间以雪场当日公告为准</div></div></div><div class="trow2"><div class="tico">🚄</div><div class="tmain"><div class="tname"><span class="tn">② G7836</span><span class="tdur">太子城 17:32 → 清河 18:34</span></div><div class="tnote">全程约1小时2分</div></div></div><div class="trow2"><div class="tico">🚇</div><div class="tmain"><div class="tname"><span class="tn">③ 地铁</span><span class="tdur">清河 → 首都机场T2 约1小时16分</span></div><div class="tnote">13号线 → 知春路换10号线(内环)→ 三元桥换首都机场线 → 2号航站楼</div></div></div></div><div class="topt"><div class="trow2 thead2"><div class="tmain"><div class="tname"><span class="tn">方案二</span></div><div class="tpc"><div class="tpc-col"><span class="tpro">✓ 时间充裕,不存在错过航班的情况</span><span class="tpro">✓ 还可以在市内一起吃顿饭</span></div><div class="tpc-col"><span class="tcon">✗ 下午不能滑雪,收板时间提前</span></div></div></div><span class="badge b-tbd">待定</span></div><div class="trow2"><div class="tico">🚌</div><div class="tmain"><div class="tname"><span class="tn">① 雪场免费大巴</span><span class="tdur">约13:00 发车 → 太子城站 约20分钟</span></div><div class="tnote">发车时间以雪场当日公告为准</div></div></div><div class="trow2"><div class="tico">🚄</div><div class="tmain"><div class="tname"><span class="tn">② G7834</span><span class="tdur">太子城 13:53 → 清河 15:03</span></div><div class="tnote">全程约1小时10分</div></div></div><div class="trow2"><div class="tico">❓</div><div class="tmain"><div class="tname"><span class="tn">③ 待定</span></div></div></div></div><div class="trow2 tshared"><div class="tico">✈️</div><div class="tmain"><div class="tname"><span class="tn">④ MU5166</span><span class="tdur">首都T2 21:30 → 上海虹桥</span></div><div class="tnote">到达约23:55(推算),虹桥就地解散;两个方案共用</div></div><span class="badge b-ok">已定</span></div></div></div>
+</section>
+<section id="stay">
+  <div class="sec-head"><div class="sec-ico">🏨</div><div class="sec-txt"><h2>住宿方案</h2><span class="sec-sub">11/06 清河站中转·三选一待定 · 11/07 万龙盛龙公寓·已确认</span></div></div>
+  <div class="grid g2"><div class="hcard" data-card="stay|🏨 清河站中转酒店"><h3>🏨 清河站中转酒店<span class="hdate">11/06 · 中转一晚</span></h3><ul class="dots"><li class="subwrap"><div class="card rcard" data-card="stay|如家商旅酒店"><a class="r-jump" href="https://m.ctrip.com/webapp/hotels/detail?hotelid=4722022&amp;atime=20261106&amp;days=1&amp;rankid=100200148882&amp;shareId=NDcyMjAyMnxob3RlbF9pbmxhbmVfZGV0YWlsfDEyOHwyMDI2MTAyM1QwMjE2NDg=&amp;uid=AD5121B9B7378FCCA70BEBA0F10D395B1F1B46AC7A77FC220EBEE200345139B1&amp;intographicshow=1&amp;sharersid=17&amp;sharerpvid=808&amp;sharercid=32001033790602847142&amp;sharerdate=20261023" target="_blank" rel="noopener" aria-label="打开 如家商旅酒店 详情"></a><span class="badge b-tbd">待定</span><div class="r-t"><span class="r-link">如家商旅酒店</span></div><div class="tpc"><div class="tpc-col"><span class="tpro">✓ 老牌连锁</span><span class="tpro">✓ 携程 4.8 分</span></div><div class="tpc-col"><span class="tcon">✗ 步行约560米,中等</span><span class="tcon">✗ ¥350/晚,中等</span></div></div><span class="r-go">›</span></div></li><li class="subwrap"><div class="card rcard" data-card="stay|金辉商务大酒店"><a class="r-jump" href="https://m.ctrip.com/webapp/hotels/detail?hotelid=129462492&amp;atime=20261106&amp;days=1&amp;rankid=100200148882&amp;shareId=MTI5NDYyNDkyfGhvdGVsX2lubGFuZV9kZXRhaWx8MTI4fDIwMjYxMDIzVDAyMTYzMQ==&amp;uid=AD5121B9B7378FCCA70BEBA0F10D395B1F1B46AC7A77FC220EBEE200345139B1&amp;intographicshow=1&amp;sharersid=17&amp;sharerpvid=804&amp;sharercid=32001033790602847142&amp;sharerdate=20261023" target="_blank" rel="noopener" aria-label="打开 金辉商务大酒店 详情"></a><span class="badge b-tbd">待定</span><div class="r-t"><span class="r-link">金辉商务大酒店</span></div><div class="tpc"><div class="tpc-col"><span class="tpro">✓ ¥250/晚,三家最便宜</span><span class="tpro">✓ 之前住过,比较熟悉</span></div><div class="tpc-col"><span class="tcon">✗ 步行约690米,三家最远</span><span class="tcon">✗ 携程 4.5 分,三家最低</span></div></div><span class="r-go">›</span></div></li><li class="subwrap"><div class="card rcard" data-card="stay|亚朵S酒店"><a class="r-jump" href="https://m.ctrip.com/webapp/hotels/detail?hotelid=70958199&amp;atime=20261106&amp;days=1&amp;rankid=&amp;shareId=NzA5NTgxOTl8aG90ZWxfaW5sYW5lZV9kZXRhaWx8MTI4fDIwMjYxMDIzVDAyMTYwOQ&amp;uid=AD5121B9B7378FCCA70BEBA0F10D395B1F1B46AC7A77FC220EBEE200345139B1&amp;intographicshow=1&amp;sharersid=17&amp;sharerpvid=800&amp;sharercid=32001033790602847142&amp;sharerdate=20261023" target="_blank" rel="noopener" aria-label="打开 亚朵S酒店 详情"></a><span class="badge b-tbd">待定</span><div class="r-t"><span class="r-link">亚朵S酒店</span></div><div class="tpc"><div class="tpc-col"><span class="tpro">✓ 步行约390米,三家最近</span><span class="tpro">✓ 高档型 · 携程 4.8 分</span></div><div class="tpc-col"><span class="tcon">✗ ¥700/晚,三家最贵</span></div></div><span class="r-go">›</span></div></li></ul></div>
+<div class="hcard" data-card="stay|🏨 万龙 · 盛龙公寓"><h3>🏨 万龙 · 盛龙公寓<span class="hdate">11/07 · 入住一晚</span><span class="h-badge"><span class="badge b-ok">已定</span></span></h3><ul class="dots"><li class="lab"><span class="li-lab">地址</span><span class="li-main"><button class="li-cp" type="button" aria-label="复制" data-copy="河北省张家口市崇礼区万龙滑雪场(盛龙公寓)"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h10"/></svg></button>河北省张家口市崇礼区万龙滑雪场(盛龙公寓)</span></li><li class="subwrap half"><div class="card rcard" data-card="stay|景观四人间 ×1"><div class="r-t">景观四人间 ×1</div><div class="r-avas"><span class="avrow"><img class="mimg" src="images/人员/辣椒面.jpg" alt="辣椒面"><img class="mimg" src="images/人员/阿蒙.jpg" alt="阿蒙"></span><span class="r-avsep">/</span><span class="avrow"><img class="mimg" src="images/人员/范达尔.jpg" alt="范达尔"><img class="mimg" src="images/人员/幽助.jpg" alt="幽助"></span></div><span class="r-go">›</span></div></li><li class="subwrap half"><div class="card rcard" data-card="stay|简约景观标间 ×1"><div class="r-t">简约景观标间 ×1</div><div class="r-avas"><span class="avrow"><img class="mimg" src="images/人员/小郭.jpg" alt="小郭"><img class="mimg" src="images/人员/Z&L.jpg" alt="Z&amp;L"></span></div><span class="r-go">›</span></div></li></ul></div></div>
+</section>
+<section id="weather">
+  <div class="sec-head"><div class="sec-ico">❄️</div><div class="sec-txt"><h2>天气与穿着</h2><span class="sec-sub">崇礼 11月上旬 · 出发前一周再核实</span></div></div>
+  <div class="ov-grid w3"><div class="ov-card"><div class="k">🌡️ 气温</div><div class="v">白天约 -5~3°C<small> 夜间 -15~-8°C · 山上风大更冷</small></div></div>
+<div class="ov-card"><div class="k">🌨️ 雪况</div><div class="v"><a href="https://www.windy.com/40.96/115.28" target="_blank" rel="noopener">开季初期 · 造雪为主</a><small> 点击查询实时天气/雪况</small></div></div>
+<div class="ov-card"><div class="k">🌅 日照</div><div class="v">约 7:00 日出<small> 17:00 左右天黑</small></div></div></div>
+</section>
+<section id="resorts">
+  <div class="sec-head"><div class="sec-ico">🏔️</div><div class="sec-txt"><h2>雪场信息</h2><span class="sec-sub">10.23 已开板 · 日场 8:30–16:30 / 夜场 18:30–21:30</span></div></div>
+  <div class="grid g2"><div class="hcard" data-card="resorts|🏔️ 万龙滑雪场(张家口·崇礼)"><h3>🏔️ 万龙滑雪场(张家口·崇礼)</h3><ul class="dots"><li class="lab"><span class="li-lab">位置</span><span class="li-main"><button class="li-cp" type="button" aria-label="复制" data-copy="河北省张家口市崇礼区"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h10"/></svg></button>河北省张家口市崇礼区</span></li><li class="lab"><span class="li-lab">开板时间</span><span class="li-main">10.23 已开板</span></li><li class="lab"><span class="li-lab">开放雪道</span><span class="li-main">威龙道(高级)
+娇龙道上段
+雨龙道上段</span><span class="li-note">其余开放雪道持续补充中</span></li><li class="lab"><span class="li-lab">开放索道</span><span class="li-main">4号吊椅(慢速索道)</span></li><li class="lab"><span class="li-lab">开放时间</span><span class="li-main">早场:尚未开放
+日场:8:30–16:30
+夜场:18:30–21:30</span></li><li class="lab"><span class="li-lab">雪票</span><span class="li-main">日场 4小时 ¥239
+日场 6小时 ¥289
+日场 1天 ¥349
+夜场 ¥168</span><span class="li-note">自带板·开板试滑价,仅供参考</span></li></ul></div></div>
+  
+</section>
+<section id="gear">
+  <div class="sec-head"><div class="sec-ico">🎿</div><div class="sec-txt"><h2>雪具方案</h2><span class="sec-sub">邮寄(3人) vs 现场租赁(3人)</span></div></div>
+  <div class="grid g2"><div class="hcard" data-card="gear|📦 雪具邮寄"><h3>📦 雪具邮寄<span class="h-avas"><span class="avrow"><img class="mimg" src="images/人员/范达尔.jpg" alt="范达尔"><img class="mimg" src="images/人员/阿蒙.jpg" alt="阿蒙"><img class="mimg" src="images/人员/幽助.jpg" alt="幽助"></span></span></h3><ul class="dots"><li class="subwrap"><div class="card rcard" data-card="gear|方案一 · 寄到中转住宿(清河酒店)"><div class="r-t">方案一 · 寄到中转住宿(清河酒店)</div><div class="tpc"><div class="tpc-col"><span class="tpro">✓ 可以一早穿戴好,到太子城放好行李直奔雪场</span></div><div class="tpc-col"><span class="tcon">✗ 要拖雪板包、早起换装备、上车可能得加钱</span></div></div><span class="r-go">›</span></div></li><li class="subwrap"><div class="card rcard" data-card="gear|方案二 · 寄到雪场住宿(盛龙公寓)|推荐"><div class="r-t">方案二 · 寄到雪场住宿(盛龙公寓)<em class="r-tag">推荐</em></div><div class="tpc"><div class="tpc-col"><span class="tpro">✓ 省力,纸箱可以回收</span></div><div class="tpc-col"><span class="tcon">✗ 上雪时间会缩短约30~60分钟</span></div></div><span class="r-go">›</span></div></li></ul></div>
+<div class="hcard" data-card="gear|🎿 现场租赁"><h3>🎿 现场租赁<span class="h-avas"><span class="avrow"><img class="mimg" src="images/人员/辣椒面.jpg" alt="辣椒面"><img class="mimg" src="images/人员/小郭.jpg" alt="小郭"><img class="mimg" src="images/人员/Z&L.jpg" alt="Z&amp;L"></span></span></h3><ul class="dots"><li><span class="li-main">雪板 / 雪鞋 / 头盔等全套</span><span class="badge b-todo">待查</span><span class="li-note">需确认雪票是否包含租赁</span></li><li><span class="li-main">雪服可能需要另外租</span><span class="badge b-todo">待查</span><span class="li-note">价格待核实</span></li></ul></div></div>
+</section>
+<section id="food">
+  <div class="sec-head"><div class="sec-ico">🍜</div><div class="sec-txt"><h2>吃喝补给</h2><span class="sec-sub">雪场大食堂 / 双龙自助 + 能量补给</span></div></div>
+  <div class="grid g2"><div class="hcard" data-card="food|🍜 雪场就餐"><h3>🍜 雪场就餐</h3><ul class="dots"><li><span class="li-main">大食堂(雪具大厅上方 · 雪场自营)</span><span class="badge b-ref">参考</span><span class="li-note">各种食物都有,人均约 ¥50–100</span></li><li><span class="li-main">双龙酒店自助餐</span><span class="badge b-todo">待查</span><span class="li-note">约17:00开放(时间待核实),人均 ¥200+(待核实)</span></li></ul></div>
+<div class="hcard" data-card="food|🛒 补给"><h3>🛒 补给</h3><ul class="dots"><li><span class="li-main">士力架 / 能量棒等小零食</span><span class="li-note">滑雪日随身补充能量,提前备好</span></li></ul></div></div>
+</section>
+
+<!-- ================= 清单 / 推荐应用 / 实用信息 已按需求移除 ================= -->
+
+</div><!-- /wrap -->
+
+<footer>
+  <div>❄️ <b>万龙,启动!</b> · v0.114 分享版</div>
+  <div style="margin-top:4px">📦 本页为离线单文件版,含全部信息,可直接转发 · 酒店链接/雪票价格等待补充项确认后更新</div>
+</footer>
+
+<button id="totop" aria-label="返回顶部">↑</button>
+
+<!-- 头像名字悬浮气泡:桌面悬停 / 手机长按 -->
+<div id="avaTip" aria-hidden="true"></div>
+
+<!-- ================= 数据源弹窗 + 数据 ================= -->
+<div class="src-mask" id="srcMask">
+  <div class="src-modal" role="dialog" aria-modal="true" aria-label="参考数据源">
+    <div class="src-head"><b id="srcTitle">参考数据源</b><button class="src-close" id="srcClose" aria-label="关闭">×</button></div>
+    <div class="src-list" id="srcList"></div>
+  </div>
+</div>
+<script id="srcdata" type="application/json">{}</script>
+
+<!-- ================= 卡片放大弹窗 + 数据 ================= -->
+<div class="pop-mask" id="popMask">
+  <div class="pop" role="dialog" aria-modal="true" aria-label="卡片详情">
+    <div class="pop-head"><div class="pop-title" id="popTitle"></div><button class="pop-close" id="popClose" aria-label="关闭">×</button></div>
+    <div class="pop-body" id="popBody"></div>
+  </div>
+</div>
+<script id="carddata" type="application/json">{"stay|景观四人间 ×1": {"tabs": [{"name": "房型照片", "blocks": [{"t": "提示", "c": "📷 房型视频待补充", "n": ""}], "subs": []}, {"name": "订单信息", "blocks": [{"t": "头像", "c": "辣椒面、阿蒙|范达尔、幽助", "n": "住宿人", "imgs": ["images/人员/辣椒面.jpg", "images/人员/阿蒙.jpg", "images/人员/范达尔.jpg", "images/人员/幽助.jpg"]}], "subs": []}]}, "stay|简约景观标间 ×1": {"tabs": [{"name": "房型照片", "blocks": [{"t": "提示", "c": "📷 房型视频待补充", "n": ""}], "subs": []}, {"name": "订单信息", "blocks": [{"t": "头像", "c": "小郭、Z&L", "n": "住宿人", "imgs": ["images/人员/小郭.jpg", "images/人员/Z&L.jpg"]}, {"t": "文本", "c": "房间信息:待补充", "n": ""}], "subs": []}]}, "resorts|🏔️ 万龙滑雪场(张家口·崇礼)": {"tabs": [{"name": "雪道图", "blocks": [{"t": "提示", "c": "📷 雪道图待补充(已开放:威龙道、娇龙道上段、雨龙道上段)", "n": ""}], "subs": []}, {"name": "雪票信息", "blocks": [{"t": "提示", "c": "📷 订单等信息待补充", "n": ""}], "subs": []}]}}</script>
+
+<!-- ================= 图片全屏查看 ================= -->
+<div class="imgview" id="imgView">
+  <img id="imgViewImg" alt="">
+  <div class="imgview-bar">
+    <button id="imgViewClose" aria-label="关闭" title="关闭">×</button>
+  </div>
+  <div class="imgview-ctrl">
+    <button id="imgViewZoomOut" aria-label="缩小" title="缩小"><svg viewBox="0 0 24 24"><circle cx="10.5" cy="10.5" r="6.5"/><path d="M21 21l-5.2-5.2M7.5 10.5h6"/></svg></button>
+    <button id="imgViewFit" class="zbtn" aria-label="缩放百分比,点击恢复适应屏幕" title="恢复适应屏幕">100%</button>
+    <button id="imgViewZoomIn" aria-label="放大" title="放大"><svg viewBox="0 0 24 24"><circle cx="10.5" cy="10.5" r="6.5"/><path d="M21 21l-5.2-5.2M7.5 10.5h6M10.5 7.5v6"/></svg></button>
+    <button id="imgViewRotate" aria-label="旋转 90 度" title="旋转"><svg viewBox="0 0 24 24"><path d="M20 11a8 8 0 1 0-2.34 5.66"/><path d="M20 5v6h-6"/></svg></button>
+  </div>
+</div>
+
+<script>
+/* ---------- 出发倒计时 ---------- */
+(function(){
+  var target = new Date("2026-11-06T18:52:00+08:00");
+  var back = new Date("2026-11-08T23:55:00+08:00");
+  var CD = { running: "🎿 行程进行中|开板快乐,注意安全", ended: "🏠 行程已结束|下次再聚" };
+  var daysEl = document.getElementById('cdDays'), hEl = document.getElementById('cdHours'),
+      mEl = document.getElementById('cdMins'), sEl = document.getElementById('cdSecs'),
+      head = document.getElementById('cdHead'), units = document.getElementById('cdUnits'),
+      msg = document.getElementById('cdMsg');
+  function setState(k){
+    var p = (CD[k] || '').split('|');
+    head.textContent = (p[0] || '').trim();
+    msg.textContent = (p[1] || '').trim();
+  }
+  function pad(n){return n<10?'0'+n:''+n}
+  function tick(){
+    var now = new Date(), d = target - now;
+    if(d > 0){
+      var days = Math.floor(d/86400000),
+          h = Math.floor(d%86400000/3600000),
+          m = Math.floor(d%3600000/60000),
+          s = Math.floor(d%60000/1000);
+      daysEl.textContent = days;
+      hEl.textContent = pad(h);
+      mEl.textContent = pad(m);
+      sEl.textContent = pad(s);
+    } else {
+      units.hidden = true;
+      msg.hidden = false;
+      setState(now < back ? 'running' : 'ended');
+    }
+  }
+  tick(); setInterval(tick, 1000);
+})();
+
+/* ---------- 导航:点击平滑滚 + 滚动高亮(双列瀑布流下按可视位置判定) ---------- */
+(function(){
+  var bar = document.getElementById('chips');
+  var links = Array.prototype.slice.call(bar.querySelectorAll('a'));
+  var secs = links.map(function(a){return document.querySelector(a.getAttribute('href'))}).filter(Boolean);
+  var lockUntil = 0, settleTimer = null, raf = 0, clicked = -1;
+
+  function setActive(a, force){
+    if(!a) return;
+    if(!force && a.classList.contains('on')) return;   // 已高亮:不重复滚动,避免抖动
+    links.forEach(function(x){x.classList.toggle('on', x === a)});
+    bar.scrollTo({left: a.offsetLeft - bar.clientWidth / 2 + a.clientWidth / 2, behavior:'smooth'});
+  }
+  // 双列瀑布流下 DOM 顺序≠视觉顺序:候选必须是"覆盖焦线"的板块;
+  // 两列同时压线时,刚点击的板块优先,否则取最晚滚过焦线的(top 最大)
+  function currentSection(){
+    var sy = window.scrollY || 0, line = sy + window.innerHeight * 0.35;
+    var covIdx = -1, covTop = -1, aboveIdx = -1, aboveTop = -1;
+    if(clicked >= 0){
+      var rc = secs[clicked].getBoundingClientRect();
+      if(rc.top + sy <= line && rc.bottom + sy >= line){ covIdx = clicked; covTop = Infinity; }
+      else clicked = -1;   // 已滚离所点板块,点击亲和失效
+    }
+    secs.forEach(function(s, i){
+      var r = s.getBoundingClientRect();
+      var top = r.top + sy, bot = r.bottom + sy;
+      if(top <= line && bot >= line){
+        if(top > covTop){ covIdx = i; covTop = top; }
+      }else if(bot < line && top > aboveTop){ aboveIdx = i; aboveTop = top; }
+    });
+    return links[covIdx >= 0 ? covIdx : (aboveIdx >= 0 ? aboveIdx : 0)];
+  }
+  function settle(){ lockUntil = 0; setActive(currentSection(), true); }
+  links.forEach(function(a, i){
+    a.addEventListener('click', function(){
+      clicked = i;                                    // 双列下另一列压线时保住所点板块
+      lockUntil = Date.now() + 1500;                  // 平滑滚动期间由点击接管高亮,停稳后校准
+      setActive(a, true);
+    });
+  });
+  // 页面内其它锚点跳转(如总览卡片)同样上锁,避免滚动途中高亮来回切换
+  document.addEventListener('click', function(e){
+    var a = e.target.closest ? e.target.closest('a[href^="#"]') : null;
+    if(a && a.getAttribute('href').length > 1 && !bar.contains(a)) lockUntil = Date.now() + 1500;
+  });
+  window.addEventListener('scroll', function(){
+    if(lockUntil){
+      clearTimeout(settleTimer);
+      settleTimer = setTimeout(settle, 140);          // 滚动停稳后解锁并校准一次
+    }else if(!raf){
+      raf = requestAnimationFrame(function(){ raf = 0; setActive(currentSection()); });
+    }
+  }, {passive:true});
+  var rsT = null;
+  window.addEventListener('resize', function(){       // 跨过 920px 瀑布流重排后校准一次
+    clearTimeout(rsT);
+    rsT = setTimeout(function(){ setActive(currentSection()); }, 150);
+  });
+})();
+
+/* ---------- 卡片滑入动效 ---------- */
+(function(){
+  var els = document.querySelectorAll('.hcard,.fcard,.day,.mcard,.ov-card,.ckgroup,.acard,.card');
+  if(!els.length || !('IntersectionObserver' in window)) return;
+  var io = new IntersectionObserver(function(entries){
+    entries.forEach(function(en){
+      en.target.classList.toggle('in', en.isIntersecting);
+    });
+  }, { rootMargin: '0px 0px -6% 0px' });
+  els.forEach(function(el){
+    el.classList.add('card-anim');
+    io.observe(el);
+  });
+})();
+
+/* ---------- 返回顶部(定位到行程总览,不是页面顶端) ---------- */
+(function(){
+  var t=document.getElementById('totop');
+  window.addEventListener('scroll',function(){t.classList.toggle('show',window.scrollY>600)},{passive:true});
+  t.addEventListener('click',function(){
+    var sec=document.querySelector('.wrap section[id]');
+    if(sec){
+      var bar=document.getElementById('chipbar');
+      var barH=bar?bar.offsetHeight:0;
+      var top=Math.ceil(sec.getBoundingClientRect().top+(window.scrollY||0)-barH);  // 小数精确+向上取整,杜绝亚像素蓝边
+      window.scrollTo({top:Math.max(0,top),behavior:'smooth'});
+    }
+    else window.scrollTo({top:0,behavior:'smooth'});
+  });
+})();
+
+/* ---------- 字段值复制(酒店/订单信息卡的复制按钮) ---------- */
+(function(){
+  function fallbackCopy(text){
+    var ta = document.createElement('textarea');
+    ta.value = text;
+    ta.style.cssText = 'position:fixed;left:-9999px;top:0';
+    document.body.appendChild(ta);
+    ta.select();
+    var ok = false;
+    try{ ok = document.execCommand('copy'); }catch(e){}
+    document.body.removeChild(ta);
+    return ok;
+  }
+  var CHECK = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 6L9 17l-5-5"/></svg>';
+  function flash(btn){
+    var old = btn.innerHTML;
+    btn.classList.add('done');
+    btn.innerHTML = CHECK;
+    setTimeout(function(){ btn.classList.remove('done'); btn.innerHTML = old; }, 1100);
+  }
+  document.addEventListener('click', function(e){
+    var b = e.target.closest ? e.target.closest('.li-cp') : null;
+    if(!b) return;
+    e.preventDefault();
+    e.stopPropagation();
+    var text = b.getAttribute('data-copy') || '';
+    if(navigator.clipboard && navigator.clipboard.writeText){
+      navigator.clipboard.writeText(text).then(function(){ flash(b); },
+        function(){ if(fallbackCopy(text)) flash(b); });
+    } else if(fallbackCopy(text)){
+      flash(b);
+    }
+  });
+})();
+
+/* ---------- 应用下载链接按系统分流:安卓走 安卓链接,其余(iOS)走默认链接 ---------- */
+(function(){
+  document.addEventListener('click', function(e){
+    var a = e.target.closest ? e.target.closest('a.alink[data-android]') : null;
+    if(!a) return;
+    e.preventDefault();
+    var url = /android/i.test(navigator.userAgent) ? a.getAttribute('data-android') : a.href;
+    var w = window.open(url, '_blank', 'noopener');
+    if(!w) location.href = url;   // 新窗口被拦截(如微信内)就当前页跳
+  });
+})();
+
+/* ---------- 头像悬浮气泡:桌面悬停显示昵称;手机长按约半秒显示,松手后收起 ---------- */
+(function(){
+  var tip = document.getElementById('avaTip');
+  if(!tip) return;
+  var hideT = null;
+  function show(img){
+    var name = (img.getAttribute('alt') || '').trim();
+    if(!name) return;
+    clearTimeout(hideT);
+    tip.textContent = name;
+    tip.classList.add('show');
+    var r = img.getBoundingClientRect();
+    var x = Math.min(Math.max(r.left + r.width / 2, 44), window.innerWidth - 44);
+    tip.style.left = x + 'px';
+    tip.style.top = Math.max(r.top, 30) + 'px';
+  }
+  function hide(){ tip.classList.remove('show'); }
+  function isAva(el){ return el && el.closest ? el.closest('img.mimg') : null; }
+  document.addEventListener('mouseover', function(e){
+    var t = isAva(e.target);
+    if(t) show(t); else hide();
+  });
+  document.addEventListener('mouseout', function(e){ if(isAva(e.target)) hide(); });
+  window.addEventListener('scroll', hide, {passive:true});
+  // 触屏:长按 500ms 显示;手指移动超过 8px 视为滚动,取消;松手 1.2s 后收起
+  document.addEventListener('touchstart', function(e){
+    var t = isAva(e.target);
+    hide();
+    if(!t || e.touches.length !== 1) return;
+    var sx = e.touches[0].clientX, sy = e.touches[0].clientY, timer = null, ended = false;
+    function done(){
+      if(ended) return; ended = true;
+      clearTimeout(timer);
+      document.removeEventListener('touchmove', move);
+      document.removeEventListener('touchend', done);
+    }
+    function move(ev){
+      if(Math.abs(ev.touches[0].clientX - sx) + Math.abs(ev.touches[0].clientY - sy) > 8) done();
+    }
+    timer = setTimeout(function(){
+      done();
+      show(t);
+      if(navigator.vibrate){ try{ navigator.vibrate(15); }catch(_){} }
+      hideT = setTimeout(hide, 1200);   // 显示 1.2 秒后自动收起
+    }, 500);
+    document.addEventListener('touchmove', move, {passive:true});
+    document.addEventListener('touchend', done);
+  }, {passive:true});
+  // 长按头像不弹系统"保存图片"菜单,避免和名字气泡打架
+  document.addEventListener('contextmenu', function(e){ if(isAva(e.target)) e.preventDefault(); });
+})();
+
+/* ---------- 默认收起的卡片:两行 + 渐变 + 箭头展开/收起 ---------- */
+(function(){
+  function measure(){
+  // 收起高度 = 前两行实际高度之和(字段行带说明小字时行高更高,保证两行完整可见)
+  document.querySelectorAll('.hcard.is-clamp').forEach(function(card){
+    var ul = card.querySelector('.dots');
+    var lis = ul ? ul.querySelectorAll('li') : [];
+    if(!ul || !lis.length) return;
+    var h = 0;
+    for(var i = 0; i < Math.min(2, lis.length); i++) h += lis[i].getBoundingClientRect().height;
+    if(h < 20) return;
+    if(lis.length <= 2 || ul.scrollHeight <= h + 2){
+      // 内容本来就装得下(两行以内):不收起,箭头隐藏
+      card.classList.remove('is-clamp');
+      var mb = card.querySelector('.clamp-more');
+      if(mb) mb.style.display = 'none';
+      return;
+    }
+    var clampH = Math.round(h) + 'px';
+    ul.dataset.clampH = clampH;
+    if(!card.classList.contains('open')) ul.style.maxHeight = clampH;
+  });
+  }
+  measure();
+  window.__clampMeasure = measure;   // 供桌面/移动布局切换后重算收起高度
+  document.addEventListener('click', function(e){
+    var b = e.target.closest ? e.target.closest('.clamp-more') : null;
+    if(!b) return;
+    e.preventDefault();
+    e.stopPropagation();
+    var card = b.closest('.hcard.is-clamp');
+    var ul = card && card.querySelector('.dots');
+    if(!ul) return;
+    if(card.classList.contains('open')){
+      ul.style.maxHeight = ul.scrollHeight + 'px';   // 先钉住当前高度再收,动画才有起点
+      void ul.offsetHeight;
+      card.classList.remove('open');
+      ul.style.maxHeight = ul.dataset.clampH || '';
+    }else{
+      card.classList.add('open');
+      ul.style.maxHeight = ul.scrollHeight + 'px';
+      setTimeout(function(){ if(card.classList.contains('open')) ul.style.maxHeight = 'none'; }, 400);
+    }
+  });
+})();
+
+/* ---------- 桌面端双列瀑布流(≥920px):板块整块参与,优先左右交替流入较矮列 ---------- */
+(function(){
+  var wrap = document.querySelector('body > .wrap') || (document.getElementById('overview') || {}).parentNode;
+  if(!wrap) return;
+  var secs = Array.prototype.slice.call(wrap.querySelectorAll(':scope > section'));
+  var cols = [];
+  var mq = window.matchMedia('(min-width:920px)');
+  function masonry(){
+    if(mq.matches){
+      if(wrap.classList.contains('masonry')) return;
+      wrap.classList.add('masonry');
+      cols = [document.createElement('div'), document.createElement('div')];
+      cols.forEach(function(c){ c.className = 'mcol'; wrap.appendChild(c); });
+      secs.forEach(function(sec){
+        var t = cols[0].getBoundingClientRect().height <= cols[1].getBoundingClientRect().height ? cols[0] : cols[1];
+        t.appendChild(sec);
+      });
+    }else if(wrap.classList.contains('masonry')){
+      wrap.classList.remove('masonry');
+      cols.forEach(function(c){ c.remove(); });
+      cols = [];
+      secs.forEach(function(sec){ wrap.appendChild(sec); });   // 按原顺序放回
+    }
+    if(window.__clampMeasure) setTimeout(window.__clampMeasure, 50);   // 列宽变了,重算收起高度
+  }
+  masonry();
+  var timer = null;
+  window.addEventListener('resize', function(){
+    clearTimeout(timer);
+    timer = setTimeout(masonry, 200);
+  });
+})();
+(function(){
+  var el = document.getElementById('srcdata');
+  if(!el) return;
+  var SOURCES;
+  try{ SOURCES = JSON.parse(el.textContent); }catch(e){ return; }
+  var mask = document.getElementById('srcMask');
+  var title = document.getElementById('srcTitle');
+  var list = document.getElementById('srcList');
+  function close(){
+    mask.classList.remove('open');
+    document.body.style.overflow = '';
+  }
+  document.getElementById('srcClose').addEventListener('click', close);
+  mask.addEventListener('click', function(e){ if(e.target === mask) close(); });
+  document.addEventListener('keydown', function(e){ if(e.key === 'Escape') close(); });
+  document.querySelectorAll('section[id]').forEach(function(sec){
+    var items = SOURCES[sec.id];
+    if(!items || !items.length) return;
+    var head = sec.querySelector('.sec-head');
+    if(!head) return;
+    var btn = document.createElement('button');
+    btn.className = 'src-entry';
+    btn.textContent = '📎 参考数据源 ' + items.length;
+    btn.addEventListener('click', function(){
+      var h2 = sec.querySelector('h2');
+      title.textContent = '「' + (h2 ? h2.textContent.trim() : '') + '」参考数据源';
+      list.innerHTML = items.map(function(it){
+        return '<a class="src-item" href="' + it.url + '" target="_blank" rel="noopener">' +
+          '<div class="src-name">' + it.name + (it.note ? '<span class="src-note">' + it.note + '</span>' : '') + '</div>' +
+          '<div class="src-url">' + it.url + '</div></a>';
+      }).join('');
+      mask.classList.add('open');
+      document.body.style.overflow = 'hidden';
+    });
+    var wrap = document.createElement('div');
+    wrap.className = 'src-wrap';
+    wrap.appendChild(btn);
+    var tip = sec.querySelector(':scope > .tip');
+    if(tip){
+      // 有提示句:同一行——提示句在左、数据源入口在右,共用一条虚线,互不叠压
+      var row = document.createElement('div');
+      row.className = 'src-tip-row';
+      sec.insertBefore(row, tip);
+      row.appendChild(tip);
+      row.appendChild(wrap);
+    }else{
+      sec.appendChild(wrap);   // 板块末尾(最后一张卡之后)
+    }
+  });
+})();
+
+/* ---------- 图片全屏查看(缩放/旋转/拖动) ---------- */
+(function(){
+  var view = document.getElementById('imgView');
+  var img = document.getElementById('imgViewImg');
+  var fitBtn = document.getElementById('imgViewFit');
+  var st = { s:1, tx:0, ty:0, rot:0, bw:0, bh:0, nw:0, nh:0,
+             d0:0, s0:1, x0:0, y0:0, tx0:0, ty0:0, lastTap:0, moved:false };
+  var md = null;
+
+  function apply(anim){
+    img.classList.toggle('anim', !!anim);
+    img.style.transform = 'translate(-50%,-50%) translate(' + st.tx + 'px,' + st.ty + 'px) rotate('
+      + st.rot + 'deg) scale(' + st.s + ')';
+    fitBtn.textContent = Math.round(st.s * 100) + '%';
+    if(anim) setTimeout(function(){ img.classList.remove('anim'); }, 300);
+  }
+  function fit(){
+    var vw = view.clientWidth, vh = view.clientHeight, pad = 36;
+    var rw = (st.rot % 180 === 0) ? st.nw : st.nh;
+    var rh = (st.rot % 180 === 0) ? st.nh : st.nw;
+    if(!rw || !rh) return;
+    var f = Math.min((vw - pad) / rw, (vh - pad) / rh);
+    st.bw = st.nw * f;
+    st.bh = st.nh * f;
+    img.style.width = st.bw + 'px';
+    img.style.height = st.bh + 'px';
+  }
+  function clamp(){
+    var vw = view.clientWidth, vh = view.clientHeight;
+    var rw = (st.rot % 180 === 0) ? st.bw : st.bh;
+    var rh = (st.rot % 180 === 0) ? st.bh : st.bw;
+    var mx = Math.max(0, (rw * st.s - vw) / 2 + 28);
+    var my = Math.max(0, (rh * st.s - vh) / 2 + 28);
+    st.tx = Math.min(mx, Math.max(-mx, st.tx));
+    st.ty = Math.min(my, Math.max(-my, st.ty));
+  }
+  function zoomTo(s, cx, cy){
+    s = Math.min(6, Math.max(1, s));
+    var k = s / st.s, ox = cx - view.clientWidth / 2, oy = cy - view.clientHeight / 2;
+    st.tx = (st.tx - ox) * k + ox;
+    st.ty = (st.ty - oy) * k + oy;
+    st.s = s; clamp(); apply(false);
+  }
+  function open(src){
+    st.rot = 0; st.s = 1; st.tx = 0; st.ty = 0; st.nw = 0; st.nh = 0;
+    img.style.width = img.style.height = '';
+    img.style.transform = 'translate(-50%,-50%)';
+    img.onload = function(){
+      st.nw = img.naturalWidth || 1; st.nh = img.naturalHeight || 1;
+      fit(); apply(false);
+    };
+    img.src = src;
+    if(img.complete && img.naturalWidth){
+      st.nw = img.naturalWidth; st.nh = img.naturalHeight; fit(); apply(false);
+    }
+    view.classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+  function close(){
+    view.classList.remove('open');
+    var pop = document.getElementById('popMask');
+    if(!pop || !pop.classList.contains('open')) document.body.style.overflow = '';
+    img.removeAttribute('src');
+  }
+  window.openImgView = open;
+
+  document.getElementById('imgViewClose').addEventListener('click', close);
+  document.getElementById('imgViewRotate').addEventListener('click', function(){
+    st.rot = (st.rot + 90) % 360;
+    st.tx = 0; st.ty = 0; st.s = 1;
+    fit(); apply(true);
+  });
+  document.getElementById('imgViewZoomIn').addEventListener('click', function(){
+    zoomTo(st.s * 1.35, view.clientWidth / 2, view.clientHeight / 2);
+  });
+  document.getElementById('imgViewZoomOut').addEventListener('click', function(){
+    zoomTo(st.s / 1.35, view.clientWidth / 2, view.clientHeight / 2);
+  });
+  fitBtn.addEventListener('click', function(){ st.s = 1; st.tx = 0; st.ty = 0; apply(true); });
+  view.addEventListener('click', function(e){ if(e.target === view && !st.moved) close(); });
+
+  view.addEventListener('touchstart', function(e){
+    if(e.target.closest('.imgview-ctrl,.imgview-bar')) return;   // 控件上的触摸不参与手势,避免连点被误判为双击
+    if(e.touches.length === 2){
+      var dx = e.touches[0].clientX - e.touches[1].clientX,
+          dy = e.touches[0].clientY - e.touches[1].clientY;
+      st.d0 = Math.sqrt(dx * dx + dy * dy); st.s0 = st.s;
+    } else if(e.touches.length === 1){
+      var x = e.touches[0].clientX, y = e.touches[0].clientY;
+      st.x0 = x; st.y0 = y; st.tx0 = st.tx; st.ty0 = st.ty; st.moved = false;
+      var now = Date.now();
+      if(now - st.lastTap < 300){
+        zoomTo(st.s > 1 ? 1 : 2.5, x, y);
+        st.lastTap = 0;
+        st.tapHandled = Date.now();   // 标记:这次双击已由触屏逻辑处理
+      } else st.lastTap = now;
+    }
+  }, {passive:true});
+  view.addEventListener('touchmove', function(e){
+    if(e.target.closest('.imgview-ctrl,.imgview-bar')) return;
+    e.preventDefault();
+    if(e.touches.length === 2){
+      var dx = e.touches[0].clientX - e.touches[1].clientX,
+          dy = e.touches[0].clientY - e.touches[1].clientY;
+      var d = Math.sqrt(dx * dx + dy * dy);
+      if(st.d0 > 0){
+        zoomTo(st.s0 * d / st.d0,
+               (e.touches[0].clientX + e.touches[1].clientX) / 2,
+               (e.touches[0].clientY + e.touches[1].clientY) / 2);
+      }
+    } else if(e.touches.length === 1 && st.s > 1){
+      var mx = e.touches[0].clientX - st.x0, my = e.touches[0].clientY - st.y0;
+      if(Math.abs(mx) + Math.abs(my) > 6) st.moved = true;
+      st.tx = st.tx0 + mx; st.ty = st.ty0 + my;
+      clamp(); apply(false);
+    }
+  }, {passive:false});
+
+  view.addEventListener('wheel', function(e){
+    e.preventDefault();
+    zoomTo(st.s * (e.deltaY < 0 ? 1.15 : 1 / 1.15), e.clientX, e.clientY);
+  }, {passive:false});
+  img.addEventListener('dblclick', function(e){
+    if(Date.now() - (st.tapHandled || 0) < 600) return;   // 触屏双击已被 touchstart 处理,浏览器合成的 dblclick 忽略,否则放大后又弹回 1 倍
+    zoomTo(st.s > 1 ? 1 : 2.5, e.clientX, e.clientY);
+  });
+  img.addEventListener('mousedown', function(e){
+    if(st.s > 1){ md = { x:e.clientX, y:e.clientY, tx:st.tx, ty:st.ty }; e.preventDefault(); }
+  });
+  window.addEventListener('mousemove', function(e){
+    if(md){ st.tx = md.tx + (e.clientX - md.x); st.ty = md.ty + (e.clientY - md.y); clamp(); apply(false); }
+  });
+  window.addEventListener('mouseup', function(){ md = null; });
+  window.addEventListener('resize', function(){
+    if(!view.classList.contains('open')) return;
+    fit(); clamp(); apply(false);
+  });
+})();
+
+/* ---------- 卡片放大弹窗(点击卡片打开,仅 × 关闭,内部滚动) ---------- */
+(function(){
+  var el = document.getElementById('carddata');
+  var DETAILS = {};
+  if(el){ try{ DETAILS = JSON.parse(el.textContent); }catch(e){} }
+  var mask = document.getElementById('popMask');
+  var title = document.getElementById('popTitle');
+  var body = document.getElementById('popBody');
+  var SELECTOR = '.hcard,.fcard,.day,.mcard,.phone,.ckgroup,.card,.ov-card';
+
+  function titleOf(card){
+    var sec = card.closest('section');
+    var t = card.querySelector('h3') || card.querySelector('.fno') || card.querySelector('.mname')
+         || card.querySelector('.p-name') || card.querySelector('.ckhead')
+         || card.querySelector('.d-title b') || card.querySelector('.r-t')
+         || (sec ? sec.querySelector('h2') : null);
+    if(!t) return '详情';
+    var clone = t.cloneNode(true);   // 徽章(首选/备选等)不进弹窗标题
+    Array.prototype.forEach.call(clone.querySelectorAll('.badge'), function(b){ b.remove(); });
+    return clone.textContent.trim() || '详情';
+  }
+  // 连续的多个链接(2~4 个)合并到同一行显示
+  function mergeLinkRuns(more){
+    var kids = Array.prototype.slice.call(more.children), run = [];
+    function flush(){
+      if(run.length >= 2 && run.length <= 4){
+        var row = document.createElement('div');
+        row.className = 'lnkrow';
+        row.style.gridTemplateColumns = 'repeat(' + run.length + ',1fr)';
+        more.insertBefore(row, run[0]);
+        run.forEach(function(el){ row.appendChild(el); });
+      }
+      run = [];
+    }
+    kids.forEach(function(el){
+      if(el.classList.contains('blk') && el.getAttribute('data-t') === '链接') run.push(el);
+      else flush();
+    });
+    flush();
+  }
+  function blockNode(bt){
+    var d = document.createElement('div'); d.className = 'blk';
+    d.setAttribute('data-t', bt.t);
+    if(bt.t === '标题'){
+      var h = document.createElement('h4'); h.textContent = bt.c; d.appendChild(h);
+    } else if(bt.t === '文本'){
+      var p = document.createElement('p'); p.textContent = bt.c || ' '; d.appendChild(p);
+    } else if(bt.t === '提示'){
+      var tb = document.createElement('div'); tb.className = 'tipbox'; tb.textContent = bt.c; d.appendChild(tb);
+    } else if(bt.t === '图片'){
+      var im = document.createElement('img'); im.src = bt.c; im.alt = bt.n || ''; im.loading = 'lazy';
+      d.appendChild(im);
+      if(bt.n){ var cap = document.createElement('div'); cap.className = 'blk-cap'; cap.textContent = bt.n; d.appendChild(cap); }
+    } else if(bt.t === '视频'){
+      var u = bt.c || '';
+      if(/youtube|youtu\.be|bilibili|\/embed\//i.test(u)){
+        var f = document.createElement('iframe'); f.src = u;
+        f.allow = 'fullscreen; encrypted-media; picture-in-picture';
+        f.setAttribute('allowfullscreen', ''); f.loading = 'lazy'; d.appendChild(f);
+      }else{
+        var v = document.createElement('video'); v.src = u; v.controls = true;
+        v.playsInline = true; v.preload = 'metadata'; d.appendChild(v);
+      }
+      if(bt.n){ var vc = document.createElement('div'); vc.className = 'blk-cap'; vc.textContent = bt.n; d.appendChild(vc); }
+    } else if(bt.t === '链接'){
+      var a = document.createElement('a'); a.className = 'lnkbtn'; a.href = bt.c;
+      a.target = '_blank'; a.rel = 'noopener'; a.textContent = bt.n || bt.c; d.appendChild(a);
+    } else if(bt.t === '字段'){
+      // 说明列=字段名,内容列=值:左标签右值,右侧带复制按钮
+      var fr = document.createElement('div'); fr.className = 'pf-row';
+      var fl = document.createElement('span'); fl.className = 'pf-lab'; fl.textContent = bt.n || '';
+      var fv = document.createElement('span'); fv.className = 'pf-val'; fv.textContent = bt.c || '';
+      var cp = document.createElement('button'); cp.type = 'button'; cp.className = 'li-cp';
+      cp.title = '复制'; cp.setAttribute('aria-label', '复制' + (bt.n || ''));
+      cp.setAttribute('data-copy', bt.c || '');
+      cp.innerHTML = '<svg viewBox="0 0 24 24"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h10"/></svg>';
+      fr.appendChild(fl); fr.appendChild(fv); fr.appendChild(cp);
+      d.appendChild(fr);
+    } else if(bt.t === '文档'){
+      var f = document.createElement('a'); f.className = 'lnkbtn'; f.href = bt.c;
+      f.target = '_blank'; f.rel = 'noopener'; f.textContent = '📄 ' + (bt.n || '查看文件'); d.appendChild(f);
+    } else if(bt.t === '头像'){
+      // 内容=昵称列表,支持 | 分组(如 两个小房间各 2 人) → 分组显示,组间 / 分隔;
+      // imgs=按视觉顺序展开的头像路径(空串渲染 👤);说明列=标签(如 住宿人)
+      if(bt.n){ var pl = document.createElement('div'); pl.className = 'blk-cap';
+        pl.style.marginTop = '0'; pl.textContent = bt.n; d.appendChild(pl); }
+      var prow = document.createElement('div'); prow.className = 'pstack';
+      var idx = 0;
+      var groups = (bt.c || '').split('|').map(function(s){return s.trim()}).filter(Boolean);
+      if(!groups.length) groups = [''];
+      groups.forEach(function(gr, gi){
+        if(gi > 0){ var sp = document.createElement('span'); sp.className = 'r-avsep';
+          sp.textContent = '/'; prow.appendChild(sp); }
+        gr.split(/[、,，/]/).map(function(s){return s.trim()}).filter(Boolean)
+          .forEach(function(nm){
+            var u = (bt.imgs && bt.imgs[idx]) || ''; idx++;
+            if(u){ var pi = document.createElement('img'); pi.src = u; pi.alt = nm;
+                   pi.loading = 'lazy'; pi.className = 'mimg'; prow.appendChild(pi); }
+            else { var ps = document.createElement('span'); ps.className = 'avt';
+                   ps.textContent = '👤'; prow.appendChild(ps); }
+          });
+      });
+      d.appendChild(prow);
+    } else {
+      d.textContent = bt.c || '';
+    }
+    return d;
+  }
+  function removeTabsBar(){
+    var old = document.querySelector('.pop-head + .pop-tabs');
+    if(old) old.remove();
+  }
+  function open(card){
+    title.textContent = titleOf(card);
+    body.innerHTML = '';
+    removeTabsBar();
+    var key = card.getAttribute('data-card');
+    var data = key ? DETAILS[key] : null;
+    var tabsInfo = (data && !Array.isArray(data) && data.tabs) ? data.tabs : null;
+    if(tabsInfo && tabsInfo.length){
+      // 多页签模式:页签栏固定在标题栏下方,内容在下方滚动区
+      var bar = document.createElement('div'); bar.className = 'pop-tabs';
+      var panes = document.createElement('div'); panes.className = 'pop-panes';
+      tabsInfo.forEach(function(tb, idx){
+        var btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = 'pop-tab' + (idx === 0 ? ' on' : '');
+        btn.textContent = tb.name;
+        var pane = document.createElement('div');
+        pane.className = 'pop-more pop-pane' + (idx === 0 ? '' : ' hidden');
+        var hasContent = false;
+        if(tb.blocks && tb.blocks.length){
+          tb.blocks.forEach(function(bt){ pane.appendChild(blockNode(bt)); });
+          mergeLinkRuns(pane);
+          hasContent = true;
+        }
+        // 二级页签(如 登机凭证/幽助):胶囊子页签 + 子内容区
+        if(tb.subs && tb.subs.length){
+          var sbar = document.createElement('div'); sbar.className = 'pop-subtabs';
+          var swrap = document.createElement('div'); swrap.className = 'pop-subwrap';
+          tb.subs.forEach(function(sb, si){
+            var sbn = document.createElement('button');
+            sbn.type = 'button';
+            sbn.className = 'pop-subtab' + (si === 0 ? ' on' : '');
+            sbn.textContent = sb.name;
+            var sp = document.createElement('div');
+            sp.className = 'pop-more pop-subpane' + (si === 0 ? '' : ' hidden');
+            if(sb.blocks && sb.blocks.length){
+              sb.blocks.forEach(function(bt){ sp.appendChild(blockNode(bt)); });
+              mergeLinkRuns(sp);
+            }else{
+              var ph2 = document.createElement('div'); ph2.className = 'pop-hint';
+              ph2.textContent = '📷 内容待补充:在「卡片详情」表页签填「' + tb.name + '/' + sb.name + '」';
+              sp.appendChild(ph2);
+            }
+            sbn.addEventListener('click', function(){
+              Array.prototype.forEach.call(sbar.children, function(x){ x.classList.remove('on'); });
+              sbn.classList.add('on');
+              Array.prototype.forEach.call(swrap.children, function(p){ p.classList.add('hidden'); });
+              sp.classList.remove('hidden');
+              body.scrollTop = 0;
+            });
+            sbar.appendChild(sbn);
+            swrap.appendChild(sp);
+          });
+          pane.appendChild(sbar);
+          pane.appendChild(swrap);
+          hasContent = true;
+        }
+        if(!hasContent){
+          var ph = document.createElement('div'); ph.className = 'pop-hint';
+          ph.textContent = '📷 内容待补充:在「卡片详情」表按该页签名称添加内容块';
+          pane.appendChild(ph);
+        }
+        btn.addEventListener('click', function(){
+          Array.prototype.forEach.call(bar.children, function(x){ x.classList.remove('on'); });
+          btn.classList.add('on');
+          Array.prototype.forEach.call(panes.children, function(p){ p.classList.add('hidden'); });
+          pane.classList.remove('hidden');
+          body.scrollTop = 0;
+        });
+        bar.appendChild(btn);
+        panes.appendChild(pane);
+      });
+      var popHead = document.querySelector('.pop-head');
+      if(popHead) popHead.insertAdjacentElement('afterend', bar); else body.appendChild(bar);
+      body.appendChild(panes);
+    } else if(data && data.length){
+      var more = document.createElement('div'); more.className = 'pop-more';
+      data.forEach(function(bt){ more.appendChild(blockNode(bt)); });
+      mergeLinkRuns(more);
+      body.appendChild(more);
+    } else {
+      var hint = document.createElement('div'); hint.className = 'pop-hint';
+      hint.textContent = '📖 详细内容待补充:在 表格\\攻略数据.xlsx「卡片详情」表按 板块+卡片 添加文本/图片/视频/链接';
+      body.appendChild(hint);
+    }
+    mask.classList.add('open');
+    var popBox = mask.querySelector('.pop');
+    if(popBox) popBox.classList.toggle('alt', !!(card && card.classList.contains('is-alt')));  // 备选卡:弹窗同步弱化
+    document.body.style.overflow = 'hidden';
+    body.scrollTop = 0;
+  }
+  function close(){
+    mask.classList.remove('open');
+    var popBox = mask.querySelector('.pop');
+    if(popBox) popBox.classList.remove('alt');
+    document.body.style.overflow = '';
+    body.innerHTML = '';
+    removeTabsBar();
+  }
+  document.getElementById('popClose').addEventListener('click', close);
+  mask.addEventListener('click', function(e){ if(e.target === mask) close(); });
+  document.querySelectorAll(SELECTOR).forEach(function(card){
+    var key = card.getAttribute('data-card');
+    var d = key ? DETAILS[key] : null;
+    var hasDetail = !!(d && ((d.length) || (d.tabs && d.tabs.length)));
+    if(!hasDetail) return;   // 没有补充内容的卡片:不加按钮、不可点击
+    card.classList.add('card-pop');
+    card.classList.add('has-zoom');
+    var btn = document.createElement('button'); btn.className = 'zoom-btn'; btn.type = 'button';
+    btn.setAttribute('aria-label', '放大查看');
+    btn.innerHTML = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9V5a1 1 0 0 1 1-1h4M15 4h4a1 1 0 0 1 1 1v4M20 15v4a1 1 0 0 1-1 1h-4M9 20H5a1 1 0 0 1-1-1v-4"/></svg>';
+    btn.addEventListener('click', function(e){ e.stopPropagation(); open(card); });
+    card.appendChild(btn);
+    card.addEventListener('click', function(e){
+      if(e.target.closest('a,button,input,label,summary')) return;
+      var inner = e.target.closest('[data-card]');   // 点在嵌套子卡上:交给子卡自己的弹窗
+      if(inner && inner !== card) return;
+      open(card);
+    });
+  });
+  // 弹窗里的图片:点击进入全屏查看(支持缩放/旋转/拖动)
+  body.addEventListener('click', function(e){
+    var t = e.target;
+    if(t && t.tagName === 'IMG' && t.closest('.blk')) window.openImgView(t.src);
+  });
+})();
+</script>
+</body>
+</html>
