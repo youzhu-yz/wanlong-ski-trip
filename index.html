@@ -195,6 +195,7 @@ section{padding:18px 0 2px;scroll-margin-top:calc(var(--chip-h) + 8px)}
 .train-go button:active{background:#ddeefb}
 .train-go button[disabled]{opacity:.45;cursor:default}
 .fstop em{transition:opacity .45s}
+.fstop{transition:opacity .45s}
 .fcard .fport{transition:transform .55s ease}
 .fstop em img{width:20px;height:20px;border-radius:50%;object-fit:cover;
   border:2px solid var(--card);box-shadow:0 1px 3px rgba(16,24,40,.18);   /* 与乘机人头像排同款边框/阴影 */
@@ -917,7 +918,7 @@ footer b{color:#4a5468}
 </div><!-- /wrap -->
 
 <footer>
-  <div>❄️ <b>万龙,启动!</b> · v0.288 分享版</div>
+  <div>❄️ <b>万龙,启动!</b> · v0.289 分享版</div>
   
 </footer>
 
@@ -1132,36 +1133,38 @@ footer b{color:#4a5468}
   });
 })();
 
-/* ---------- G30 去程:头像火车动画 v6(按钮触发循环:停卡片中央→第6人走上车→北京南居中停) ---------- */
+/* ---------- G30 去程:头像火车动画 v7(按钮触发:虹桥→中央带人→北京南常驻,重新发车重播) ---------- */
 (function(){
   var card = document.querySelector('.fcard');
   if(!card || !card.querySelector('.fstop')) return;
 
   function wait(ms){ return new Promise(function(r){ setTimeout(r, ms); }); }
 
-  var layer, row;
+  var layer, row, btn;
+  var route = card.querySelector('.froute');
   var stack = card.querySelector('.fstack');
-  var stopEm = card.querySelector('.fstop em');
+  var fstop = card.querySelector('.fstop');
   var port1 = card.querySelectorAll('.fport')[0];
   var port2 = card.querySelectorAll('.fport')[1];
   var avas = stack ? Array.prototype.slice.call(stack.querySelectorAll('img')) : [];
-  var zl = stopEm ? stopEm.querySelector('img') : null;
+  var zl = fstop ? fstop.querySelector('em img') : null;
   if(avas.length < 2 || !zl || !port2 || !port1) return;
 
   var H0 = 0;
-  var lane = null;
+  var lane = null;   // 出发原位,只在最初量一次;动画期间布局锁定,坐标永不变
 
-  function measure(){
-    var rr = card.querySelector('.froute').getBoundingClientRect();
+  function measureOnce(){
+    var rr = route.getBoundingClientRect();
     var fa = stack.querySelector('img');
     var fr = fa.getBoundingClientRect();
     var p1 = port1.getBoundingClientRect();
     var w0 = avas.length * 25 - (avas.length - 1) * 9;
     lane = { sx: p1.left + p1.width / 2 - w0 / 2 - rr.left, sy: fr.top - rr.top };
     H0 = stack.offsetHeight;
+    route.style.minHeight = route.offsetHeight + 'px';   // 锁高:文字下沉不压扁卡片
   }
 
-  function slotCollapse(){
+  function slotCollapse(){   // 虹桥:火车出站后,栈占位收起 → 文字下沉(卡片高度不变)
     stack.style.overflow = 'hidden';
     stack.style.height = H0 + 'px';
     void stack.offsetWidth;
@@ -1185,7 +1188,7 @@ footer b{color:#4a5468}
     row.className = 'train-row';
     row.style.left = '-9999px';
     layer.appendChild(row);
-    card.querySelector('.froute').appendChild(layer);
+    route.appendChild(layer);
   }
 
   function resetRow(){
@@ -1203,71 +1206,75 @@ footer b{color:#4a5468}
       function(w, im){ return w + im.getBoundingClientRect().width - 9; }, 25);
   }
 
-  function cycle(){
-    var M = measure();
+  function run(){
+    var rr0 = route.getBoundingClientRect();
+    var rrW = rr0.width;
+    var zR = fstop.getBoundingClientRect();
+    var zxC = zR.left + zR.width / 2 - rr0.left;
+    var zy = zR.top + 6 - rr0.top;   // 候车胶囊的大致中心
+    var pxC = port2.getBoundingClientRect().left + port2.getBoundingClientRect().width / 2 - rr0.left;
+
     resetRow();
     slotRestore();
-    stopEm.style.opacity = '';
+    fstop.style.opacity = '';
     port2.style.transform = '';
     layer.classList.add('show');
-    var rr0 = card.querySelector('.froute').getBoundingClientRect();
-    var rrW = rr0.width;
-    var zR = stopEm.getBoundingClientRect();
-    var zxC = zR.left + zR.width / 2 - rr0.left;
-    var zy = zR.top - rr0.top;
-    var pxC = port2.getBoundingClientRect().left + port2.getBoundingClientRect().width / 2 - rr0.left;
+
+    function walkIn(){   // 第 6 人从苏州北候车点走到队尾
+      var tail = row.getBoundingClientRect().left - rr0.left;
+      var wk = document.createElement('img');
+      wk.src = zl.src;
+      wk.className = 'train-walk';
+      wk.style.left = (zxC - 12) + 'px';
+      wk.style.top = zy + 'px';
+      layer.appendChild(wk);
+      void wk.offsetWidth;
+      wk.style.transform = 'translate(' + (tail - (zxC - 12)) + 'px,' + (lane.sy - zy) + 'px)';
+      return wait(1400).then(function(){
+        wk.remove();
+        var im = document.createElement('img');
+        im.src = zl.src;
+        row.insertBefore(im, row.firstChild);
+      });
+    }
 
     var seq = [
       function(){ row.style.transition = 'transform 2.4s cubic-bezier(.45,.05,.55,.95)'; return wait(1000); },
       function(){
-        // 火车停在卡片相对居中的位置候客(火车此后不动)
         row.style.transform = 'translateX(' + (rrW / 2 - rowW() / 2 - lane.sx) + 'px)';
-        setTimeout(slotCollapse, 600);
+        setTimeout(slotCollapse, 600);      // 出站后虹桥文字下沉
+        fstop.style.opacity = '0';          // 发车即淡出:苏州北站名 + 候车胶囊
         return wait(2500);
       },
-      function(){
-        // 第 6 人从苏州北候车点自己走到火车最末尾(队尾)
-        stopEm.style.opacity = '0';
-        var tail = row.getBoundingClientRect().left - rr0.left;
-        var wk = document.createElement('img');
-        wk.src = zl.src;
-        wk.className = 'train-walk';
-        wk.style.left = (zxC - 12) + 'px';
-        wk.style.top = zy + 'px';
-        layer.appendChild(wk);
-        void wk.offsetWidth;
-        wk.style.transform = 'translate(' + (tail - (zxC - 12)) + 'px,' + (lane.sy - zy) + 'px)';
-        return wait(1400).then(function(){
-          wk.remove();
-          var im = document.createElement('img');
-          im.src = zl.src;
-          row.insertBefore(im, row.firstChild);   // 到位后并入队尾
-        });
-      },
-      function(){ return wait(1000); },   // 上车后停 2 秒(走1秒+停1秒)
+      function(){ return walkIn(); },
+      function(){ return wait(1000); },
       function(){
         row.style.transform = 'translateX(' + (pxC - rowW() / 2 - lane.sx) + 'px)';
         setTimeout(function(){ port2.style.transform = 'translateY(-6px)'; }, 1600);
         return wait(2500);
-      },
-      function(){ return wait(5000); },
-      function(){ layer.classList.remove('show'); return wait(500); }
+      }
     ];
     var i2 = 0;
     (function step(){
-      if(i2 >= seq.length){ cycle(); return; }
+      if(i2 >= seq.length){
+        // 到站常驻:按钮变「重新发车」,火车留在北京南不动
+        btn.disabled = false;
+        btn.textContent = '重新发车 ↻';
+        return;
+      }
       Promise.resolve(seq[i2++]()).then(step);
     })();
   }
 
   function start(){
     if(window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    measureOnce();
     build();
-    stack.style.visibility = 'hidden';
-    cycle();
+    stack.style.visibility = 'hidden';   // 原栈内容常隐(占位参与布局)
+    run();
   }
 
-  var btn = document.createElement('button');
+  btn = document.createElement('button');
   btn.type = 'button';
   btn.textContent = '出发 ▶';
   var wrap = document.createElement('div');
@@ -1277,8 +1284,18 @@ footer b{color:#4a5468}
   btn.addEventListener('click', function(){
     if(btn.disabled) return;
     btn.disabled = true;
-    btn.textContent = '已发车 🚄';
-    start();
+    if(layer){
+      // 重新发车:先回默认布局(文字升回/胶囊再现/火车淡出),再从头播放
+      btn.textContent = '已发车 🚄';
+      layer.classList.remove('show');
+      slotRestore();
+      fstop.style.opacity = '';
+      port2.style.transform = '';
+      setTimeout(run, 800);
+    }else{
+      btn.textContent = '已发车 🚄';
+      start();
+    }
   });
 })();
 
