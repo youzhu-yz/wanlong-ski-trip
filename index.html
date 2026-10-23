@@ -175,7 +175,7 @@ section{padding:18px 0 2px;scroll-margin-top:calc(var(--chip-h) + 8px)}
 .fstop em{display:flex;align-items:center;justify-content:center;font-style:normal;font-size:8px;
   font-weight:600;color:#fff;background:var(--accent);border-radius:999px;padding:1px 6px;
   margin:4px auto 0;width:fit-content;letter-spacing:.5px}
-.train-anim{position:absolute;inset:0;z-index:4;pointer-events:none;will-change:transform;
+.train-anim{position:absolute;inset:0;z-index:4;pointer-events:none;
   opacity:0;transition:opacity .4s}
 .train-anim.show{opacity:1}
 .train-row{position:absolute;display:flex;will-change:transform;
@@ -919,7 +919,7 @@ footer b{color:#4a5468}
 </div><!-- /wrap -->
 
 <footer>
-  <div>❄️ <b>万龙,启动!</b> · v0.309 分享版</div>
+  <div>❄️ <b>万龙,启动!</b> · v0.310 分享版</div>
   
 </footer>
 
@@ -1199,7 +1199,6 @@ footer b{color:#4a5468}
     stack.style.paddingLeft = '9px';
   }
 
-  var walker = null;
   function build(){
     layer = document.createElement('div');
     layer.className = 'train-anim';
@@ -1207,11 +1206,6 @@ footer b{color:#4a5468}
     row.className = 'train-row';
     row.style.left = '-9999px';
     layer.appendChild(row);
-    walker = document.createElement('img');   // 尾卡常驻,仅显隐复用,避免每轮建删引起合成层抖动
-    walker.className = 'train-walk';
-    walker.style.zIndex = '-1';
-    walker.style.display = 'none';
-    layer.appendChild(walker);
     route.appendChild(layer);
   }
 
@@ -1240,6 +1234,9 @@ footer b{color:#4a5468}
     var pxC = p2R0.left + p2R0.width / 2 - o0.x;
 
     resetRow();
+    Array.prototype.forEach.call(layer.querySelectorAll('.train-walk'),
+      function(w){ w.remove(); });   // 清扫上一轮残留的尾卡(重播时局部变量引用不到)
+    walker = null;
     slotRestore(true);               // 瞬时复位,一帧回默认态
     stopEm.style.transition = 'none';
     stopEm.style.opacity = '';
@@ -1254,19 +1251,20 @@ footer b{color:#4a5468}
     void layer.offsetWidth;
     layer.style.transition = '';
 
+    var walker = null;
     function rowX(){   // row 当前 translateX 数值(解析,不读矩形)
       return parseFloat((row.style.transform.match(/[-\d.]+/g) || ['0'])[0]) || 0;
     }
-    function walkIn(){   // 第 6 人:候车点直线走到队尾(后景);常驻尾卡复用
-      var tail = Math.round(lane.sx + rowX()) - 16;
-      walker.style.display = '';
-      walker.style.transition = 'none';
+    function walkIn(){   // 第 6 人:候车点直线走到队尾(后景),到位后留作独立尾卡,不插入火车
+      var tail = lane.sx + rowX() - 16;
+      walker = document.createElement('img');
+      walker.src = zl.src;
+      walker.className = 'train-walk';
       walker.style.left = (zxC - 12) + 'px';
       walker.style.top = zy + 'px';
-      walker.style.transform = 'none';
-      walker.src = zl.src;
+      walker.style.zIndex = '-1';
+      layer.appendChild(walker);
       void walker.offsetWidth;
-      walker.style.transition = '';
       walker.style.transform = 'translate(' + (tail - (zxC - 12)) + 'px,' + (lane.sy - zy) + 'px)';
       return wait(1400);
     }
@@ -1285,13 +1283,13 @@ footer b{color:#4a5468}
       function(){
         // 6 节整列(5 节 row + 独立尾卡)与北京南居中;两者同曲线同速,视觉是一列车
         var w6 = rowW() + 16;
-        var newRowX = Math.round(pxC - w6 / 2 + 16) - lane.sx;
+        var newRowX = pxC - w6 / 2 + 16 - lane.sx;
         var delta = newRowX - rowX();
         var tr = 'transform 10s cubic-bezier(.45,.05,.55,.95)';
         row.style.transition = tr;
         if(walker){
           walker.style.transition = 'none';
-          walker.style.left = (Math.round(lane.sx + rowX()) - 16) + 'px';   // 取整槽位,与 walkIn 终点一致
+          walker.style.left = (lane.sx + rowX() - 16) + 'px';   // 槽位公式化,与 walkIn 终点一致
           walker.style.top = lane.sy + 'px';
           walker.style.transform = 'none';
           void walker.offsetWidth;
