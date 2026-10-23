@@ -918,7 +918,7 @@ footer b{color:#4a5468}
 </div><!-- /wrap -->
 
 <footer>
-  <div>❄️ <b>万龙,启动!</b> · v0.293 分享版</div>
+  <div>❄️ <b>万龙,启动!</b> · v0.294 分享版</div>
   
 </footer>
 
@@ -1243,24 +1243,24 @@ footer b{color:#4a5468}
         im.src = zl.src;
         row.insertBefore(im, row.firstChild);
         void row.offsetWidth;
-        row.style.transition = 'transform 2.4s cubic-bezier(.45,.05,.55,.95)';
+        row.style.transition = 'transform 10s cubic-bezier(.45,.05,.55,.95)';
       });
     }
 
     var seq = [
-      function(){ row.style.transition = 'transform 2.4s cubic-bezier(.45,.05,.55,.95)'; return wait(1000); },
+      function(){ row.style.transition = 'transform 5s cubic-bezier(.45,.05,.55,.95)'; return wait(1000); },
       function(){
         row.style.transform = 'translateX(' + (rrW / 2 - rowW() / 2 - lane.sx) + 'px)';
-        setTimeout(slotCollapse, 900);      // 完全出站后虹桥文字下沉(延后 0.3s)
-        return wait(2500);
+        setTimeout(slotCollapse, 1400);     // 完全出站后虹桥文字下沉(再延后 0.5s)
+        return wait(5200);
       },
       function(){ return walkIn(); },
-      function(){ return wait(1000); },
+      function(){ return wait(3600); },   // 苏州北共停留 5 秒(含第6人走位 1.4s)
       function(){
         row.style.transform = 'translateX(' + (pxC - rowW() / 2 - lane.sx) + 'px)';
         stopEm.style.opacity = '0';         // 带上第 6 人开走后,候车胶囊才淡出(站名常驻)
-        setTimeout(function(){ port2.style.transform = 'translateY(-6px)'; }, 1600);
-        return wait(2500);
+        setTimeout(function(){ port2.style.transform = 'translateY(-6px)'; }, 8700);  // 提前 0.5s 升
+        return wait(10300);
       }
     ];
     var i2 = 0;
