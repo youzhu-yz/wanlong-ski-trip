@@ -185,6 +185,9 @@ section{padding:18px 0 2px;scroll-margin-top:calc(var(--chip-h) + 8px)}
 .train-row img + img{margin-left:-9px}
 .train-row img{transition:margin-left .45s ease}
 .train-row img.train-join{margin-left:16px}   /* 从邻座头像下面滑出 */
+.train-walk{position:absolute;width:25px;height:25px;border-radius:50%;object-fit:cover;
+  border:2px solid var(--card);box-shadow:0 1px 3px rgba(16,24,40,.18);
+  transition:transform 1s ease .15s}   /* 第6人自己走到队尾 */
 .train-go{display:flex;justify-content:center;margin:-4px 0 14px}   /* 出发按钮:去程卡正下方居中 */
 .train-go button{font-size:12.5px;font-weight:700;color:var(--accent-deep);
   background:var(--accent-weak);border:1px solid #cfe4f6;border-radius:999px;
@@ -914,7 +917,7 @@ footer b{color:#4a5468}
 </div><!-- /wrap -->
 
 <footer>
-  <div>❄️ <b>万龙,启动!</b> · v0.287 分享版</div>
+  <div>❄️ <b>万龙,启动!</b> · v0.288 分享版</div>
   
 </footer>
 
@@ -1129,7 +1132,7 @@ footer b{color:#4a5468}
   });
 })();
 
-/* ---------- G30 去程:头像火车动画 v5(循环:虹桥出发→苏州北带人→北京南停5秒→淡出重置) ---------- */
+/* ---------- G30 去程:头像火车动画 v6(按钮触发循环:停卡片中央→第6人走上车→北京南居中停) ---------- */
 (function(){
   var card = document.querySelector('.fcard');
   if(!card || !card.querySelector('.fstop')) return;
@@ -1145,8 +1148,8 @@ footer b{color:#4a5468}
   var zl = stopEm ? stopEm.querySelector('img') : null;
   if(avas.length < 2 || !zl || !port2 || !port1) return;
 
-  var H0 = 0;        // 原头像栈高度(占位用)
-  var lane = null;   // {sx,sy} 出发原位(布局原状时量好)
+  var H0 = 0;
+  var lane = null;
 
   function measure(){
     var rr = card.querySelector('.froute').getBoundingClientRect();
@@ -1154,12 +1157,11 @@ footer b{color:#4a5468}
     var fr = fa.getBoundingClientRect();
     var p1 = port1.getBoundingClientRect();
     var w0 = avas.length * 25 - (avas.length - 1) * 9;
-    lane = { sx: p1.left + p1.width / 2 - w0 / 2 - rr.left,
-             sy: fr.top - rr.top };
+    lane = { sx: p1.left + p1.width / 2 - w0 / 2 - rr.left, sy: fr.top - rr.top };
     H0 = stack.offsetHeight;
   }
 
-  function slotCollapse(){   // 虹桥:火车出站后,栈占位收起 → 文字下沉
+  function slotCollapse(){
     stack.style.overflow = 'hidden';
     stack.style.height = H0 + 'px';
     void stack.offsetWidth;
@@ -1170,7 +1172,7 @@ footer b{color:#4a5468}
       stack.style.paddingLeft = '0';
     });
   }
-  function slotRestore(){    // 循环重置:栈占位恢复 → 文字升回,火车原位重生
+  function slotRestore(){
     stack.style.height = H0 + 'px';
     stack.style.marginTop = '7px';
     stack.style.paddingLeft = '9px';
@@ -1204,42 +1206,56 @@ footer b{color:#4a5468}
   function cycle(){
     var M = measure();
     resetRow();
-    slotRestore();                       // 文字升回原状
-    stopEm.style.opacity = '';           // 候车胶囊复位(Z&L 回站等待)
-    port2.style.transform = '';          // 北京南文字复位
+    slotRestore();
+    stopEm.style.opacity = '';
+    port2.style.transform = '';
     layer.classList.add('show');
     var rr0 = card.querySelector('.froute').getBoundingClientRect();
-    var zxC = stopEm.getBoundingClientRect().left + stopEm.getBoundingClientRect().width / 2 - rr0.left;
+    var rrW = rr0.width;
+    var zR = stopEm.getBoundingClientRect();
+    var zxC = zR.left + zR.width / 2 - rr0.left;
+    var zy = zR.top - rr0.top;
     var pxC = port2.getBoundingClientRect().left + port2.getBoundingClientRect().width / 2 - rr0.left;
 
     var seq = [
       function(){ row.style.transition = 'transform 2.4s cubic-bezier(.45,.05,.55,.95)'; return wait(1000); },
       function(){
-        // 队尾对齐苏州北:第 6 个人的上车点就在站下
-        row.style.transform = 'translateX(' + (zxC - lane.sx) + 'px)';
-        setTimeout(slotCollapse, 600);   // 火车完全出站后虹桥文字才下沉
+        // 火车停在卡片相对居中的位置候客(火车此后不动)
+        row.style.transform = 'translateX(' + (rrW / 2 - rowW() / 2 - lane.sx) + 'px)';
+        setTimeout(slotCollapse, 600);
         return wait(2500);
       },
       function(){
-        stopEm.style.opacity = '0';      // 到站接人,胶囊渐隐
-        var im = document.createElement('img');
-        im.src = zl.src;                 // 运行时取 src(经启动脚本换算后的直链)
-        im.className = 'train-join';
-        row.insertBefore(im, row.firstChild);
-        requestAnimationFrame(function(){ im.classList.remove('train-join'); });
-        return wait(2000);               // 上车后停 2 秒
+        // 第 6 人从苏州北候车点自己走到火车最末尾(队尾)
+        stopEm.style.opacity = '0';
+        var tail = row.getBoundingClientRect().left - rr0.left;
+        var wk = document.createElement('img');
+        wk.src = zl.src;
+        wk.className = 'train-walk';
+        wk.style.left = (zxC - 12) + 'px';
+        wk.style.top = zy + 'px';
+        layer.appendChild(wk);
+        void wk.offsetWidth;
+        wk.style.transform = 'translate(' + (tail - (zxC - 12)) + 'px,' + (lane.sy - zy) + 'px)';
+        return wait(1400).then(function(){
+          wk.remove();
+          var im = document.createElement('img');
+          im.src = zl.src;
+          row.insertBefore(im, row.firstChild);   // 到位后并入队尾
+        });
       },
+      function(){ return wait(1000); },   // 上车后停 2 秒(走1秒+停1秒)
       function(){
         row.style.transform = 'translateX(' + (pxC - rowW() / 2 - lane.sx) + 'px)';
-        setTimeout(function(){ port2.style.transform = 'translateY(-6px)'; }, 1600);  // 即将进站,北京南文字先升
+        setTimeout(function(){ port2.style.transform = 'translateY(-6px)'; }, 1600);
         return wait(2500);
       },
-      function(){ return wait(5000); },  // 到站停留 5 秒(火车不跟文字走,停在车道上)
+      function(){ return wait(5000); },
       function(){ layer.classList.remove('show'); return wait(500); }
     ];
     var i2 = 0;
     (function step(){
-      if(i2 >= seq.length){ cycle(); return; }   // 淡出后直接原位重置,不做返程
+      if(i2 >= seq.length){ cycle(); return; }
       Promise.resolve(seq[i2++]()).then(step);
     })();
   }
@@ -1247,11 +1263,10 @@ footer b{color:#4a5468}
   function start(){
     if(window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches) return;
     build();
-    stack.style.visibility = 'hidden';   // 原栈内容常隐(占位保留,文字位置随占位动画)
+    stack.style.visibility = 'hidden';
     cycle();
   }
 
-  // 不自动播:去程卡正下方放「出发」按钮,点击才发车
   var btn = document.createElement('button');
   btn.type = 'button';
   btn.textContent = '出发 ▶';
