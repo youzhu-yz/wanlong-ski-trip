@@ -918,7 +918,7 @@ footer b{color:#4a5468}
 </div><!-- /wrap -->
 
 <footer>
-  <div>❄️ <b>万龙,启动!</b> · v0.295 分享版</div>
+  <div>❄️ <b>万龙,启动!</b> · v0.298 分享版</div>
   
 </footer>
 
@@ -1139,6 +1139,11 @@ footer b{color:#4a5468}
   if(!card || !card.querySelector('.fstop')) return;
 
   function wait(ms){ return new Promise(function(r){ setTimeout(r, ms); }); }
+  function when(cond){   // 每帧检查,条件满足即触发(位置驱动,不按时间)
+    return new Promise(function(r){
+      (function tick(){ if(cond()) return r(); requestAnimationFrame(tick); })();
+    });
+  }
 
   var layer, row, btn;
   var route = card.querySelector('.froute');
@@ -1242,7 +1247,9 @@ footer b{color:#4a5468}
       function(){ row.style.transition = 'transform 5s cubic-bezier(.45,.05,.55,.95)'; return wait(1000); },
       function(){
         row.style.transform = 'translateX(' + (rrW / 2 - rowW() / 2 - lane.sx) + 'px)';
-        setTimeout(slotCollapse, 1400);     // 完全出站后虹桥文字下沉(再延后 0.5s)
+        var p1t = port1.querySelector('.fair').getBoundingClientRect();
+        when(function(){ return row.getBoundingClientRect().left > p1t.right + 2; })
+          .then(slotCollapse);              // 车尾完全出清虹桥站名,文字才下沉
         return wait(5200);
       },
       function(){ return walkIn(); },       // 走位完成,第 6 人独立留在队尾
@@ -1267,7 +1274,9 @@ footer b{color:#4a5468}
         }
         row.style.transform = 'translateX(' + newRowX + 'px)';
         stopEm.style.opacity = '0';         // 带上第 6 人开走后,候车胶囊才淡出(站名常驻)
-        setTimeout(function(){ port2.style.transform = 'translateY(-6px)'; }, 8700);  // 提前 0.5s 升
+        var arriveHead = pxC + rowW() / 2 + 8;   // 到站时车头(右缘)的位置
+        when(function(){ return row.getBoundingClientRect().right - rr0.left > arriveHead - 70; })
+          .then(function(){ port2.style.transform = 'translateY(-6px)'; });  // 车头距到点 70px 即升
         return wait(10300);
       }
     ];
