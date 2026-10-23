@@ -608,7 +608,9 @@ footer b{color:#4a5468}
 /* 「|并排」子页签:双列同屏,列头小标题 */
 .pop-cols{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:4px}
 .pop-col2{min-width:0}
-.pop-col2-h{font-size:12.5px;font-weight:800;color:var(--accent-deep);text-align:center;margin:2px 0 8px}
+.pop-col2-h{display:block;margin:0 0 8px;padding:6px 2px;border:1px solid var(--line);
+  border-radius:8px;background:#f6f8fb;color:#5b6b83;font-size:11px;font-weight:700;
+  text-align:center}   /* 并排列头:保持子页签同款样式(仅展示,不切换) */
 .pop-col2 .blk{margin:8px 0}
 .pop-col2 .blk img{width:100%}   /* 窄列里图片铺满列宽(约整弹窗一半,与原小图观感一致) */
 /* 人员卡:详情用默认方框放大镜按钮(右上角,同雪场卡),无专属覆盖样式 */
@@ -819,7 +821,7 @@ footer b{color:#4a5468}
 </div><!-- /wrap -->
 
 <footer>
-  <div>❄️ <b>万龙,启动!</b> · v0.213 分享版</div>
+  <div>❄️ <b>万龙,启动!</b> · v0.214 分享版</div>
   
 </footer>
 
