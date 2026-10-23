@@ -918,7 +918,7 @@ footer b{color:#4a5468}
 </div><!-- /wrap -->
 
 <footer>
-  <div>❄️ <b>万龙,启动!</b> · v0.294 分享版</div>
+  <div>❄️ <b>万龙,启动!</b> · v0.295 分享版</div>
   
 </footer>
 
@@ -1216,35 +1216,26 @@ footer b{color:#4a5468}
     var pxC = port2.getBoundingClientRect().left + port2.getBoundingClientRect().width / 2 - rr0.left;
 
     resetRow();
+    if(walker){ walker.remove(); walker = null; }
     slotRestore();
     stopEm.style.opacity = '';
     port2.style.transform = '';
     layer.classList.add('show');
 
-    function walkIn(){   // 第 6 人:从默认候车点直线走到队尾(后景层,从火车背后通过)
+    var walker = null;
+    function walkIn(){   // 第 6 人:候车点直线走到队尾(后景),到位后留作独立尾卡,不插入火车
       var rowR = row.getBoundingClientRect();
-      var tail = rowR.left - rr0.left - 16;      // 并入后的队尾槽位(向左扩 16px)
-      var wk = document.createElement('img');
-      wk.src = zl.src;
-      wk.className = 'train-walk';
-      wk.style.left = (zxC - 12) + 'px';
-      wk.style.top = zy + 'px';
-      wk.style.zIndex = '-1';                    // 后景:不遮住头像火车
-      layer.appendChild(wk);
-      void wk.offsetWidth;
-      wk.style.transform = 'translate(' + (tail - (zxC - 12)) + 'px,' + (lane.sy - zy) + 'px)';
-      return wait(1400).then(function(){
-        wk.remove();
-        // 并入:整排瞬时左移 16px 抵消新增车厢的占位,原 5 人原地不动
-        row.style.transition = 'none';
-        var cur = (row.style.transform.match(/[-\d.]+/g) || ['0'])[0];
-        row.style.transform = 'translateX(' + (parseFloat(cur) - 16) + 'px)';
-        var im = document.createElement('img');
-        im.src = zl.src;
-        row.insertBefore(im, row.firstChild);
-        void row.offsetWidth;
-        row.style.transition = 'transform 10s cubic-bezier(.45,.05,.55,.95)';
-      });
+      var tail = rowR.left - rr0.left - 16;
+      walker = document.createElement('img');
+      walker.src = zl.src;
+      walker.className = 'train-walk';
+      walker.style.left = (zxC - 12) + 'px';
+      walker.style.top = zy + 'px';
+      walker.style.zIndex = '-1';
+      layer.appendChild(walker);
+      void walker.offsetWidth;
+      walker.style.transform = 'translate(' + (tail - (zxC - 12)) + 'px,' + (lane.sy - zy) + 'px)';
+      return wait(1400);
     }
 
     var seq = [
@@ -1254,10 +1245,27 @@ footer b{color:#4a5468}
         setTimeout(slotCollapse, 1400);     // 完全出站后虹桥文字下沉(再延后 0.5s)
         return wait(5200);
       },
-      function(){ return walkIn(); },
+      function(){ return walkIn(); },       // 走位完成,第 6 人独立留在队尾
       function(){ return wait(3600); },   // 苏州北共停留 5 秒(含第6人走位 1.4s)
       function(){
-        row.style.transform = 'translateX(' + (pxC - rowW() / 2 - lane.sx) + 'px)';
+        // 6 节整列(5 节 row + 独立尾卡)与北京南居中;两者同曲线同速,视觉是一列车
+        var w6 = rowW() + 16;
+        var newRowX = pxC - w6 / 2 + 16 - lane.sx;
+        var curX = parseFloat((row.style.transform.match(/[-\d.]+/g) || ['0'])[0]);
+        var delta = newRowX - curX;
+        var tr = 'transform 10s cubic-bezier(.45,.05,.55,.95)';
+        row.style.transition = tr;
+        if(walker){
+          walker.style.transition = 'none';
+          var wr = walker.getBoundingClientRect();
+          walker.style.left = (wr.left - rr0.left) + 'px';
+          walker.style.top = (wr.top - rr0.top) + 'px';
+          walker.style.transform = 'none';
+          void walker.offsetWidth;
+          walker.style.transition = tr;
+          walker.style.transform = 'translateX(' + delta + 'px)';
+        }
+        row.style.transform = 'translateX(' + newRowX + 'px)';
         stopEm.style.opacity = '0';         // 带上第 6 人开走后,候车胶囊才淡出(站名常驻)
         setTimeout(function(){ port2.style.transform = 'translateY(-6px)'; }, 8700);  // 提前 0.5s 升
         return wait(10300);
