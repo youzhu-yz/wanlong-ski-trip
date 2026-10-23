@@ -887,7 +887,7 @@ footer b{color:#4a5468}
 </div><!-- /wrap -->
 
 <footer>
-  <div>❄️ <b>万龙,启动!</b> · v0.264 分享版</div>
+  <div>❄️ <b>万龙,启动!</b> · v0.265 分享版</div>
   
 </footer>
 
@@ -1539,6 +1539,10 @@ footer b{color:#4a5468}
     });
     flush();
   }
+  function imgSrc(c){
+    return (typeof c === 'string' && c.indexOf('#img:') === 0)
+      ? (window.__IMG ? (window.__IMG[c.slice(5)] || '') : '') : c;
+  }
   function blockNode(bt){
     var d = document.createElement('div'); d.className = 'blk';
     d.setAttribute('data-t', bt.t);
@@ -1579,7 +1583,7 @@ footer b{color:#4a5468}
       });
       gw.appendChild(gbar); gw.appendChild(gwrap); d.appendChild(gw);
     } else if(bt.t === '图片'){
-      var im = document.createElement('img'); im.src = bt.c;
+      var im = document.createElement('img'); im.src = imgSrc(bt.c);
       var capTxt = (bt.n || '').replace(/小图/g, '').trim();
       im.alt = capTxt; im.loading = 'lazy';
       if((bt.n || '').indexOf('小图') >= 0) im.className = 'blk-half';   /* 说明带「小图」→ 半宽缩略 */
@@ -1611,7 +1615,7 @@ footer b{color:#4a5468}
       fr.appendChild(fl); fr.appendChild(fv); fr.appendChild(cp);
       d.appendChild(fr);
     } else if(bt.t === '文档'){
-      var f = document.createElement('a'); f.className = 'doc-btn'; f.href = bt.c;
+      var f = document.createElement('a'); f.className = 'doc-btn'; f.href = imgSrc(bt.c);
       f.target = '_blank'; f.rel = 'noopener'; f.textContent = '📄 ' + (bt.n || '查看文件'); d.appendChild(f);
     } else if(bt.t === '头像'){
       // 内容=昵称列表,支持 | 分组(如 两个小房间各 2 人) → 分组显示,组间 / 分隔;
@@ -1628,7 +1632,7 @@ footer b{color:#4a5468}
         gr.split(/[、,，/]/).map(function(s){return s.trim()}).filter(Boolean)
           .forEach(function(nm){
             var u = (bt.imgs && bt.imgs[idx]) || ''; idx++;
-            if(u){ var pi = document.createElement('img'); pi.src = u; pi.alt = nm;
+            if(u){ var pi = document.createElement('img'); pi.src = imgSrc(u); pi.alt = nm;
                    pi.loading = 'lazy'; pi.className = 'mimg'; prow.appendChild(pi); }
             else { var ps = document.createElement('span'); ps.className = 'avt';
                    ps.textContent = '👤'; prow.appendChild(ps); }
