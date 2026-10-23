@@ -918,7 +918,7 @@ footer b{color:#4a5468}
 </div><!-- /wrap -->
 
 <footer>
-  <div>❄️ <b>万龙,启动!</b> · v0.301 分享版</div>
+  <div>❄️ <b>万龙,启动!</b> · v0.302 分享版</div>
   
 </footer>
 
@@ -1163,9 +1163,7 @@ footer b{color:#4a5468}
     var rr = route.getBoundingClientRect();
     var fa = stack.querySelector('img');
     var fr = fa.getBoundingClientRect();
-    var p1 = port1.getBoundingClientRect();
-    var w0 = avas.length * 25 - (avas.length - 1) * 9;
-    lane = { sx: p1.left + p1.width / 2 - w0 / 2 - rr.left, sy: fr.top - rr.top };
+    lane = { sx: fr.left - rr.left, sy: fr.top - rr.top };   // 首枚头像实测原位
     H0 = stack.offsetHeight;
     route.style.minHeight = route.offsetHeight + 'px';   // 锁高:文字下沉不压扁卡片
   }
@@ -1233,9 +1231,11 @@ footer b{color:#4a5468}
     layer.style.transition = '';
 
     var walker = null;
+    function rowX(){   // row 当前 translateX 数值(解析,不读矩形)
+      return parseFloat((row.style.transform.match(/[-\d.]+/g) || ['0'])[0]) || 0;
+    }
     function walkIn(){   // 第 6 人:候车点直线走到队尾(后景),到位后留作独立尾卡,不插入火车
-      var rowR = row.getBoundingClientRect();
-      var tail = rowR.left - rr0.left - 16;
+      var tail = lane.sx + rowX() - 16;
       walker = document.createElement('img');
       walker.src = zl.src;
       walker.className = 'train-walk';
@@ -1263,15 +1263,13 @@ footer b{color:#4a5468}
         // 6 节整列(5 节 row + 独立尾卡)与北京南居中;两者同曲线同速,视觉是一列车
         var w6 = rowW() + 16;
         var newRowX = pxC - w6 / 2 + 16 - lane.sx;
-        var curX = parseFloat((row.style.transform.match(/[-\d.]+/g) || ['0'])[0]);
-        var delta = newRowX - curX;
+        var delta = newRowX - rowX();
         var tr = 'transform 10s cubic-bezier(.45,.05,.55,.95)';
         row.style.transition = tr;
         if(walker){
           walker.style.transition = 'none';
-          var wr = walker.getBoundingClientRect();
-          walker.style.left = (wr.left - rr0.left) + 'px';
-          walker.style.top = (wr.top - rr0.top) + 'px';
+          walker.style.left = (lane.sx + rowX() - 16) + 'px';   // 槽位公式化,与 walkIn 终点一致
+          walker.style.top = lane.sy + 'px';
           walker.style.transform = 'none';
           void walker.offsetWidth;
           walker.style.transition = tr;
