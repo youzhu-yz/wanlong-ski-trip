@@ -919,7 +919,7 @@ footer b{color:#4a5468}
 </div><!-- /wrap -->
 
 <footer>
-  <div>❄️ <b>万龙,启动!</b> · v0.307 分享版</div>
+  <div>❄️ <b>万龙,启动!</b> · v0.308 分享版</div>
   
 </footer>
 
@@ -1184,7 +1184,16 @@ footer b{color:#4a5468}
       stack.style.paddingLeft = '0';
     });
   }
-  function slotRestore(){
+  function slotRestore(now){   // now=true:一帧到位,不播过渡
+    if(now){
+      stack.style.transition = 'none';
+      stack.style.height = H0 + 'px';
+      stack.style.marginTop = '7px';
+      stack.style.paddingLeft = '9px';
+      void stack.offsetWidth;
+      stack.style.transition = '';
+      return;
+    }
     stack.style.height = H0 + 'px';
     stack.style.marginTop = '7px';
     stack.style.paddingLeft = '9px';
@@ -1228,9 +1237,15 @@ footer b{color:#4a5468}
     Array.prototype.forEach.call(layer.querySelectorAll('.train-walk'),
       function(w){ w.remove(); });   // 清扫上一轮残留的尾卡(重播时局部变量引用不到)
     walker = null;
-    slotRestore();
+    slotRestore(true);               // 瞬时复位,一帧回默认态
+    stopEm.style.transition = 'none';
     stopEm.style.opacity = '';
+    void stopEm.offsetWidth;
+    stopEm.style.transition = '';
+    port2.style.transition = 'none';
     port2.style.transform = '';
+    void port2.offsetWidth;
+    port2.style.transition = '';
     layer.style.transition = 'none';   // 首帧立即现身(跳过淡入),与原栈隐藏同帧交接
     layer.classList.add('show');
     void layer.offsetWidth;
@@ -1330,13 +1345,7 @@ footer b{color:#4a5468}
     if(layer){
       // 重新发车:先回默认布局(文字升回/胶囊再现/火车淡出),再从头播放
       btn.innerHTML = ICO_PLAY;
-      var fse = card.querySelector('.fstop em');
-      if(fse){ fse.style.transition = 'none'; fse.style.opacity = ''; void fse.offsetWidth; fse.style.transition = ''; }
-      layer.classList.remove('show');
-      slotRestore();
-      stopEm.style.opacity = '';
-      port2.style.transform = '';
-      setTimeout(run, 800);
+      run();   // 立即重置+重播:全部复位在 run 内一帧完成,无过渡动画
     }else{
       btn.innerHTML = ICO_PLAY;
       start();
