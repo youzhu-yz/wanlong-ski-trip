@@ -185,6 +185,12 @@ section{padding:18px 0 2px;scroll-margin-top:calc(var(--chip-h) + 8px)}
 .train-row img + img{margin-left:-9px}
 .train-row img{transition:margin-left .45s ease}
 .train-row img.train-join{margin-left:16px}   /* 从邻座头像下面滑出 */
+.train-go{display:flex;justify-content:center;margin:-4px 0 14px}   /* 出发按钮:去程卡正下方居中 */
+.train-go button{font-size:12.5px;font-weight:700;color:var(--accent-deep);
+  background:var(--accent-weak);border:1px solid #cfe4f6;border-radius:999px;
+  padding:6px 24px;font-family:inherit;cursor:pointer;-webkit-tap-highlight-color:transparent}
+.train-go button:active{background:#ddeefb}
+.train-go button[disabled]{opacity:.45;cursor:default}
 .fstop em{transition:opacity .45s}
 .fcard .fport{transition:transform .55s ease}
 .fstop em img{width:20px;height:20px;border-radius:50%;object-fit:cover;
@@ -908,7 +914,7 @@ footer b{color:#4a5468}
 </div><!-- /wrap -->
 
 <footer>
-  <div>❄️ <b>万龙,启动!</b> · v0.286 分享版</div>
+  <div>❄️ <b>万龙,启动!</b> · v0.287 分享版</div>
   
 </footer>
 
@@ -1245,14 +1251,20 @@ footer b{color:#4a5468}
     cycle();
   }
 
-  if('IntersectionObserver' in window){
-    var io = new IntersectionObserver(function(es){
-      es.forEach(function(en){ if(en.isIntersecting){ io.disconnect(); setTimeout(start, 350); } });
-    }, { threshold: 0.5 });
-    io.observe(card);
-  }else{
-    setTimeout(start, 600);
-  }
+  // 不自动播:去程卡正下方放「出发」按钮,点击才发车
+  var btn = document.createElement('button');
+  btn.type = 'button';
+  btn.textContent = '出发 ▶';
+  var wrap = document.createElement('div');
+  wrap.className = 'train-go';
+  wrap.appendChild(btn);
+  card.insertAdjacentElement('afterend', wrap);
+  btn.addEventListener('click', function(){
+    if(btn.disabled) return;
+    btn.disabled = true;
+    btn.textContent = '已发车 🚄';
+    start();
+  });
 })();
 
 /* ---------- 方案对比模式:有方案盒的交通卡右下角加「方案对比」入口,点开多列平铺 ---------- */
