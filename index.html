@@ -188,12 +188,12 @@ section{padding:18px 0 2px;scroll-margin-top:calc(var(--chip-h) + 8px)}
 .train-walk{position:absolute;width:25px;height:25px;border-radius:50%;object-fit:cover;
   border:2px solid var(--card);box-shadow:0 1px 3px rgba(16,24,40,.18);
   transition:transform 1s ease .15s}   /* 第6人自己走到队尾 */
-.train-go{display:flex;justify-content:center;margin:-4px 0 14px}   /* 出发按钮:去程卡正下方居中 */
-.train-go button{font-size:12.5px;font-weight:700;color:var(--accent-deep);
-  background:var(--accent-weak);border:1px solid #cfe4f6;border-radius:999px;
-  padding:6px 24px;font-family:inherit;cursor:pointer;-webkit-tap-highlight-color:transparent}
-.train-go button:active{background:#ddeefb}
-.train-go button[disabled]{opacity:.45;cursor:default}
+.train-btn{position:absolute;top:-9px;right:14px;z-index:6;font-size:11px;font-weight:700;
+  color:#fff;background:#1a9e5c;border:none;border-radius:999px;padding:2.5px 12px;
+  letter-spacing:1px;font-family:inherit;cursor:pointer;box-shadow:var(--shadow);
+  -webkit-tap-highlight-color:transparent}   /* 出发按钮:去程卡右上角,与「去程」标签同款(绿色) */
+.train-btn:active{background:#178a51}
+.train-btn[disabled]{opacity:.55;cursor:default}
 .fstop em{transition:opacity .45s}
 .fstop{transition:opacity .45s}
 .fcard .fport{transition:transform .55s ease}
@@ -918,7 +918,7 @@ footer b{color:#4a5468}
 </div><!-- /wrap -->
 
 <footer>
-  <div>❄️ <b>万龙,启动!</b> · v0.303 分享版</div>
+  <div>❄️ <b>万龙,启动!</b> · v0.304 分享版</div>
   
 </footer>
 
@@ -1159,11 +1159,15 @@ footer b{color:#4a5468}
   var H0 = 0;
   var lane = null;   // 出发原位,只在最初量一次;动画期间布局锁定,坐标永不变
 
-  function measureOnce(){
+  function origin(){   // layer 内坐标原点 = route 的 padding 盒左上角(绝对定位的真实基准)
     var rr = route.getBoundingClientRect();
+    return { x: rr.left + route.clientLeft, y: rr.top + route.clientTop };
+  }
+  function measureOnce(){
+    var o = origin();
     var fa = stack.querySelector('img');
     var fr = fa.getBoundingClientRect();
-    lane = { sx: fr.left - rr.left, sy: fr.top - rr.top };   // 首枚头像实测原位
+    lane = { sx: fr.left - o.x, sy: fr.top - o.y };   // 首枚头像实测原位(含边框修正)
     H0 = stack.offsetHeight;
     route.style.minHeight = route.offsetHeight + 'px';   // 锁高:文字下沉不压扁卡片
   }
@@ -1211,12 +1215,13 @@ footer b{color:#4a5468}
   }
 
   function run(){
-    var rr0 = route.getBoundingClientRect();
-    var rrW = rr0.width;
+    var o0 = origin();
+    var rrW = route.getBoundingClientRect().width;
     var zR = fstop.getBoundingClientRect();
-    var zxC = zR.left + zR.width / 2 - rr0.left;
-    var zy = zR.top + 6 - rr0.top;   // 候车胶囊的大致中心
-    var pxC = port2.getBoundingClientRect().left + port2.getBoundingClientRect().width / 2 - rr0.left;
+    var zxC = zR.left + zR.width / 2 - o0.x;
+    var zy = zR.top + 6 - o0.y;   // 候车胶囊的大致中心
+    var p2R0 = port2.getBoundingClientRect();
+    var pxC = p2R0.left + p2R0.width / 2 - o0.x;
 
     resetRow();
     Array.prototype.forEach.call(layer.querySelectorAll('.train-walk'),
@@ -1277,8 +1282,8 @@ footer b{color:#4a5468}
         }
         row.style.transform = 'translateX(' + newRowX + 'px)';
         stopEm.style.opacity = '0';         // 带上第 6 人开走后,候车胶囊才淡出(站名常驻)
-        var arriveHead = pxC + rowW() / 2 + 8;   // 到站时车头(右缘)的位置
-        when(function(){ return row.getBoundingClientRect().right - rr0.left > arriveHead - 70; })
+        var arriveHeadV = o0.x + pxC + rowW() / 2 + 8 - 70;   // 到站车头视口X - 70
+        when(function(){ return row.getBoundingClientRect().right > arriveHeadV; })
           .then(function(){ port2.style.transform = 'translateY(-6px)'; });  // 车头距到点 70px 即升
         return wait(10300);
       }
@@ -1288,7 +1293,7 @@ footer b{color:#4a5468}
       if(i2 >= seq.length){
         // 到站常驻:按钮变「重新发车」,火车留在北京南不动
         btn.disabled = false;
-        btn.textContent = '重新发车 ↻';
+        btn.textContent = '重新发车';
         return;
       }
       Promise.resolve(seq[i2++]()).then(step);
@@ -1305,24 +1310,22 @@ footer b{color:#4a5468}
 
   btn = document.createElement('button');
   btn.type = 'button';
-  btn.textContent = '出发 ▶';
-  var wrap = document.createElement('div');
-  wrap.className = 'train-go';
-  wrap.appendChild(btn);
-  card.insertAdjacentElement('afterend', wrap);
+  btn.className = 'train-btn';
+  btn.textContent = '出发';
+  card.appendChild(btn);
   btn.addEventListener('click', function(){
     if(btn.disabled) return;
     btn.disabled = true;
     if(layer){
       // 重新发车:先回默认布局(文字升回/胶囊再现/火车淡出),再从头播放
-      btn.textContent = '已发车 🚄';
+      btn.textContent = '已发车';
       layer.classList.remove('show');
       slotRestore();
       stopEm.style.opacity = '';
       port2.style.transform = '';
       setTimeout(run, 800);
     }else{
-      btn.textContent = '已发车 🚄';
+      btn.textContent = '已发车';
       start();
     }
   });
