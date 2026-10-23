@@ -221,16 +221,18 @@ section{padding:18px 0 2px;scroll-margin-top:calc(var(--chip-h) + 8px)}
 @media(min-width:680px){.mgrid{grid-template-columns:repeat(3,1fr)}}
 @media(min-width:920px){.mgrid{grid-template-columns:repeat(4,1fr)}}
 .mcard{background:var(--card);border:1px solid var(--line);border-radius:12px;box-shadow:var(--shadow);
-  padding:12px 8px 11px;text-align:center;position:relative}
+  padding:14px 10px;display:flex;align-items:center;gap:13px;position:relative}
+/* 头像在左、信息在右,左右两栏水平对齐(垂直居中) */
 .mcard.tbd{border-style:dashed;box-shadow:none;background:#fbfcfe}
-.mava{width:44px;height:44px;margin:0 auto 6px;border-radius:50%;background:var(--accent-weak);
-  display:flex;align-items:center;justify-content:center;font-size:21px;overflow:hidden}
+.mava{width:50px;height:50px;flex:none;border-radius:50%;background:var(--accent-weak);
+  display:flex;align-items:center;justify-content:center;font-size:24px;overflow:hidden}
 .mava img{width:100%;height:100%;object-fit:cover;display:block}
 .mcard.tbd .mava{background:#f0f2f7;opacity:.6}
+.m-body{flex:1;min-width:0;display:flex;flex-direction:column;align-items:center}   /* 右侧内容保持居中对齐 */
 .mname{font-size:15px;font-weight:800}
-.mline{font-size:12px;color:#4a5468;margin-top:4px;word-break:break-all}
+.mline{font-size:12px;color:#4a5468;margin-top:3px;word-break:break-all;text-align:center}
 .mline .wx-ico{width:12px;height:12px;vertical-align:-1.5px;margin-right:2px}
-.mcard .badge{margin-top:7px}
+.mcard .badge{position:absolute;top:9px;right:9px;margin:0}   /* 若有状态徽章挂右上角 */
 
 /* ---------- 通用双栏内容卡(住宿/交通/雪具等) ---------- */
 .hcard{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);padding:16px}
@@ -602,10 +604,10 @@ footer b{color:#4a5468}
 .pop-subtab.on{background:var(--accent-weak);border-color:var(--accent);color:var(--accent-deep)}
 .pop-subtabs.l2{margin:0 0 6px}
 .pop-subtabs.l2 .pop-subtab{padding:5px 13px;font-size:12px;background:#fbfcff}
-/* 人员卡「详情」文字胶囊(替换放大镜圆钮) */
-.mcard .zoom-btn{width:auto;height:auto;padding:5px 13px;border-radius:999px;
-  background:var(--accent-weak);color:var(--accent-deep);font-size:11.5px;font-weight:700;
-  font-family:inherit;top:10px;right:10px}
+/* 人员卡「详情」文字胶囊:在右侧信息列顶部,随列居中 */
+.mcard .zoom-btn{position:static;width:auto;height:auto;padding:4px 12px;border-radius:999px;
+  background:var(--accent-weak);color:var(--accent-deep);font-size:11px;font-weight:700;
+  font-family:inherit;margin-bottom:4px}
 .pop-subpane.hidden{display:none}
 .pop-more > .blk{margin:12px 0}
 .pop-more > .blk[data-t="标题"]{margin-top:24px}
@@ -667,7 +669,7 @@ footer b{color:#4a5468}
   .ov-grid.w3{grid-template-columns:repeat(3,1fr)}
   .mgrid{grid-template-columns:repeat(2,1fr);gap:16px}
   .mcard{padding:20px 16px}
-  .mava{width:64px;height:64px;margin-bottom:10px;font-size:30px}
+  .mava{width:64px;height:64px;font-size:30px}   /* 横排布局:不再要旧版的下边距 */
   .mname{font-size:18px}
   .mline{font-size:13.5px;margin-top:6px}
   .agrid{grid-template-columns:repeat(2,1fr);gap:14px}
@@ -760,12 +762,12 @@ footer b{color:#4a5468}
 <section id="members">
   <div class="sec-head"><div class="sec-ico">👥</div><div class="sec-txt"><h2>同行人员</h2><span class="sec-sub">6人</span></div></div>
   <div class="mgrid">
-    <div class="mcard" data-card="members|幽助"><div class="mava"><img src="images/a/3545cfca7f.jpg" alt=""></div><div class="mname">幽助</div></div>
-<div class="mcard" data-card="members|范达尔"><div class="mava"><img src="images/a/a17432ca0c.jpg" alt=""></div><div class="mname">范达尔</div></div>
-<div class="mcard" data-card="members|阿蒙"><div class="mava"><img src="images/a/2ac7c642cf.jpg" alt=""></div><div class="mname">阿蒙</div></div>
-<div class="mcard" data-card="members|辣椒面"><div class="mava"><img src="images/a/593abc6d7a.jpg" alt=""></div><div class="mname">辣椒面</div></div>
-<div class="mcard" data-card="members|小郭"><div class="mava"><img src="images/a/1b5af55d3b.jpg" alt=""></div><div class="mname">小郭</div></div>
-<div class="mcard" data-card="members|Z&amp;L"><div class="mava"><img src="images/a/adbb15c823.jpg" alt=""></div><div class="mname">Z&amp;L</div></div>
+    <div class="mcard" data-card="members|幽助"><div class="mava"><img src="images/a/3545cfca7f.jpg" alt=""></div><div class="m-body"><div class="mname">幽助</div></div></div>
+<div class="mcard" data-card="members|范达尔"><div class="mava"><img src="images/a/a17432ca0c.jpg" alt=""></div><div class="m-body"><div class="mname">范达尔</div></div></div>
+<div class="mcard" data-card="members|阿蒙"><div class="mava"><img src="images/a/2ac7c642cf.jpg" alt=""></div><div class="m-body"><div class="mname">阿蒙</div></div></div>
+<div class="mcard" data-card="members|辣椒面"><div class="mava"><img src="images/a/593abc6d7a.jpg" alt=""></div><div class="m-body"><div class="mname">辣椒面</div></div></div>
+<div class="mcard" data-card="members|小郭"><div class="mava"><img src="images/a/1b5af55d3b.jpg" alt=""></div><div class="m-body"><div class="mname">小郭</div></div></div>
+<div class="mcard" data-card="members|Z&amp;L"><div class="mava"><img src="images/a/adbb15c823.jpg" alt=""></div><div class="m-body"><div class="mname">Z&amp;L</div></div></div>
   </div>
 </section>
 <section id="transport">
@@ -813,7 +815,7 @@ footer b{color:#4a5468}
 </div><!-- /wrap -->
 
 <footer>
-  <div>❄️ <b>万龙,启动!</b> · v0.180 分享版</div>
+  <div>❄️ <b>万龙,启动!</b> · v0.182 分享版</div>
   
 </footer>
 
@@ -1680,15 +1682,17 @@ footer b{color:#4a5468}
     card.classList.add('has-zoom');
     var btn = document.createElement('button'); btn.className = 'zoom-btn'; btn.type = 'button';
     if(card.classList.contains('mcard')){
-      // 人员卡:不用放大镜图标,改成「详情」文字胶囊
+      // 人员卡:「详情」胶囊插到右侧信息列顶部(详情/名字/电话 居中排)
       btn.setAttribute('aria-label', '查看详情');
       btn.textContent = '详情';
+      var mbody = card.querySelector('.m-body');
+      if(mbody){ mbody.insertBefore(btn, mbody.firstChild); } else { card.appendChild(btn); }
     }else{
       btn.setAttribute('aria-label', '放大查看');
       btn.innerHTML = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9V5a1 1 0 0 1 1-1h4M15 4h4a1 1 0 0 1 1 1v4M20 15v4a1 1 0 0 1-1 1h-4M9 20H5a1 1 0 0 1-1-1v-4"/></svg>';
+      card.appendChild(btn);
     }
     btn.addEventListener('click', function(e){ e.stopPropagation(); open(card); });
-    card.appendChild(btn);
     card.addEventListener('click', function(e){
       if(e.target.closest('a,button,input,label,summary')) return;
       var inner = e.target.closest('[data-card]');   // 点在嵌套子卡上:交给子卡自己的弹窗
