@@ -183,7 +183,10 @@ section{padding:18px 0 2px;scroll-margin-top:calc(var(--chip-h) + 8px)}
 .train-row img{width:25px;height:25px;border-radius:50%;object-fit:cover;
   border:2px solid var(--card);box-shadow:0 1px 3px rgba(16,24,40,.18);flex:none}
 .train-row img + img{margin-left:-9px}
-.train-row img.train-new{transform:scale(0);transition:transform .35s cubic-bezier(.34,1.56,.64,1)}
+.train-row img{transition:margin-left .45s ease}
+.train-row img.train-join{margin-left:16px}   /* 从邻座头像下面滑出 */
+.fstop em{transition:opacity .45s}
+.fcard .fport{transition:transform .55s ease}
 .fstop em img{width:20px;height:20px;border-radius:50%;object-fit:cover;
   border:2px solid var(--card);box-shadow:0 1px 3px rgba(16,24,40,.18);   /* 与乘机人头像排同款边框/阴影 */
   vertical-align:-5px;margin:-3px 3px -3px 0}   /* 放大但用负边距抵消布局高度,胶囊高度不变,头像微凸出边缘 */
@@ -905,7 +908,7 @@ footer b{color:#4a5468}
 </div><!-- /wrap -->
 
 <footer>
-  <div>❄️ <b>万龙,启动!</b> · v0.281 分享版</div>
+  <div>❄️ <b>万龙,启动!</b> · v0.282 分享版</div>
   
 </footer>
 
@@ -1120,7 +1123,7 @@ footer b{color:#4a5468}
   });
 })();
 
-/* ---------- G30 去程:头像火车动画 v3(15秒循环:5人出发→苏州北带 Z&L→6人到京→停5秒→返程再来) ---------- */
+/* ---------- G30 去程:头像火车动画 v4(循环:出发→苏州北带人→北京南→停5秒→返程) ---------- */
 (function(){
   var card = document.querySelector('.fcard');
   if(!card || !card.querySelector('.fstop')) return;
@@ -1136,6 +1139,28 @@ footer b{color:#4a5468}
   if(avas.length < 2 || !zl || !port2) return;
   zlSrc = zl.src;
 
+  var base = null;   // 出发原位(收起原栈前量好的真实坐标)
+
+  function measureBase(){
+    var rr = card.querySelector('.froute').getBoundingClientRect();
+    var fa = stack.querySelector('img');
+    var fr = fa.getBoundingClientRect();
+    base = { sx: fr.left - rr.left, sy: fr.top - rr.top };
+  }
+
+  function collapseStack(){   // 原头像栈平滑收起(虹桥文字随之下沉居中)
+    stack.style.overflow = 'hidden';
+    stack.style.height = stack.offsetHeight + 'px';
+    stack.style.marginTop = '7px';
+    void stack.offsetWidth;
+    stack.style.transition = 'height .5s ease, margin .5s ease, padding .5s ease';
+    requestAnimationFrame(function(){
+      stack.style.height = '0';
+      stack.style.marginTop = '0';
+      stack.style.paddingLeft = '0';
+    });
+  }
+
   function build(){
     layer = document.createElement('div');
     layer.className = 'train-anim';
@@ -1144,26 +1169,6 @@ footer b{color:#4a5468}
     row.style.left = '-9999px';
     layer.appendChild(row);
     card.querySelector('.froute').appendChild(layer);
-  }
-
-  function resetRow(M){
-    // 重置为 5 人车队,回到虹桥原位(不留过渡)
-    row.style.transition = 'none';
-    while(row.firstChild){ row.removeChild(row.firstChild); }   /* live 集合不能边遍历边删 */
-    avas.forEach(function(a){ var im = document.createElement('img'); im.src = a.src; row.appendChild(im); });
-    row.style.left = (M.sx) + 'px';
-    row.style.top = (M.sy) + 'px';
-    row.style.transform = 'none';
-    void row.offsetWidth;   // 强制回流,清掉 none 前的过渡
-  }
-
-  var base = null;   // 出发原位(隐藏原栈前量好的真实坐标)
-
-  function measureBase(){
-    var rr = card.querySelector('.froute').getBoundingClientRect();
-    var fa = stack.querySelector('img');   // 原栈第一枚头像 = 火车出发原位
-    var fr = fa.getBoundingClientRect();
-    base = { sx: fr.left - rr.left, sy: fr.top - rr.top };
   }
 
   function measure(){
@@ -1181,47 +1186,62 @@ footer b{color:#4a5468}
     };
   }
 
+  function resetRow(M){
+    row.style.transition = 'none';
+    while(row.firstChild){ row.removeChild(row.firstChild); }
+    avas.forEach(function(a){ var im = document.createElement('img'); im.src = a.src; row.appendChild(im); });
+    row.style.left = (M.sx) + 'px';
+    row.style.top = (M.sy) + 'px';
+    row.style.transform = 'none';
+    void row.offsetWidth;
+  }
+
   function cycle(){
     var M = measure();
     resetRow(M);
     layer.classList.add('show');
+    var frontDx = function(x){ return x - M.rowW() - M.sx; };   // 车头(右缘)对齐到 x
     var seq = [
-      function(){ row.style.transition = 'transform 2.4s cubic-bezier(.45,.05,.55,.95)'; return wait(800); },
-      function(){ row.style.transform = 'translateX(' + (M.zx - M.sx) + 'px)'; return wait(2500); },
+      function(){ row.style.transition = 'transform 2.4s cubic-bezier(.45,.05,.55,.95)'; return wait(900); },
+      function(){ row.style.transform = 'translateX(' + frontDx(M.zx) + 'px)'; return wait(2500); },
       function(){
+        // Z&L 从队尾邻座头像下面滑出加入
         var im = document.createElement('img');
-        im.src = zlSrc; im.className = 'train-new';
+        im.src = zlSrc; im.className = 'train-join';
         row.insertBefore(im, row.firstChild);
-        requestAnimationFrame(function(){ im.classList.remove('train-new'); im.style.transform = 'scale(1)'; });
-        return wait(1000);
+        requestAnimationFrame(function(){ im.classList.remove('train-join'); });
+        return wait(2000);   // 上车后停 2 秒再出发
       },
+      function(){ row.style.transform = 'translateX(' + frontDx(M.zx) + 'px)'; return wait(50); },  // 保持车位(加人后宽度没变,队尾在左)
       function(){ row.style.transform = 'translateX(' + (M.px - M.rowW() / 2 - M.sx) + 'px)'; return wait(2500); },
       function(){
         row.style.transition = 'transform .5s ease';
         row.style.transform = 'translate(' + (M.px - M.rowW() / 2 - M.sx) + 'px,-7px)';
-        return wait(600);
+        port2.style.transform = 'translateY(-6px)';   // 北京南文字上移迎车
+        return wait(700);
       },
       function(){ return wait(5000); },   // 到站停留 5 秒
       function(){
         row.style.transition = 'transform 2.4s ease-in-out';
-        row.style.transform = 'none';    // 返回虹桥原位(整体下移复原)
+        row.style.transform = 'none';
+        port2.style.transform = '';   // 文字复原
         return wait(2500);
       },
       function(){ layer.classList.remove('show'); return wait(450); }
     ];
     var i2 = 0;
     (function step(){
-      if(i2 >= seq.length){ cycle(); return; }   // 无限循环
+      if(i2 >= seq.length){ cycle(); return; }
       Promise.resolve(seq[i2++]()).then(step);
     })();
   }
 
   function start(){
     if(window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-    measureBase();   // 先量真实原位,再隐藏原栈(隐藏后布局变化会影响估算)
+    measureBase();
     build();
-    if(stopEm) stopEm.style.visibility = 'hidden';
-    if(stack) stack.style.display = 'none';
+    stopEm.style.opacity = '0';   // 候车胶囊渐隐
+    collapseStack();
     cycle();
   }
 
