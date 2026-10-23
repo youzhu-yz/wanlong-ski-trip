@@ -362,22 +362,38 @@ ul.dots li.subwrap.half + li.subwrap.half{margin-left:10px}
 .cmp-close{width:34px;height:34px;flex:none;border:none;border-radius:50%;background:#fff;color:#4a5468;
   font-size:19px;cursor:pointer;line-height:1;box-shadow:var(--shadow)}
 .cmp-grid{display:grid;grid-auto-flow:column;grid-auto-columns:1fr;gap:10px;align-items:stretch}
-.cmp-col{border:1px solid var(--line);border-radius:12px;background:#fff;padding:10px 10px 12px;
+.cmp-col{border:1px solid var(--line);border-radius:12px;background:#fff;padding:0 9px 10px;
   box-shadow:var(--shadow);min-width:0;overflow:hidden}
-.cmp-col .thead2 .tname{font-size:13.5px}
+.cmp-col .thead2{background:var(--accent-weak);margin:0 -9px 6px;padding:9px 9px 8px;
+  border-radius:11px 11px 0 0}   /* 每列顶部色带,截图时方案名更醒目 */
+.cmp-col .thead2 .tname{font-size:13px}
 .cmp-col .badge{font-size:10.5px}
 .cmp-shared{margin-top:12px;border:1px solid var(--line);border-radius:12px;background:#f8fafd;padding:10px 12px}
 .cmp-shared-cap{font-size:12px;color:var(--muted);margin-bottom:2px}
 /* 对比态的紧凑排版(列窄) */
-.cmp-col .trow2{padding:8px 0;gap:8px}
-.cmp-col .tico{width:28px;height:28px;border-radius:9px;font-size:14px}
-.cmp-col .trow2.no-ico{padding-left:36px}
-.cmp-col .tn{font-size:12px}
+.cmp-col .trow2{padding:7px 0;gap:7px}
+.cmp-col .tico{width:26px;height:26px;border-radius:8px;font-size:13px}
+.cmp-col .trow2.no-ico{padding-left:33px}
+.cmp-col .tn{font-size:11.5px}
 .cmp-col .tdur{font-size:10px;padding:1px 6px}
-.cmp-col .tnote{font-size:10.5px;line-height:1.45}
-.cmp-col .tpro,.cmp-col .tcon{font-size:10px;padding:1.5px 6px}
+.cmp-col .tnote{font-size:10px;line-height:1.4}
+.cmp-col .tpro,.cmp-col .tcon{font-size:9.5px;padding:1.5px 6px}
 .cmp-col .tpc{gap:3px;margin-top:4px}
-.cmp-col .thead2{padding-top:0}
+/* 小屏再压一档字号,保证 3 列都在屏内 */
+@media(max-width:400px){
+  .cmp-col .tn{font-size:10.5px}
+  .cmp-col .tnote{font-size:9.5px}
+  .cmp-col .thead2 .tname{font-size:12px}
+  .cmp-grid{gap:7px}
+  .cmp-col{padding:0 7px 8px}
+}
+/* 宽屏放开排版 */
+@media(min-width:680px){
+  .cmp-col .tn{font-size:13px}
+  .cmp-col .tnote{font-size:11.5px}
+  .cmp-col .tpro,.cmp-col .tcon{font-size:11px}
+  .cmp-col .thead2 .tname{font-size:15px}
+}
 /* 两案共用段(如 返程 MU5166):独立浅色圆角块,与上方方案组明显区分 */
 .trow2.tshared{border-top:none;margin:9px 0 3px;padding:13px 12px 12px;
   background:#f8fafd;border:1px solid var(--line);border-radius:12px}
@@ -775,7 +791,7 @@ footer b{color:#4a5468}
 </div><!-- /wrap -->
 
 <footer>
-  <div>❄️ <b>万龙,启动!</b> · v0.155 分享版</div>
+  <div>❄️ <b>万龙,启动!</b> · v0.157 分享版</div>
   
 </footer>
 
@@ -1015,18 +1031,20 @@ footer b{color:#4a5468}
       opt.querySelectorAll('.trow2').forEach(function(row){ col.appendChild(row.cloneNode(true)); });
       grid.appendChild(col);
     });
+    // 方案之外的环节:卡内直接子行(去程的 G30/地铁/睡觉/大巴、返程的共用车次等),对比才完整
     var shared = mask.querySelector('#cmpShared');
     shared.innerHTML = '';
-    card.querySelectorAll('.tshared').forEach(function(sh){
+    var others = card.querySelectorAll(':scope > .trow2');
+    if(others.length){
       var box = document.createElement('div');
       box.className = 'cmp-shared';
       var cap = document.createElement('div');
       cap.className = 'cmp-shared-cap';
-      cap.textContent = '共用段';
+      cap.textContent = '各方案之外的行程';
       box.appendChild(cap);
-      box.appendChild(sh.cloneNode(true));
+      others.forEach(function(row){ box.appendChild(row.cloneNode(true)); });
       shared.appendChild(box);
-    });
+    }
     mask.classList.add('open');
     document.body.style.overflow = 'hidden';
     mask.scrollTop = 0;
