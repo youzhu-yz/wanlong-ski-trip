@@ -918,7 +918,7 @@ footer b{color:#4a5468}
 </div><!-- /wrap -->
 
 <footer>
-  <div>❄️ <b>万龙,启动!</b> · v0.289 分享版</div>
+  <div>❄️ <b>万龙,启动!</b> · v0.290 分享版</div>
   
 </footer>
 
@@ -1202,8 +1202,8 @@ footer b{color:#4a5468}
   }
 
   function rowW(){
-    return Array.prototype.reduce.call(row.children,
-      function(w, im){ return w + im.getBoundingClientRect().width - 9; }, 25);
+    var n = row.children.length;
+    return n ? 25 + (n - 1) * 16 : 0;   // 首枚 25px,其后每枚重叠 9px 净占 16px
   }
 
   function run(){
@@ -1220,21 +1220,29 @@ footer b{color:#4a5468}
     port2.style.transform = '';
     layer.classList.add('show');
 
-    function walkIn(){   // 第 6 人从苏州北候车点走到队尾
-      var tail = row.getBoundingClientRect().left - rr0.left;
+    function walkIn(){   // 第 6 人:从火车头(前端)沿车走到最末尾
+      var rowR = row.getBoundingClientRect();
+      var head = rowR.right - rr0.left;          // 车头(右缘)
+      var tail = rowR.left - rr0.left - 16;      // 并入后的队尾槽位(向左扩 16px)
       var wk = document.createElement('img');
       wk.src = zl.src;
       wk.className = 'train-walk';
-      wk.style.left = (zxC - 12) + 'px';
-      wk.style.top = zy + 'px';
+      wk.style.left = (head - 25) + 'px';
+      wk.style.top = lane.sy + 'px';
       layer.appendChild(wk);
       void wk.offsetWidth;
-      wk.style.transform = 'translate(' + (tail - (zxC - 12)) + 'px,' + (lane.sy - zy) + 'px)';
+      wk.style.transform = 'translate(' + (tail - (head - 25)) + 'px,0)';
       return wait(1400).then(function(){
         wk.remove();
+        // 并入:整排瞬时左移 16px 抵消新增车厢的占位,原 5 人原地不动
+        row.style.transition = 'none';
+        var cur = (row.style.transform.match(/[-\d.]+/g) || ['0'])[0];
+        row.style.transform = 'translateX(' + (parseFloat(cur) - 16) + 'px)';
         var im = document.createElement('img');
         im.src = zl.src;
         row.insertBefore(im, row.firstChild);
+        void row.offsetWidth;
+        row.style.transition = 'transform 2.4s cubic-bezier(.45,.05,.55,.95)';
       });
     }
 
