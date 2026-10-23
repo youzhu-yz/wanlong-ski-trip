@@ -542,10 +542,10 @@ footer b{color:#4a5468}
 /* 明细表:窄屏横向滚动 */
 .tbl-scroll{overflow-x:auto;-webkit-overflow-scrolling:touch}
 .cost-detail{table-layout:fixed;font-size:11px}
-.cost-detail .cost-item-h{width:72px}
+.cost-detail .cost-item-h{width:58px}
 /* 首列/合计列冻结,中间人物列加宽横滑(同屏约 5 列) */
-.cost-detail .cost-people{width:40px}
-.cost-detail .cost-sum-h{width:54px}
+.cost-detail .cost-people{width:39px}
+.cost-detail .cost-sum-h{width:52px}
 .cost-detail td:first-child,.cost-detail th:first-child{position:sticky;left:0;z-index:2;
   background:#fff;box-shadow:2px 0 5px rgba(16,24,40,.07)}
 .cost-detail td:last-child,.cost-detail th:last-child{position:sticky;right:0;z-index:2;
@@ -553,8 +553,8 @@ footer b{color:#4a5468}
 .cost-detail td,.cost-detail .cost-people{padding:3.5px 1px;font-size:10px}
 .cost-detail td:nth-child(even),.cost-detail th:nth-child(even){background:#f5f8fc}   /* 数据列斑马纹 */
 .cost-detail td,.cost-detail th{text-align:center!important}   /* 弹窗全部格子居中(含首列/合计行列) */
-.cost-detail .cost-item{width:72px;white-space:normal;line-height:1.2;
-  padding:3.5px 3px 3.5px 2px}   /* 与表头同宽,紧凑行高 */
+.cost-detail .cost-item{width:58px;white-space:normal;line-height:1.2;
+  padding:3.5px 2px 3.5px 1px;font-size:10px}   /* 窄列小字,防三行 */
 .cost-detail .cost-item-h,.cost-detail .cost-people{padding-top:3px}
 .cost-sum-h,.cost-detail td.cost-sum-td{font-weight:800;color:var(--accent-deep)}   /* 合计列 */
 /* 转置明细表:表头=人(头像上名字下),首列=费用项目 */
@@ -894,7 +894,7 @@ footer b{color:#4a5468}
 </div><!-- /wrap -->
 
 <footer>
-  <div>❄️ <b>万龙,启动!</b> · v0.269 分享版</div>
+  <div>❄️ <b>万龙,启动!</b> · v0.270 分享版</div>
   
 </footer>
 
