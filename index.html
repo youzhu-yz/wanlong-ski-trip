@@ -905,7 +905,7 @@ footer b{color:#4a5468}
 </div><!-- /wrap -->
 
 <footer>
-  <div>❄️ <b>万龙,启动!</b> · v0.280 分享版</div>
+  <div>❄️ <b>万龙,启动!</b> · v0.281 分享版</div>
   
 </footer>
 
@@ -1157,16 +1157,21 @@ footer b{color:#4a5468}
     void row.offsetWidth;   // 强制回流,清掉 none 前的过渡
   }
 
+  var base = null;   // 出发原位(隐藏原栈前量好的真实坐标)
+
+  function measureBase(){
+    var rr = card.querySelector('.froute').getBoundingClientRect();
+    var fa = stack.querySelector('img');   // 原栈第一枚头像 = 火车出发原位
+    var fr = fa.getBoundingClientRect();
+    base = { sx: fr.left - rr.left, sy: fr.top - rr.top };
+  }
+
   function measure(){
     var rr = card.querySelector('.froute').getBoundingClientRect();
-    var sr = stack.getBoundingClientRect();       // display:none 时 rect 为 0,用站1内容推算
-    var p1 = card.querySelectorAll('.fport')[0].getBoundingClientRect();
-    var sx = sr.width ? sr.left - rr.left : (p1.left + p1.width / 2 - 45);
-    var sy = sr.width ? sr.top - rr.top : (p1.bottom - rr.top + 7);
     var zr = stopEm.getBoundingClientRect();
     var p2 = port2.getBoundingClientRect();
     return {
-      sx: sx, sy: sy,
+      sx: base.sx, sy: base.sy,
       zx: zr.left + zr.width / 2 - rr.left,
       px: p2.left + p2.width / 2 - rr.left,
       rowW: function(){
@@ -1213,6 +1218,7 @@ footer b{color:#4a5468}
 
   function start(){
     if(window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    measureBase();   // 先量真实原位,再隐藏原栈(隐藏后布局变化会影响估算)
     build();
     if(stopEm) stopEm.style.visibility = 'hidden';
     if(stack) stack.style.display = 'none';
