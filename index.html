@@ -918,7 +918,7 @@ footer b{color:#4a5468}
 </div><!-- /wrap -->
 
 <footer>
-  <div>❄️ <b>万龙,启动!</b> · v0.292 分享版</div>
+  <div>❄️ <b>万龙,启动!</b> · v0.293 分享版</div>
   
 </footer>
 
@@ -1221,18 +1221,18 @@ footer b{color:#4a5468}
     port2.style.transform = '';
     layer.classList.add('show');
 
-    function walkIn(){   // 第 6 人:从火车头(前端)沿车走到最末尾
+    function walkIn(){   // 第 6 人:从默认候车点直线走到队尾(后景层,从火车背后通过)
       var rowR = row.getBoundingClientRect();
-      var head = rowR.right - rr0.left;          // 车头(右缘)
       var tail = rowR.left - rr0.left - 16;      // 并入后的队尾槽位(向左扩 16px)
       var wk = document.createElement('img');
       wk.src = zl.src;
       wk.className = 'train-walk';
-      wk.style.left = (head - 25) + 'px';
-      wk.style.top = lane.sy + 'px';
+      wk.style.left = (zxC - 12) + 'px';
+      wk.style.top = zy + 'px';
+      wk.style.zIndex = '-1';                    // 后景:不遮住头像火车
       layer.appendChild(wk);
       void wk.offsetWidth;
-      wk.style.transform = 'translate(' + (tail - (head - 25)) + 'px,0)';
+      wk.style.transform = 'translate(' + (tail - (zxC - 12)) + 'px,' + (lane.sy - zy) + 'px)';
       return wait(1400).then(function(){
         wk.remove();
         // 并入:整排瞬时左移 16px 抵消新增车厢的占位,原 5 人原地不动
