@@ -905,7 +905,7 @@ footer b{color:#4a5468}
 </div><!-- /wrap -->
 
 <footer>
-  <div>❄️ <b>万龙,启动!</b> · v0.278 分享版</div>
+  <div>❄️ <b>万龙,启动!</b> · v0.280 分享版</div>
   
 </footer>
 
@@ -1120,97 +1120,112 @@ footer b{color:#4a5468}
   });
 })();
 
-/* ---------- G30 去程:头像火车动画 v2(5人从原位出发 → 苏州北带上 Z&L → 6人到北京南) ---------- */
+/* ---------- G30 去程:头像火车动画 v3(15秒循环:5人出发→苏州北带 Z&L→6人到京→停5秒→返程再来) ---------- */
 (function(){
   var card = document.querySelector('.fcard');
   if(!card || !card.querySelector('.fstop')) return;
-  var played = false;
 
   function wait(ms){ return new Promise(function(r){ setTimeout(r, ms); }); }
 
-  function run(){
-    if(played) return;
-    played = true;
-    var stack = card.querySelector('.fstack');
-    var stopEm = card.querySelector('.fstop em');
-    var port1 = card.querySelectorAll('.fport')[0];
-    var port2 = card.querySelectorAll('.fport')[1];
-    var avas = stack ? Array.prototype.slice.call(stack.querySelectorAll('img')) : [];
-    var zl = stopEm ? stopEm.querySelector('img') : null;
-    if(avas.length < 2 || !zl || !port2 || !port1) return;
+  var layer, row, zlSrc;
+  var stack = card.querySelector('.fstack');
+  var stopEm = card.querySelector('.fstop em');
+  var port2 = card.querySelectorAll('.fport')[1];
+  var avas = stack ? Array.prototype.slice.call(stack.querySelectorAll('img')) : [];
+  var zl = stopEm ? stopEm.querySelector('img') : null;
+  if(avas.length < 2 || !zl || !port2) return;
+  zlSrc = zl.src;
 
-    var layer = document.createElement('div');
+  function build(){
+    layer = document.createElement('div');
     layer.className = 'train-anim';
-    var row = document.createElement('div');
+    row = document.createElement('div');
     row.className = 'train-row';
-    row.style.left = '-9999px';   // 先移出屏,定位好再进场,避免起始闪跳
-    avas.forEach(function(a){ var im = document.createElement('img'); im.src = a.src; row.appendChild(im); });
+    row.style.left = '-9999px';
     layer.appendChild(row);
+    card.querySelector('.froute').appendChild(layer);
+  }
 
-    var route = card.querySelector('.froute');
-    var rr = route.getBoundingClientRect();
-    var sr = stack.getBoundingClientRect();     // 原头像栈位置 = 出发原位
+  function resetRow(M){
+    // 重置为 5 人车队,回到虹桥原位(不留过渡)
+    row.style.transition = 'none';
+    while(row.firstChild){ row.removeChild(row.firstChild); }   /* live 集合不能边遍历边删 */
+    avas.forEach(function(a){ var im = document.createElement('img'); im.src = a.src; row.appendChild(im); });
+    row.style.left = (M.sx) + 'px';
+    row.style.top = (M.sy) + 'px';
+    row.style.transform = 'none';
+    void row.offsetWidth;   // 强制回流,清掉 none 前的过渡
+  }
+
+  function measure(){
+    var rr = card.querySelector('.froute').getBoundingClientRect();
+    var sr = stack.getBoundingClientRect();       // display:none 时 rect 为 0,用站1内容推算
+    var p1 = card.querySelectorAll('.fport')[0].getBoundingClientRect();
+    var sx = sr.width ? sr.left - rr.left : (p1.left + p1.width / 2 - 45);
+    var sy = sr.width ? sr.top - rr.top : (p1.bottom - rr.top + 7);
     var zr = stopEm.getBoundingClientRect();
     var p2 = port2.getBoundingClientRect();
-    row.style.left = (sr.left - rr.left) + 'px';
-    row.style.top = (sr.top - rr.top) + 'px';
-    route.appendChild(layer);
-    if(stopEm) stopEm.style.visibility = 'hidden';   // 出发即隐藏候车胶囊(含头像/上车/蓝底)
-    if(stack) stack.style.display = 'none';          // 虹桥站文字随 flex 垂直居中(下移)
+    return {
+      sx: sx, sy: sy,
+      zx: zr.left + zr.width / 2 - rr.left,
+      px: p2.left + p2.width / 2 - rr.left,
+      rowW: function(){
+        return Array.prototype.reduce.call(row.children,
+          function(w, im){ return w + im.getBoundingClientRect().width - 9; }, 25);
+      }
+    };
+  }
 
-    function rowW(){ return Array.prototype.reduce.call(row.children,
-      function(w, im){ return w + im.getBoundingClientRect().width - 9; }, 25); }
-    function centerX(r){ return r.left + r.width / 2 - rr.left; }
-
+  function cycle(){
+    var M = measure();
+    resetRow(M);
+    layer.classList.add('show');
     var seq = [
-      function(){ layer.classList.add('show'); return wait(150); },
-      // 车头驶过苏州北:让车列左端(队尾)到达候车点,Z&L 从队尾上车
-      function(){ row.style.transform = 'translateX(' + (centerX(zr) - (sr.left - rr.left)) + 'px)'; return wait(1750); },
+      function(){ row.style.transition = 'transform 2.4s cubic-bezier(.45,.05,.55,.95)'; return wait(800); },
+      function(){ row.style.transform = 'translateX(' + (M.zx - M.sx) + 'px)'; return wait(2500); },
       function(){
         var im = document.createElement('img');
-        im.src = zl.src; im.className = 'train-new';
-        row.insertBefore(im, row.firstChild);   // 上车的人跟在移动方向的队尾(左端)
+        im.src = zlSrc; im.className = 'train-new';
+        row.insertBefore(im, row.firstChild);
         requestAnimationFrame(function(){ im.classList.remove('train-new'); im.style.transform = 'scale(1)'; });
-        return wait(700);
+        return wait(1000);
       },
-      // 全员驶向北京南,停稳后整体上移一点贴近站点
+      function(){ row.style.transform = 'translateX(' + (M.px - M.rowW() / 2 - M.sx) + 'px)'; return wait(2500); },
       function(){
-        var dx = centerX(p2) - rowW() / 2 - (sr.left - rr.left);
-        row.style.transform = 'translateX(' + dx + 'px)';
-        return wait(1800);
+        row.style.transition = 'transform .5s ease';
+        row.style.transform = 'translate(' + (M.px - M.rowW() / 2 - M.sx) + 'px,-7px)';
+        return wait(600);
       },
+      function(){ return wait(5000); },   // 到站停留 5 秒
       function(){
-        row.style.transition = 'transform .45s ease';
-        var cur = row.style.transform.match(/[-\d.]+/g) || [0];
-        row.style.transform = 'translate(' + cur[0] + 'px,' + ((parseFloat(cur[1]) || 0) - 7) + 'px)';
-        return wait(650);
+        row.style.transition = 'transform 2.4s ease-in-out';
+        row.style.transform = 'none';    // 返回虹桥原位(整体下移复原)
+        return wait(2500);
       },
-      function(){ return wait(700); },
       function(){ layer.classList.remove('show'); return wait(450); }
     ];
     var i2 = 0;
     (function step(){
-      if(i2 >= seq.length){
-        layer.remove();
-        if(stack) stack.style.display = '';
-        if(stopEm) stopEm.style.visibility = '';
-        return;
-      }
-      Promise.resolve(seq[i2++]()).then(step).catch(function(){
-        layer.remove();
-        if(stack) stack.style.display = '';
-        if(stopEm) stopEm.style.visibility = '';
-      });
+      if(i2 >= seq.length){ cycle(); return; }   // 无限循环
+      Promise.resolve(seq[i2++]()).then(step);
     })();
+  }
+
+  function start(){
+    if(window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    build();
+    if(stopEm) stopEm.style.visibility = 'hidden';
+    if(stack) stack.style.display = 'none';
+    cycle();
   }
 
   if('IntersectionObserver' in window){
     var io = new IntersectionObserver(function(es){
-      es.forEach(function(en){ if(en.isIntersecting){ io.disconnect(); setTimeout(run, 350); } });
+      es.forEach(function(en){ if(en.isIntersecting){ io.disconnect(); setTimeout(start, 350); } });
     }, { threshold: 0.5 });
     io.observe(card);
   }else{
-    setTimeout(run, 600);
+    setTimeout(start, 600);
   }
 })();
 
