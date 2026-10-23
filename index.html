@@ -366,6 +366,8 @@ ul.dots li.subwrap.subwrap-bak{display:none}   /* 备选子卡(如中转酒店)�
 .rcard .rf-val{flex:1;min-width:0;font-size:11px;font-weight:600;color:var(--ink);
   word-break:break-all;text-align:right}
 .rcard .r-field .li-cp{margin-left:0}
+.rcard .r-field .rf-gap{flex:1}   /* 地址行:空隙把按钮+值顶到右边 */
+.rcard .rf-val.rf-adj{flex:0 1 auto}   /* 地址值自适应宽,按钮贴住文字块 */
 .cmp-mask{position:fixed;inset:0;z-index:110;background:rgba(240,244,249,.98);display:none;
   overflow-y:auto;-webkit-overflow-scrolling:touch}
 .cmp-mask.open{display:block}
@@ -826,7 +828,7 @@ footer b{color:#4a5468}
 </section>
 <section id="gear">
   <div class="sec-head"><div class="sec-ico">🎿</div><div class="sec-txt"><h2>雪具方案</h2><span class="sec-sub">邮寄(3人) vs 现场租赁(3人)</span></div></div>
-  <div class="grid g2"><div class="hcard" data-card="gear|📦 雪具邮寄"><h3>📦 雪具邮寄<span class="h-avas"><span class="avrow"><img class="mimg" src="images/a/a17432ca0c.jpg" alt="范达尔"><img class="mimg" src="images/a/2ac7c642cf.jpg" alt="阿蒙"><img class="mimg" src="images/a/3545cfca7f.jpg" alt="幽助"></span></span></h3><ul class="dots"><li class="subwrap subwrap-bak"><div class="card rcard" data-card="gear|方案一 · 寄到中转酒店"><span class="badge b-tbd">备</span><div class="r-t">方案一 · 寄到中转酒店</div><span class="r-go">›</span></div></li><li class="subwrap"><div class="card rcard" data-card="gear|寄到盛龙公寓|推荐"><div class="r-t">寄到盛龙公寓<em class="r-tag">推荐</em></div><div class="r-fields"><div class="r-field"><span class="rf-lab">地址</span><button class="li-cp" type="button" aria-label="复制地址" data-copy="河北省张家口市崇礼区万龙滑雪场(盛龙公寓)"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h10"/></svg></button><span class="rf-val">河北省张家口市崇礼区万龙滑雪场(盛龙公寓)</span></div><div class="r-field"><span class="rf-lab">电话</span><span class="rf-val">待补充</span></div></div><span class="r-go">›</span></div></li></ul></div>
+  <div class="grid g2"><div class="hcard" data-card="gear|📦 雪具邮寄"><h3>📦 雪具邮寄<span class="h-avas"><span class="avrow"><img class="mimg" src="images/a/a17432ca0c.jpg" alt="范达尔"><img class="mimg" src="images/a/2ac7c642cf.jpg" alt="阿蒙"><img class="mimg" src="images/a/3545cfca7f.jpg" alt="幽助"></span></span></h3><ul class="dots"><li class="subwrap subwrap-bak"><div class="card rcard" data-card="gear|方案一 · 寄到中转酒店"><span class="badge b-tbd">备</span><div class="r-t">方案一 · 寄到中转酒店</div><span class="r-go">›</span></div></li><li class="subwrap"><div class="card rcard" data-card="gear|寄到盛龙公寓|推荐"><div class="r-t">寄到盛龙公寓<em class="r-tag">推荐</em></div><div class="r-fields"><div class="r-field"><span class="rf-lab">地址</span><span class="rf-gap"></span><button class="li-cp" type="button" aria-label="复制地址" data-copy="河北省张家口市崇礼区万龙滑雪场(盛龙公寓)"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h10"/></svg></button><span class="rf-val rf-adj">河北省张家口市崇礼区万龙滑雪场(盛龙公寓)</span></div><div class="r-field"><span class="rf-lab">电话</span><span class="rf-val">待补充</span></div></div><span class="r-go">›</span></div></li></ul></div>
 <div class="hcard" data-card="gear|🎿 现场租赁"><h3>🎿 现场租赁<span class="h-avas"><span class="avrow"><img class="mimg" src="images/a/593abc6d7a.jpg" alt="辣椒面"><img class="mimg" src="images/a/1b5af55d3b.jpg" alt="小郭"><img class="mimg" src="images/a/adbb15c823.jpg" alt="Z&amp;L"></span></span></h3><ul class="dots"><li><span class="li-main">雪板 / 雪鞋 / 头盔等全套</span><span class="badge b-todo">待查</span><span class="li-note">需确认雪票是否包含租赁</span></li><li><span class="li-main">雪服可能需要另外租</span><span class="badge b-todo">待查</span><span class="li-note">价格待核实</span></li></ul></div></div>
 </section>
 <section id="food">
@@ -844,7 +846,7 @@ footer b{color:#4a5468}
 </div><!-- /wrap -->
 
 <footer>
-  <div>❄️ <b>万龙,启动!</b> · v0.224 分享版</div>
+  <div>❄️ <b>万龙,启动!</b> · v0.225 分享版</div>
   
 </footer>
 
