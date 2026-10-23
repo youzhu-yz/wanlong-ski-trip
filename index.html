@@ -895,7 +895,7 @@ footer b{color:#4a5468}
 </div><!-- /wrap -->
 
 <footer>
-  <div>❄️ <b>万龙,启动!</b> · v0.272 分享版</div>
+  <div>❄️ <b>万龙,启动!</b> · v0.273 分享版</div>
   
 </footer>
 
@@ -1843,7 +1843,7 @@ footer b{color:#4a5468}
   // 弹窗里的图片:点击进入全屏查看(支持缩放/旋转/拖动)
   body.addEventListener('click', function(e){
     var t = e.target;
-    if(t && t.tagName === 'IMG' && t.closest('.blk')) window.openImgView(t.src);
+    if(t && t.tagName === 'IMG' && t.closest('.blk') && !t.closest('.cost-table')) window.openImgView(t.src);   /* 费用表里的头像不进全屏查看 */
   });
 })();
 </script>
