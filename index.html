@@ -616,6 +616,7 @@ footer b{color:#4a5468}
 .blk{margin:12px 0}
 .blk p{font-size:14px;white-space:pre-line;color:#333a48;text-align:center}
 .blk img{width:100%;border-radius:10px;display:block}
+.blk img.blk-half{width:50%;margin:0 auto}   /* 「小图」:半宽缩略(如订单截图/PDF 首页) */
 .blk video{width:100%;height:auto;border:none;border-radius:10px;display:block;background:#000}   /* 视频按自身比例(竖屏不压扁) */
 .blk iframe{width:100%;aspect-ratio:16/9;border:none;border-radius:10px;display:block;background:#000}
 .blk-cap{font-size:11px;color:var(--muted);margin-top:5px;text-align:center;white-space:pre-line}
@@ -814,7 +815,7 @@ footer b{color:#4a5468}
 </div><!-- /wrap -->
 
 <footer>
-  <div>❄️ <b>万龙,启动!</b> · v0.208 分享版</div>
+  <div>❄️ <b>万龙,启动!</b> · v0.209 分享版</div>
   
 </footer>
 
@@ -1476,9 +1477,12 @@ footer b{color:#4a5468}
     } else if(bt.t === '提示'){
       var tb = document.createElement('div'); tb.className = 'tipbox'; tb.textContent = bt.c; d.appendChild(tb);
     } else if(bt.t === '图片'){
-      var im = document.createElement('img'); im.src = bt.c; im.alt = bt.n || ''; im.loading = 'lazy';
+      var im = document.createElement('img'); im.src = bt.c;
+      var capTxt = (bt.n || '').replace(/小图/g, '').trim();
+      im.alt = capTxt; im.loading = 'lazy';
+      if((bt.n || '').indexOf('小图') >= 0) im.className = 'blk-half';   /* 说明带「小图」→ 半宽缩略 */
       d.appendChild(im);
-      if(bt.n){ var cap = document.createElement('div'); cap.className = 'blk-cap'; cap.textContent = bt.n; d.appendChild(cap); }
+      if(capTxt){ var cap = document.createElement('div'); cap.className = 'blk-cap'; cap.textContent = capTxt; d.appendChild(cap); }
     } else if(bt.t === '视频'){
       var u = bt.c || '';
       if(/youtube|youtu\.be|bilibili|\/embed\//i.test(u)){
