@@ -918,7 +918,7 @@ footer b{color:#4a5468}
 </div><!-- /wrap -->
 
 <footer>
-  <div>❄️ <b>万龙,启动!</b> · v0.290 分享版</div>
+  <div>❄️ <b>万龙,启动!</b> · v0.292 分享版</div>
   
 </footer>
 
@@ -1144,6 +1144,7 @@ footer b{color:#4a5468}
   var route = card.querySelector('.froute');
   var stack = card.querySelector('.fstack');
   var fstop = card.querySelector('.fstop');
+  var stopEm = fstop ? fstop.querySelector('em') : null;   // 候车胶囊(站名常驻,只隐胶囊)
   var port1 = card.querySelectorAll('.fport')[0];
   var port2 = card.querySelectorAll('.fport')[1];
   var avas = stack ? Array.prototype.slice.call(stack.querySelectorAll('img')) : [];
@@ -1216,7 +1217,7 @@ footer b{color:#4a5468}
 
     resetRow();
     slotRestore();
-    fstop.style.opacity = '';
+    stopEm.style.opacity = '';
     port2.style.transform = '';
     layer.classList.add('show');
 
@@ -1250,14 +1251,14 @@ footer b{color:#4a5468}
       function(){ row.style.transition = 'transform 2.4s cubic-bezier(.45,.05,.55,.95)'; return wait(1000); },
       function(){
         row.style.transform = 'translateX(' + (rrW / 2 - rowW() / 2 - lane.sx) + 'px)';
-        setTimeout(slotCollapse, 600);      // 出站后虹桥文字下沉
-        fstop.style.opacity = '0';          // 发车即淡出:苏州北站名 + 候车胶囊
+        setTimeout(slotCollapse, 900);      // 完全出站后虹桥文字下沉(延后 0.3s)
         return wait(2500);
       },
       function(){ return walkIn(); },
       function(){ return wait(1000); },
       function(){
         row.style.transform = 'translateX(' + (pxC - rowW() / 2 - lane.sx) + 'px)';
+        stopEm.style.opacity = '0';         // 带上第 6 人开走后,候车胶囊才淡出(站名常驻)
         setTimeout(function(){ port2.style.transform = 'translateY(-6px)'; }, 1600);
         return wait(2500);
       }
@@ -1297,7 +1298,7 @@ footer b{color:#4a5468}
       btn.textContent = '已发车 🚄';
       layer.classList.remove('show');
       slotRestore();
-      fstop.style.opacity = '';
+      stopEm.style.opacity = '';
       port2.style.transform = '';
       setTimeout(run, 800);
     }else{
