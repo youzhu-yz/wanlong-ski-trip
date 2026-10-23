@@ -365,11 +365,12 @@ ul.dots li.subwrap.half + li.subwrap.half{margin-left:10px}
 .cmp-row{background:#fff;border:1px solid var(--line);border-radius:10px;padding:8px 10px;box-shadow:var(--shadow)}
 .cmp-row .trow2{padding:0;border-top:none;gap:8px}
 .cmp-grid{display:grid;grid-auto-flow:column;grid-auto-columns:1fr;gap:10px;align-items:stretch}
-.cmp-col{border:1px solid var(--line);border-radius:12px;background:#fff;padding:0 9px 10px;
+.cmp-col{border:1px solid var(--line);border-radius:12px;background:#fff;padding:0 12px 12px;
   box-shadow:var(--shadow);min-width:0;overflow:hidden}
-.cmp-col .thead2{background:var(--accent-weak);margin:0 -9px 6px;padding:9px 9px 8px;
-  border-radius:11px 11px 0 0}   /* 每列顶部色带,截图时方案名更醒目 */
-/* 对比态的紧凑排版(列窄) */
+.cmp-mask .cmp-col .thead2{background:var(--accent-weak);margin:0 -12px 6px;padding:10px 12px 9px;
+  border-radius:11px 11px 0 0}   /* 每列顶部色带;权重高于下面的紧凑行规则,别被 padding:7px 0 覆盖 */
+/* 对比态的紧凑排版(列窄);优劣势单列排 */
+.cmp-mask .tpc{flex-direction:column}
 .cmp-mask .trow2{padding:7px 0;gap:7px}
 .cmp-mask .tico{width:26px;height:26px;border-radius:8px;font-size:13px}
 .cmp-mask .trow2.no-ico{padding-left:33px}
@@ -386,7 +387,8 @@ ul.dots li.subwrap.half + li.subwrap.half{margin-left:10px}
   .cmp-mask .tnote{font-size:9.5px}
   .cmp-mask .thead2 .tname{font-size:12px}
   .cmp-grid{gap:7px}
-  .cmp-col{padding:0 7px 8px}
+  .cmp-col{padding:0 9px 9px}
+  .cmp-mask .cmp-col .thead2{margin:0 -9px 5px;padding:9px 9px 8px}
 }
 /* 宽屏放开排版 */
 @media(min-width:680px){
@@ -792,7 +794,7 @@ footer b{color:#4a5468}
 </div><!-- /wrap -->
 
 <footer>
-  <div>❄️ <b>万龙,启动!</b> · v0.158 分享版</div>
+  <div>❄️ <b>万龙,启动!</b> · v0.161 分享版</div>
   
 </footer>
 
