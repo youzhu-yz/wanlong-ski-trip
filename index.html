@@ -160,7 +160,7 @@ section{padding:18px 0 2px;scroll-margin-top:calc(var(--chip-h) + 8px)}
   border-radius:999px;padding:2px 10px;letter-spacing:.3px}   /* 日期星期:最右侧 */
 .fhead .badge{position:absolute;top:-2px;right:4px}
 .fcard.has-zoom .fhead .badge{right:42px}
-.froute{display:flex;align-items:center;gap:8px;flex-wrap:wrap;background:#f7fafd;border:1px solid var(--line);
+.froute{position:relative;display:flex;align-items:center;gap:8px;flex-wrap:wrap;background:#f7fafd;border:1px solid var(--line);
   border-radius:var(--radius);padding:14px 12px}
 .fport{flex:1;min-width:0;text-align:center}
 .ftime{font-size:26px;font-weight:800;font-variant-numeric:tabular-nums;letter-spacing:1px}
@@ -908,7 +908,7 @@ footer b{color:#4a5468}
 </div><!-- /wrap -->
 
 <footer>
-  <div>❄️ <b>万龙,启动!</b> · v0.282 分享版</div>
+  <div>❄️ <b>万龙,启动!</b> · v0.285 分享版</div>
   
 </footer>
 
@@ -1139,15 +1139,6 @@ footer b{color:#4a5468}
   if(avas.length < 2 || !zl || !port2) return;
   zlSrc = zl.src;
 
-  var base = null;   // 出发原位(收起原栈前量好的真实坐标)
-
-  function measureBase(){
-    var rr = card.querySelector('.froute').getBoundingClientRect();
-    var fa = stack.querySelector('img');
-    var fr = fa.getBoundingClientRect();
-    base = { sx: fr.left - rr.left, sy: fr.top - rr.top };
-  }
-
   function collapseStack(){   // 原头像栈平滑收起(虹桥文字随之下沉居中)
     stack.style.overflow = 'hidden';
     stack.style.height = stack.offsetHeight + 'px';
@@ -1174,9 +1165,12 @@ footer b{color:#4a5468}
   function measure(){
     var rr = card.querySelector('.froute').getBoundingClientRect();
     var zr = stopEm.getBoundingClientRect();
+    var p1 = card.querySelectorAll('.fport')[0].getBoundingClientRect();
     var p2 = port2.getBoundingClientRect();
+    var w0 = avas.length * 25 - (avas.length - 1) * 9;
     return {
-      sx: base.sx, sy: base.sy,
+      sx: p1.left + p1.width / 2 - w0 / 2 - rr.left,   // 车队居中于虹桥站下方
+      sy: zr.top - rr.top + 5,                             // 行驶车道 = 候车胶囊所在高度
       zx: zr.left + zr.width / 2 - rr.left,
       px: p2.left + p2.width / 2 - rr.left,
       rowW: function(){
@@ -1238,11 +1232,10 @@ footer b{color:#4a5468}
 
   function start(){
     if(window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-    measureBase();
     build();
     stopEm.style.opacity = '0';   // 候车胶囊渐隐
     collapseStack();
-    cycle();
+    setTimeout(cycle, 700);   // 等虹桥文字下沉动画完成再发车
   }
 
   if('IntersectionObserver' in window){
