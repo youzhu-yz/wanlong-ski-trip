@@ -918,7 +918,7 @@ footer b{color:#4a5468}
 </div><!-- /wrap -->
 
 <footer>
-  <div>❄️ <b>万龙,启动!</b> · v0.298 分享版</div>
+  <div>❄️ <b>万龙,启动!</b> · v0.299 分享版</div>
   
 </footer>
 
@@ -1221,7 +1221,9 @@ footer b{color:#4a5468}
     var pxC = port2.getBoundingClientRect().left + port2.getBoundingClientRect().width / 2 - rr0.left;
 
     resetRow();
-    if(walker){ walker.remove(); walker = null; }
+    Array.prototype.forEach.call(layer.querySelectorAll('.train-walk'),
+      function(w){ w.remove(); });   // 清扫上一轮残留的尾卡(重播时局部变量引用不到)
+    walker = null;
     slotRestore();
     stopEm.style.opacity = '';
     port2.style.transform = '';
