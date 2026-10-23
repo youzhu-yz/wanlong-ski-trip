@@ -551,7 +551,7 @@ footer b{color:#4a5468}
   background:#fff;box-shadow:2px 0 5px rgba(16,24,40,.07)}
 .cost-detail td:last-child,.cost-detail th:last-child{position:sticky;right:0;z-index:2;
   background:#f5f8fc;box-shadow:-2px 0 5px rgba(16,24,40,.07)}
-.cost-detail td,.cost-detail .cost-people{padding:3.5px 1px;font-size:10px}
+.cost-detail td,.cost-detail .cost-people{padding:3px 1px;font-size:10px}
 .cost-detail td:nth-child(even),.cost-detail th:nth-child(even){background:#f5f8fc}   /* 数据列斑马纹 */
 .cost-detail td,.cost-detail th{text-align:center!important}   /* 弹窗全部格子居中(含首列/合计行列) */
 .cost-detail .cost-item{width:61px;white-space:normal;line-height:1.2;
@@ -646,14 +646,15 @@ footer b{color:#4a5468}
 .pop-close{width:34px;height:34px;flex:none;border:none;border-radius:50%;background:#eef1f6;color:#4a5468;
   font-size:19px;cursor:pointer;line-height:1}
 .pop-close:active{background:#e2e7ef}
-.pop-body{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;overscroll-behavior:contain;padding:14px}
+.pop-body{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;overscroll-behavior:contain;padding:10px;scrollbar-width:none}
+.pop-body::-webkit-scrollbar{display:none}   /* 竖向滚动条隐藏(仍可滑动) */
 .pop-hint{margin-top:14px;padding:12px;border:1px dashed var(--line);border-radius:8px;
   font-size:12.5px;color:var(--muted);text-align:center}
 .pop-more{margin-top:0;padding-top:0}
 /* 详情弹窗的多页签:固定在标题栏下方、滚动区之外(页签条占满一行) */
 .pop-tabs{display:flex;gap:8px;flex:none;background:#fff;
-  padding:12px 14px 12px;border-bottom:1px solid var(--line)}
-.pop-tab{flex:1;padding:9px 4px;border:1px solid var(--line);border-radius:8px;background:#f6f8fb;
+  padding:8px 12px 8px;border-bottom:1px solid var(--line)}
+.pop-tab{flex:1;padding:7px 4px;border:1px solid var(--line);border-radius:8px;background:#f6f8fb;
   color:#5b6b83;font-size:13.5px;font-weight:700;font-family:inherit;cursor:pointer;
   -webkit-tap-highlight-color:transparent}
 .pop-tab:active{background:#eef2f8}
@@ -681,7 +682,7 @@ footer b{color:#4a5468}
 .pop-subpane.hidden{display:none}
 .pop-more > .blk{margin:12px 0}
 .pop-more > .blk[data-t="标题"]{margin-top:24px}
-.pop-more > .blk:first-child{margin-top:10px}
+.pop-more > .blk:first-child{margin-top:5px}
 .pop-more h4{font-size:17px;line-height:1.4;margin:0 0 6px;text-align:center}
 .blk{margin:12px 0}
 .blk p{font-size:14px;white-space:pre-line;color:#333a48;text-align:center}
@@ -895,7 +896,7 @@ footer b{color:#4a5468}
 </div><!-- /wrap -->
 
 <footer>
-  <div>❄️ <b>万龙,启动!</b> · v0.273 分享版</div>
+  <div>❄️ <b>万龙,启动!</b> · v0.274 分享版</div>
   
 </footer>
 
