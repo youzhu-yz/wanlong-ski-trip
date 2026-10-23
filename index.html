@@ -39,21 +39,21 @@ section{padding:18px 0 2px;scroll-margin-top:calc(var(--chip-h) + 8px)}
     radial-gradient(ellipse 400px 240px at 0% 130%, rgba(120,220,235,.12), transparent),
     linear-gradient(135deg,#0e1c31 0%,#173257 55%,#1e4a7d 100%);
 }
-.hero .tag{display:inline-block;font-size:12px;letter-spacing:2px;color:#9fc3ea;border:1px solid rgba(160,200,240,.35);
+.hero .tag{display:inline-block;font-size:11.5px;letter-spacing:2px;color:#9fc3ea;border:1px solid rgba(160,200,240,.35);
   border-radius:999px;padding:3px 12px;margin-bottom:10px;white-space:pre-wrap}
 .hero h1{font-size:30px;font-weight:800;letter-spacing:6px;white-space:pre-line}
-.hero .sub{margin-top:8px;font-size:14px;color:#b9cbe4;white-space:pre-line}
+.hero .sub{margin-top:8px;font-size:13px;color:#b9cbe4;white-space:pre-line}
 .hero .sub b{color:#fff;font-weight:600}
 /* 行程要点胶囊:欢迎页内、倒计时下方(紧贴行程总览) */
 .hero-chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:16px}
 .hero-chips:not(:has(span)){display:none;margin:0}   /* 没有胶囊时整块隐藏,不留空白 */
 .hchip-row{display:contents}   /* 移动端:行包装透明,胶囊自然流式换行 */
-.hero-chips span{font-size:12.5px;background:rgba(255,255,255,.10);border:1px solid rgba(255,255,255,.16);
+.hero-chips span{font-size:11.5px;background:rgba(255,255,255,.10);border:1px solid rgba(255,255,255,.16);
   border-radius:999px;padding:4px 12px;color:#dce9f8}
 /* ---------- 倒计时(极简排版) ---------- */
 .countdown{margin:20px auto 0;display:block;width:fit-content;max-width:100%;padding:17px 24px 16px;
   background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.10);border-radius:14px}
-.cd-head{font-size:12px;font-weight:500;letter-spacing:2.5px;color:rgba(196,214,236,.62);
+.cd-head{font-size:11.5px;font-weight:500;letter-spacing:2.5px;color:rgba(196,214,236,.62);
   margin-bottom:12px}
 .cd-units{display:flex;align-items:stretch}
 .cd-unit{display:flex;flex-direction:column;align-items:center;padding:0 18px}
@@ -103,16 +103,16 @@ section{padding:18px 0 2px;scroll-margin-top:calc(var(--chip-h) + 8px)}
 .b-todo{background:var(--warn-bg);color:var(--warn)}
 .b-tbd{background:#eef1f6;color:#6d7688}
 .b-ref{background:var(--accent-weak);color:var(--accent-deep)}
-.tip{font-size:12.5px;color:var(--muted);margin-top:10px;padding-top:10px;border-top:1px dashed var(--line);white-space:pre-line}
+.tip{font-size:11.5px;color:var(--muted);margin-top:10px;padding-top:10px;border-top:1px dashed var(--line);white-space:pre-line}
 
 /* ---------- 总览 ---------- */
 .ov-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
 .ov-grid.w3{grid-template-columns:repeat(3,1fr)}   /* 天气三卡一行 */
 @media(min-width:680px){.ov-grid{grid-template-columns:repeat(3,1fr)}}
 .ov-card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px;box-shadow:var(--shadow)}
-.ov-card .k{font-size:12px;color:var(--muted);display:flex;align-items:center;gap:2px}
+.ov-card .k{font-size:11px;color:var(--muted);display:flex;align-items:center;gap:2px}
 .ov-card .v{font-size:14.5px;font-weight:700;margin-top:4px;white-space:pre-line}
-.ov-card .v small{display:block;font-size:12px;font-weight:400;color:var(--muted);margin-top:2px;white-space:pre-line}
+.ov-card .v small{display:block;font-size:11px;font-weight:400;color:var(--muted);margin-top:2px;white-space:pre-line}
 .ov-card > .badge{position:absolute;top:6px;right:8px;font-size:10.5px}   /* 总览卡右上角状态徽章(如 待定) */
 .ov-go{margin-left:auto;font-size:15px;line-height:1;color:var(--muted)}
 .ov-link{display:block;text-decoration:none;color:inherit;-webkit-tap-highlight-color:transparent}
@@ -129,7 +129,7 @@ section{padding:18px 0 2px;scroll-margin-top:calc(var(--chip-h) + 8px)}
 .day .d-num span{font-size:10px;opacity:.8}
 .day .d-title{flex:1;min-width:0}
 .day .d-title b{font-size:16px}
-.day .d-title .d-sub{font-size:12px;color:var(--muted)}
+.day .d-title .d-sub{font-size:11px;color:var(--muted)}
 .day .d-arrow{width:30px;height:30px;flex:none;border-radius:50%;background:#f1f4f9;
   display:flex;align-items:center;justify-content:center;transition:transform .2s,background .2s}
 .day .d-arrow svg{width:16px;height:16px;stroke:#4a5468;fill:none;stroke-width:2.4;
@@ -141,7 +141,7 @@ section{padding:18px 0 2px;scroll-margin-top:calc(var(--chip-h) + 8px)}
 .ttime{min-width:56px;font-weight:800;font-size:14px;color:var(--accent-deep);font-variant-numeric:tabular-nums;padding-top:1px}
 .tbody{flex:1;min-width:0}
 .twhat{font-size:14.5px;font-weight:600}
-.tnote{font-size:12.5px;color:var(--muted);margin-top:2px}
+.tnote{font-size:11.5px;color:var(--muted);margin-top:2px}
 .trow .badge{margin-top:3px}
 
 /* ---------- 航班 ---------- */
@@ -154,9 +154,9 @@ section{padding:18px 0 2px;scroll-margin-top:calc(var(--chip-h) + 8px)}
   background:var(--accent);border-radius:999px;padding:2.5px 11px;letter-spacing:1px;
   box-shadow:var(--shadow)}   /* 去程/返程:悬浮在卡片左上角 */
 .fno{font-size:16px;font-weight:800;letter-spacing:.5px}
-.fairline{font-size:11.5px;font-weight:600;color:#7d8aa0;background:#f1f4f9;border-radius:999px;
+.fairline{font-size:11px;font-weight:600;color:#7d8aa0;background:#f1f4f9;border-radius:999px;
   padding:2px 10px;letter-spacing:.3px}
-.fdate{font-size:11.5px;font-weight:600;color:#7d8aa0;background:#f1f4f9;
+.fdate{font-size:11px;font-weight:600;color:#7d8aa0;background:#f1f4f9;
   border-radius:999px;padding:2px 10px;letter-spacing:.3px}   /* 日期星期:最右侧 */
 .fhead .badge{position:absolute;top:-2px;right:4px}
 .fcard.has-zoom .fhead .badge{right:42px}
@@ -164,13 +164,13 @@ section{padding:18px 0 2px;scroll-margin-top:calc(var(--chip-h) + 8px)}
   border-radius:12px;padding:14px 12px}
 .fport{flex:1;min-width:0;text-align:center}
 .ftime{font-size:26px;font-weight:800;font-variant-numeric:tabular-nums;letter-spacing:1px}
-.fair{font-size:12.5px;color:var(--ink);margin-top:2px}
-.fcode{font-size:11px;color:var(--muted);letter-spacing:2px}
+.fair{font-size:11.5px;color:var(--ink);margin-top:2px}
+.fcode{font-size:10.5px;color:var(--muted);letter-spacing:2px}
 .fmid{flex:none;text-align:center;padding:0 6px;min-width:64px}
 .fplane{font-size:18px;color:var(--accent)}
-.fdur{font-size:11px;color:var(--muted);margin-top:2px}
+.fdur{font-size:10.5px;color:var(--muted);margin-top:2px}
 /* 经停/途径站:两行居中,如 苏州北 19:15 / [头像] 上车 */
-.fstop{font-size:11px;font-weight:700;color:var(--accent-deep);margin-top:4px;text-align:center}
+.fstop{font-size:10.5px;font-weight:700;color:var(--accent-deep);margin-top:4px;text-align:center}
 .fstop .fstop-t{white-space:nowrap}
 .fstop em{display:flex;align-items:center;justify-content:center;font-style:normal;font-size:10px;
   font-weight:600;color:#fff;background:var(--accent);border-radius:999px;padding:1px 8px;
@@ -210,7 +210,7 @@ section{padding:18px 0 2px;scroll-margin-top:calc(var(--chip-h) + 8px)}
 #avaTip.show{opacity:1}
 #avaTip::after{content:"";position:absolute;left:50%;top:100%;transform:translateX(-50%);
   border:5px solid transparent;border-top-color:rgba(17,24,39,.92)}
-.fmeta{display:grid;grid-template-columns:1fr;gap:6px;margin-top:12px;font-size:13.5px}
+.fmeta{display:grid;grid-template-columns:1fr;gap:6px;margin-top:12px;font-size:12.5px}
 /* 宽屏自适应:一条信息占满整行,多条(如备注)才分列 */
 @media(min-width:680px){.fmeta{grid-template-columns:repeat(auto-fit,minmax(0,1fr))}}
 .fmeta div{color:#4a5468}
@@ -230,7 +230,7 @@ section{padding:18px 0 2px;scroll-margin-top:calc(var(--chip-h) + 8px)}
 .mcard.tbd .mava{background:#f0f2f7;opacity:.6}
 .m-body{flex:1;min-width:0;display:flex;flex-direction:column;align-items:center}   /* 右侧内容保持居中对齐 */
 .mname{font-size:15px;font-weight:800}
-.mline{font-size:12px;color:#4a5468;margin-top:3px;word-break:break-all;text-align:center}
+.mline{font-size:11px;color:#4a5468;margin-top:3px;word-break:break-all;text-align:center}
 .mline .wx-ico{width:12px;height:12px;vertical-align:-1.5px;margin-right:2px}
 .mcard .badge{position:absolute;top:9px;right:9px;margin:0}   /* 若有状态徽章挂右上角 */
 
@@ -240,10 +240,10 @@ section{padding:18px 0 2px;scroll-margin-top:calc(var(--chip-h) + 8px)}
 .hcard .h-badge{margin-left:auto}   /* 卡级状态徽章推到标题行最右 */
 .hcard .h-avas{margin-left:auto;display:inline-flex;align-items:center}   /* 涉及人头像:标题行右端 */
 .hcard .h-avas .avrow .mimg,.hcard .h-avas .avrow .avt{width:24px;height:24px}
-.hcard .hdate{display:inline-flex;align-items:center;font-size:11.5px;font-weight:600;color:#5b6b83;
+.hcard .hdate{display:inline-flex;align-items:center;font-size:11px;font-weight:600;color:#5b6b83;
   background:#f1f4f9;border:1px solid var(--line);border-radius:999px;padding:2px 10px;white-space:nowrap}
 .hcard:not(.has-zoom) h3{padding-right:2px}   /* 无放大按钮的卡:标题行不再预留右侧空位,胶囊贴右 */
-.hcard .h-sub{font-size:12.5px;color:var(--muted);margin:4px 0 10px}
+.hcard .h-sub{font-size:11.5px;color:var(--muted);margin:4px 0 10px}
 ul.dots{list-style:none}
 ul.dots li{padding:6px 0 6px 22px;position:relative;font-size:14px;border-top:1px dashed var(--line);
   display:flex;flex-wrap:wrap;align-items:baseline;column-gap:8px}
@@ -252,12 +252,12 @@ ul.dots li::before{content:"";position:absolute;left:4px;top:13px;width:7px;heig
   background:var(--accent);opacity:.55}
 ul.dots li .li-main{flex:1;min-width:0;white-space:pre-line}
 ul.dots li .badge{margin-left:auto;flex:none}
-ul.dots li .li-note{flex-basis:100%;font-size:12px;color:var(--muted);margin-top:2px;white-space:pre-line}
+ul.dots li .li-note{flex-basis:100%;font-size:11px;color:var(--muted);margin-top:2px;white-space:pre-line}
 ul.dots li{line-height:1.5}
 /* 字段标签行:标签在整行(值+说明)中垂直居中;自适应宽度 + 右对齐值 + 复制按钮 */
 ul.dots li.lab{display:grid;grid-template-columns:auto minmax(0,1fr) auto;column-gap:8px;
   align-items:center;row-gap:2px}
-ul.dots li.lab .li-lab{grid-row:1 / span 2;align-self:center;font-size:12px;color:#8a94a6;line-height:1.7}
+ul.dots li.lab .li-lab{grid-row:1 / span 2;align-self:center;font-size:11px;color:#8a94a6;line-height:1.7}
 ul.dots li.lab .li-main{grid-column:2;grid-row:1;font-size:14.5px;font-weight:600;letter-spacing:.2px;
   display:flex;align-items:center;justify-content:flex-end;text-align:right}   /* 值右对齐;多行值时每行也右对齐 */
 ul.dots li.lab .li-note{grid-column:2;grid-row:2;text-align:right;margin:0}
@@ -314,7 +314,7 @@ ul.dots li.subwrap.half + li.subwrap.half{margin-left:10px}
   border-radius:10px;padding:10px 12px;box-shadow:none;cursor:pointer}
 .rcard:active{background:#eef4fb}
 .rcard .r-t{font-size:14.5px;font-weight:800;padding-right:24px}
-.rcard .r-sub{font-size:12px;color:var(--muted);margin-top:2px;padding-right:24px;white-space:pre-line}
+.rcard .r-sub{font-size:11px;color:var(--muted);margin-top:2px;padding-right:24px;white-space:pre-line}
 .rcard .r-go{position:absolute;right:11px;top:50%;transform:translateY(-50%);
   font-size:18px;color:#a7b1c2;line-height:1}
 .rcard.has-zoom .r-go{display:none}   /* 有放大按钮时右上是按钮,不再叠 › 箭头 */
@@ -322,7 +322,7 @@ ul.dots li.subwrap.half + li.subwrap.half{margin-left:10px}
 .rcard .r-tag{font-style:normal;font-size:10.5px;font-weight:700;color:#1a9e5c;background:#e7f6ed;
   border-radius:999px;padding:2px 8px;margin-left:8px;vertical-align:1px}
 .rcard .tpc{margin-top:7px}
-.rcard .li-note{display:block;font-size:12px;color:var(--muted);margin-top:3px;white-space:pre-line}
+.rcard .li-note{display:block;font-size:11px;color:var(--muted);margin-top:3px;white-space:pre-line}
 .rcard .zoom-btn{top:6px;right:6px;width:22px;height:22px}
 .rcard .zoom-btn svg{width:11px;height:11px}
 .rcard .r-jump{position:absolute;inset:0;z-index:3;border-radius:10px}   /* 整卡可点的透明跳转层 */
@@ -351,7 +351,7 @@ ul.dots li.subwrap.half + li.subwrap.half{margin-left:10px}
 .topt.opt-backup{display:none}   /* 备选方案盒(如 进山车次方案二/返程高铁链) */
 ul.dots li.subwrap.subwrap-bak{display:none}   /* 备选子卡(如中转酒店)在卡上隐藏 */
 .bak-entry{display:flex;justify-content:flex-start;margin-top:8px}
-.bak-entry button{font-size:11.5px;color:#a0a9b8;background:none;border:none;padding:4px 2px;
+.bak-entry button{font-size:11px;color:#a0a9b8;background:none;border:none;padding:4px 2px;
   cursor:pointer;font-family:inherit;text-decoration:underline dotted;text-underline-offset:3px;
   -webkit-tap-highlight-color:transparent}
 .bak-entry button:active{color:var(--accent-deep)}
@@ -363,8 +363,8 @@ ul.dots li.subwrap.subwrap-bak{display:none}   /* 备选子卡(如中转酒店)�
 .rcard .r-field{display:flex;align-items:center;gap:8px;padding:6px 8px;border:1px solid var(--line);
   border-radius:8px;background:#fafcff;margin-top:5px}
 .rcard .r-field:first-child{margin-top:0}
-.rcard .rf-lab{flex:none;font-size:11px;font-weight:600;color:var(--muted)}
-.rcard .rf-val{flex:1;min-width:0;font-size:11.5px;font-weight:600;color:var(--ink);
+.rcard .rf-lab{flex:none;font-size:10.5px;font-weight:600;color:var(--muted)}
+.rcard .rf-val{flex:1;min-width:0;font-size:11px;font-weight:600;color:var(--ink);
   word-break:break-all;text-align:right}
 .rcard .rf-val.left{text-align:left}   /* 地址行:复制按钮在值左边,值左对齐紧挨按钮 */
 .rcard .r-field .li-cp{margin-left:0}
@@ -423,18 +423,18 @@ ul.dots li.subwrap.subwrap-bak{display:none}   /* 备选子卡(如中转酒店)�
 .trow2 > .badge{position:absolute;right:0;top:13px;margin:0}
 .tname{font-size:15px;font-weight:700;display:flex;align-items:baseline;flex-wrap:wrap;gap:6px}
 .tname .tn{flex-basis:100%}   /* 名称独占一行,时长胶囊固定另起一行,避免挤压截断 */
-.tname .tdur{font-size:12px;font-weight:600;color:var(--accent-deep);background:var(--accent-weak);
+.tname .tdur{font-size:11px;font-weight:600;color:var(--accent-deep);background:var(--accent-weak);
   border-radius:999px;padding:2px 9px;width:fit-content;max-width:100%}
 @media(max-width:380px){   /* 小屏:胶囊缩字号、无图标行缩进减小,尽量单行放下 */
-  .tname .tdur{font-size:11px;padding:2px 7px}
+  .tname .tdur{font-size:10.5px;padding:2px 7px}
   .trow2.no-ico{padding-left:44px}
 }
-.tnote{font-size:12.5px;color:var(--muted);margin-top:4px;line-height:1.55;white-space:pre-line}
+.tnote{font-size:11.5px;color:var(--muted);margin-top:4px;line-height:1.55;white-space:pre-line}
 /* 交通说明:优势|劣势 标签,双列布局(优势左列/劣势右列) */
 .tpc{display:flex;flex-direction:row;gap:10px;align-items:flex-start;margin-top:5px}
 .tpc-col{flex:1;min-width:0;display:flex;flex-direction:column;gap:4px}
 .tcard .tpc,#gear .tpc{flex-direction:column}   /* 交通卡与雪具卡内的优劣势保持单列 */
-.tpro,.tcon{display:inline-flex;align-items:center;font-size:11.5px;font-weight:600;
+.tpro,.tcon{display:inline-flex;align-items:center;font-size:11px;font-weight:600;
   border-radius:6px;padding:2.5px 9px;line-height:1.5;width:fit-content;max-width:100%}
 .tpro{color:#1f7a4f;background:#e7f5ee}
 .tcon{color:#a35638;background:#faefe9}
@@ -465,7 +465,7 @@ ul.dots li.subwrap.subwrap-bak{display:none}   /* 备选子卡(如中转酒店)�
 .btn:active{background:#f1f4f9}
 
 /* ---------- 页脚 / 返回顶部 ---------- */
-footer{padding:28px 0 calc(34px + env(safe-area-inset-bottom));text-align:center;color:var(--muted);font-size:12.5px}
+footer{padding:28px 0 calc(34px + env(safe-area-inset-bottom));text-align:center;color:var(--muted);font-size:11.5px}
 footer b{color:#4a5468}
 #totop{position:fixed;right:14px;bottom:calc(18px + env(safe-area-inset-bottom));z-index:60;width:44px;height:44px;
   border-radius:50%;border:1px solid var(--line);background:rgba(255,255,255,.95);color:var(--accent-deep);
@@ -548,8 +548,8 @@ footer b{color:#4a5468}
   padding:11px 13px;margin:9px 0}
 .src-item:active{background:#f6fafd}
 .src-name{font-size:14.5px;font-weight:700;color:var(--ink);white-space:pre-line}
-.src-note{display:block;font-size:12px;color:var(--muted);margin-top:2px;font-weight:400;white-space:pre-line}
-.src-url{font-size:11.5px;color:var(--accent-deep);margin-top:4px;word-break:break-all;opacity:.75}
+.src-note{display:block;font-size:11px;color:var(--muted);margin-top:2px;font-weight:400;white-space:pre-line}
+.src-url{font-size:11px;color:var(--accent-deep);margin-top:4px;word-break:break-all;opacity:.75}
 
 /* ---------- 卡片放大弹窗(3:4,仅 × 关闭,内部滚动) ---------- */
 .hcard,.fcard,.day,.mcard,.phone,.ckgroup,.card,.ov-card{position:relative}
@@ -616,13 +616,13 @@ footer b{color:#4a5468}
 .blk img{width:100%;border-radius:10px;display:block}
 .blk video{width:100%;height:auto;border:none;border-radius:10px;display:block;background:#000}   /* 视频按自身比例(竖屏不压扁) */
 .blk iframe{width:100%;aspect-ratio:16/9;border:none;border-radius:10px;display:block;background:#000}
-.blk-cap{font-size:12px;color:var(--muted);margin-top:5px;text-align:center;white-space:pre-line}
+.blk-cap{font-size:11px;color:var(--muted);margin-top:5px;text-align:center;white-space:pre-line}
 /* 字段行(如登机人员信息):左标签右值 + 复制按钮 */
 .blk[data-t="字段"]{margin:0}
 .pf-row{display:flex;align-items:center;gap:10px;padding:8px 8px 8px 14px;border:1px solid var(--line);
   border-radius:10px;background:#fafcff;margin:0 0 7px}
 .pf-row:last-child{margin-bottom:0}
-.pf-lab{flex:none;font-size:12.5px;font-weight:600;color:var(--muted)}
+.pf-lab{flex:none;font-size:11.5px;font-weight:600;color:var(--muted)}
 .pf-val{flex:1;min-width:0;font-size:14px;font-weight:600;color:var(--ink);
   font-variant-numeric:tabular-nums;word-break:break-all;text-align:right}
 .tipbox{background:#f6f8fb;border:1px solid var(--line);border-radius:10px;padding:10px 12px;
@@ -644,7 +644,7 @@ footer b{color:#4a5468}
   .wrap.masonry>section{margin:0;padding-top:14px}
   .hero{padding:52px 28px 44px}
   .hero h1{font-size:42px;letter-spacing:9px}
-  .hero .sub{font-size:16px}
+  .hero .sub{font-size:15px}
   /* 欢迎页左右分栏:文本+胶囊在左,倒计时在右垂直居中 */
   .hero .wrap{display:grid;grid-template-columns:minmax(0,1fr) auto;column-gap:56px;align-items:center}
   .hero .tag,.hero h1,.hero .sub,.hero .hero-chips{grid-column:1}
@@ -659,7 +659,7 @@ footer b{color:#4a5468}
   .cd-unit span{font-size:13px}
   .sec-head{margin-bottom:20px}
   .sec-head h2{font-size:24px}
-  .sec-head .sec-sub{font-size:13.5px}
+  .sec-head .sec-sub{font-size:12.5px}
   /* 列宽 ~560:板块内部一律单列,由页面级双列负责分栏;人员卡 2×2 等比放大铺满列宽 */
   .grid{gap:14px}
   .grid.g2,.grid.g3,.grid.g4{grid-template-columns:1fr}
@@ -669,13 +669,13 @@ footer b{color:#4a5468}
   .mcard{padding:20px 22px}
   .mava{width:64px;height:64px;font-size:30px}   /* 横排布局:不再要旧版的下边距 */
   .mname{font-size:18px}
-  .mline{font-size:13.5px;margin-top:6px}
+  .mline{font-size:12.5px;margin-top:6px}
   .agrid{grid-template-columns:repeat(2,1fr);gap:14px}
   .hcard h3{font-size:18px}
   ul.dots li.lab .li-main{font-size:15.5px}
   .pop{width:min(560px,calc((100vh - 40px)*.75),calc((100dvh - 40px)*.75));max-height:calc(100dvh - 40px)}
   .pop-more h4{font-size:19px}
-  .tip{font-size:13px}
+  .tip{font-size:12.5px}
 }
 
 /* ---------- 打印 ---------- */
@@ -813,7 +813,7 @@ footer b{color:#4a5468}
 </div><!-- /wrap -->
 
 <footer>
-  <div>❄️ <b>万龙,启动!</b> · v0.185 分享版</div>
+  <div>❄️ <b>万龙,启动!</b> · v0.186 分享版</div>
   
 </footer>
 
