@@ -919,7 +919,7 @@ footer b{color:#4a5468}
 </div><!-- /wrap -->
 
 <footer>
-  <div>❄️ <b>万龙,启动!</b> · v0.306 分享版</div>
+  <div>❄️ <b>万龙,启动!</b> · v0.307 分享版</div>
   
 </footer>
 
@@ -1330,6 +1330,8 @@ footer b{color:#4a5468}
     if(layer){
       // 重新发车:先回默认布局(文字升回/胶囊再现/火车淡出),再从头播放
       btn.innerHTML = ICO_PLAY;
+      var fse = card.querySelector('.fstop em');
+      if(fse){ fse.style.transition = 'none'; fse.style.opacity = ''; void fse.offsetWidth; fse.style.transition = ''; }
       layer.classList.remove('show');
       slotRestore();
       stopEm.style.opacity = '';
