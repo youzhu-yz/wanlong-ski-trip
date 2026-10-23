@@ -918,7 +918,7 @@ footer b{color:#4a5468}
 </div><!-- /wrap -->
 
 <footer>
-  <div>❄️ <b>万龙,启动!</b> · v0.299 分享版</div>
+  <div>❄️ <b>万龙,启动!</b> · v0.300 分享版</div>
   
 </footer>
 
@@ -1227,7 +1227,10 @@ footer b{color:#4a5468}
     slotRestore();
     stopEm.style.opacity = '';
     port2.style.transform = '';
+    layer.style.transition = 'none';   // 首帧立即现身(跳过淡入),与原栈隐藏同帧交接
     layer.classList.add('show');
+    void layer.offsetWidth;
+    layer.style.transition = '';
 
     var walker = null;
     function walkIn(){   // 第 6 人:候车点直线走到队尾(后景),到位后留作独立尾卡,不插入火车
