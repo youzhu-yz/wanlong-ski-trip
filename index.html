@@ -637,6 +637,11 @@ footer b{color:#4a5468}
 .tipbox{padding:2px 0;font-size:11.5px;color:#a0a9b8;text-align:center}   /* 提示弱化:无框无底色,一行灰字 */
 .lnkbtn{display:block;text-decoration:none;text-align:center;background:var(--accent-weak);color:var(--accent-deep);
   border:1px solid #cfe4f6;border-radius:8px;padding:11px;font-size:14px;font-weight:700}
+/* 文档(PDF 等)查看按钮:小号居中,不占整行 */
+.doc-btn{display:block;width:fit-content;margin:2px auto;text-decoration:none;text-align:center;
+  background:var(--accent-weak);color:var(--accent-deep);border:1px solid #cfe4f6;border-radius:8px;
+  padding:5px 16px;font-size:11.5px;font-weight:700}
+.doc-btn:active{background:#ddeefb}
 .lnkbtn:active{background:#ddeefb}
 .lnkrow{display:grid;gap:8px;margin:12px 0}
 .pop-more > .lnkrow:first-child{margin-top:10px}
@@ -821,7 +826,7 @@ footer b{color:#4a5468}
 </div><!-- /wrap -->
 
 <footer>
-  <div>❄️ <b>万龙,启动!</b> · v0.215 分享版</div>
+  <div>❄️ <b>万龙,启动!</b> · v0.216 分享版</div>
   
 </footer>
 
@@ -1515,7 +1520,7 @@ footer b{color:#4a5468}
       fr.appendChild(fl); fr.appendChild(fv); fr.appendChild(cp);
       d.appendChild(fr);
     } else if(bt.t === '文档'){
-      var f = document.createElement('a'); f.className = 'lnkbtn'; f.href = bt.c;
+      var f = document.createElement('a'); f.className = 'doc-btn'; f.href = bt.c;
       f.target = '_blank'; f.rel = 'noopener'; f.textContent = '📄 ' + (bt.n || '查看文件'); d.appendChild(f);
     } else if(bt.t === '头像'){
       // 内容=昵称列表,支持 | 分组(如 两个小房间各 2 人) → 分组显示,组间 / 分隔;
