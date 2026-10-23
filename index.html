@@ -175,6 +175,15 @@ section{padding:18px 0 2px;scroll-margin-top:calc(var(--chip-h) + 8px)}
 .fstop em{display:flex;align-items:center;justify-content:center;font-style:normal;font-size:8px;
   font-weight:600;color:#fff;background:var(--accent);border-radius:999px;padding:1px 6px;
   margin:4px auto 0;width:fit-content;letter-spacing:.5px}
+.train-anim{position:absolute;inset:0;z-index:4;pointer-events:none;
+  opacity:0;transition:opacity .4s}
+.train-anim.show{opacity:1}
+.train-row{position:absolute;display:flex;will-change:transform;
+  transition:transform 1.6s cubic-bezier(.45,.05,.55,.95)}
+.train-row img{width:25px;height:25px;border-radius:50%;object-fit:cover;
+  border:2px solid var(--card);box-shadow:0 1px 3px rgba(16,24,40,.18);flex:none}
+.train-row img + img{margin-left:-9px}
+.train-row img.train-new{transform:scale(0);transition:transform .35s cubic-bezier(.34,1.56,.64,1)}
 .fstop em img{width:20px;height:20px;border-radius:50%;object-fit:cover;
   border:2px solid var(--card);box-shadow:0 1px 3px rgba(16,24,40,.18);   /* 与乘机人头像排同款边框/阴影 */
   vertical-align:-5px;margin:-3px 3px -3px 0}   /* 放大但用负边距抵消布局高度,胶囊高度不变,头像微凸出边缘 */
@@ -896,7 +905,7 @@ footer b{color:#4a5468}
 </div><!-- /wrap -->
 
 <footer>
-  <div>❄️ <b>万龙,启动!</b> · v0.276 分享版</div>
+  <div>❄️ <b>万龙,启动!</b> · v0.277 分享版</div>
   
 </footer>
 
@@ -1109,6 +1118,86 @@ footer b{color:#4a5468}
     var w = window.open(url, '_blank', 'noopener');
     if(!w) location.href = url;   // 新窗口被拦截(如微信内)就当前页跳
   });
+})();
+
+/* ---------- G30 去程:头像火车动画(5人出发 → 苏州北带上 Z&L → 6人到北京南) ---------- */
+(function(){
+  var card = document.querySelector('.fcard');
+  if(!card || !card.querySelector('.fstop')) return;
+  var played = false;
+
+  function run(){
+    if(played) return;
+    played = true;
+    try{
+      if(window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+      var route = card.querySelector('.froute');
+      var stack = card.querySelector('.fstack');
+      var stopEm = card.querySelector('.fstop em');
+      var port2 = card.querySelectorAll('.fport')[1];
+      var avas = stack ? [...stack.querySelectorAll('img')] : [];
+      var zl = stopEm ? stopEm.querySelector('img') : null;
+      if(avas.length < 2 || !zl || !port2) return;
+
+      var layer = document.createElement('div');
+      layer.className = 'train-anim';
+      var row = document.createElement('div');
+      row.className = 'train-row';
+      avas.forEach(function(a){ var im = document.createElement('img'); im.src = a.src; row.appendChild(im); });
+      layer.appendChild(row);
+      route.appendChild(layer);
+
+      var rr = route.getBoundingClientRect();
+      var sr = stack.getBoundingClientRect();
+      var zr = stopEm.getBoundingClientRect();
+      var p2 = port2.getBoundingClientRect();
+      function width(){ return row.getBoundingClientRect().width; }
+      function place(){ row.style.left = (sr.left - rr.left) + 'px'; row.style.top = (sr.top - rr.top) + 'px'; }
+      place();
+      if(stack) stack.style.visibility = 'hidden';
+
+      var seq = [
+        function(){ layer.classList.add('show'); return wait(120); },
+        function(){ row.style.transform = 'translateX(' + ((zr.left + zr.width / 2) - width() - (sr.left)) + 'px)'; return wait(1700); },
+        function(){
+          var im = document.createElement('img');
+          im.src = zl.src; im.className = 'train-new';
+          row.appendChild(im);
+          requestAnimationFrame(function(){ im.classList.remove('train-new'); im.style.transform = 'scale(1)'; });
+          return wait(650);
+        },
+        function(){
+          var p2c = p2.left + p2.width / 2 - width() / 2;
+          row.style.transform = 'translateX(' + (p2c - sr.left) + 'px)';
+          return wait(1750);
+        },
+        function(){ return wait(600); },
+        function(){ layer.classList.remove('show'); return wait(450); }
+      ];
+      var i = 0;
+      (function step(){
+        if(i >= seq.length){
+          layer.remove();
+          if(stack) stack.style.visibility = '';
+          return;
+        }
+        Promise.resolve(seq[i++]()).then(step);
+      })();
+    }catch(e){
+      var s = card.querySelector('.fstack');
+      if(s) s.style.visibility = '';
+    }
+  }
+  function wait(ms){ return new Promise(function(r){ setTimeout(r, ms); }); }
+
+  if('IntersectionObserver' in window){
+    var io = new IntersectionObserver(function(es){
+      es.forEach(function(en){ if(en.isIntersecting){ io.disconnect(); setTimeout(run, 350); } });
+    }, { threshold: 0.5 });
+    io.observe(card);
+  }else{
+    setTimeout(run, 600);
+  }
 })();
 
 /* ---------- 方案对比模式:有方案盒的交通卡右下角加「方案对比」入口,点开多列平铺 ---------- */
