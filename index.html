@@ -356,9 +356,8 @@ ul.dots li.subwrap.half + li.subwrap.half{margin-left:10px}
   overflow-y:auto;-webkit-overflow-scrolling:touch}
 .cmp-mask.open{display:block}
 .cmp-wrap{max-width:1080px;margin:0 auto;padding:16px 12px calc(28px + env(safe-area-inset-bottom))}
-.cmp-head{display:flex;align-items:center;gap:10px;margin-bottom:4px}
+.cmp-head{display:flex;align-items:center;gap:10px;margin-bottom:10px}
 .cmp-head b{font-size:17px;flex:1;min-width:0}
-.cmp-hint{font-size:12px;color:var(--muted);margin-bottom:12px}
 .cmp-close{width:34px;height:34px;flex:none;border:none;border-radius:50%;background:#fff;color:#4a5468;
   font-size:19px;cursor:pointer;line-height:1;box-shadow:var(--shadow)}
 .cmp-body{display:flex;flex-direction:column;gap:8px}
@@ -794,7 +793,7 @@ footer b{color:#4a5468}
 </div><!-- /wrap -->
 
 <footer>
-  <div>❄️ <b>万龙,启动!</b> · v0.161 分享版</div>
+  <div>❄️ <b>万龙,启动!</b> · v0.162 分享版</div>
   
 </footer>
 
@@ -1015,7 +1014,6 @@ footer b{color:#4a5468}
   mask.className = 'cmp-mask';
   mask.innerHTML = '<div class="cmp-wrap">' +
     '<div class="cmp-head"><b id="cmpTitle"></b><button class="cmp-close" aria-label="关闭对比">×</button></div>' +
-    '<div class="cmp-hint">按行程顺序对比 · 截图发群里投票</div>' +
     '<div class="cmp-body" id="cmpBody"></div></div>';
   document.body.appendChild(mask);
   function close(){ mask.classList.remove('open'); document.body.style.overflow = ''; }
