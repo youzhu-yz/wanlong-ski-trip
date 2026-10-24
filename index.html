@@ -367,13 +367,12 @@ ul.dots li.subwrap.half + li.subwrap.half{margin-left:10px}
 .thead2 .tname{font-size:15.5px;font-weight:800}
 /* 方案组包裹盒:组头+步骤整体一个虚线圆角盒,共用段放盒外 */
 .topt{border:1px dashed var(--line);border-radius:var(--radius);padding:0 12px 2px;margin:10px 0 6px;background:#fbfcfe}
-/* 夜宿休息行(去程睡觉):深蓝夜色底,和赶路行程区分 */
-.trow2.tnight{background:linear-gradient(135deg,#243154 0%,#31436f 100%);
-  border-radius:10px;margin:3px -4px;padding-left:14px;padding-right:10px}
-.trow2.tnight .tn{color:#e8edf9}
-.trow2.tnight .tnote{color:#aab6d4}
-.trow2.tnight .tico{background:rgba(255,255,255,.14)}
-.cmp-mask .trow2.tnight{background:linear-gradient(135deg,#243154 0%,#31436f 100%)}
+/* 夜宿休息行(去程睡觉):淡暮色底+左侧月色竖条,轻微区别于赶路行程 */
+.trow2.tnight{background:#f2f4fb;border-radius:8px;margin:2px -4px;
+  padding-left:12px;padding-right:8px;position:relative}
+.trow2.tnight::before{content:"";position:absolute;left:0;top:6px;bottom:6px;width:3px;
+  border-radius:2px;background:#8fa3c8}   /* 左侧月色竖条 */
+.cmp-mask .trow2.tnight{background:#f2f4fb}
 .topt .trow2:first-child{border-top:none;padding-top:11px}
 .topt .trow2:last-child{padding-bottom:13px}
 
@@ -928,7 +927,7 @@ footer b{color:#4a5468}
 </div><!-- /wrap -->
 
 <footer>
-  <div>❄️ <b>万龙,启动!</b> · v0.325 分享版</div>
+  <div>❄️ <b>万龙,启动!</b> · v0.326 分享版</div>
   
 </footer>
 
