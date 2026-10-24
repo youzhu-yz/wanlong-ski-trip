@@ -565,11 +565,11 @@ ul.dots li.item .li-note{flex-basis:100%;font-size:11px;color:var(--muted);
 ul.dots li.item .badge{flex:none}
 
 /* ---------- 雪场卡:多行内容网格化 ---------- */
-li.fld{display:flex;flex-wrap:wrap;align-items:flex-start;justify-content:space-between;
-  gap:0 10px;padding:8px 0;border-top:1px dashed var(--line)}   /* 标签左、内容右;说明小字整行换行 */
+li.fld{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;
+  gap:0 10px;padding:8px 0;border-top:1px dashed var(--line)}   /* 标签左、内容右,当前行垂直居中;说明小字整行换行 */
 li.fld:first-child{border-top:none;padding-top:0}
 .fld-lab{flex:none;font-size:12px;font-weight:700;color:var(--muted);
-  letter-spacing:.5px;line-height:26px}   /* 标签靠左,与胶囊行等高对齐 */
+  letter-spacing:.5px}   /* 标签在当前行垂直居中 */
 ul.dots li.fld{padding-left:16px}
 .fld-lab{position:relative}
 .fld-lab::before{content:"";position:absolute;left:-14px;top:50%;margin-top:-3px;width:6px;height:6px;
@@ -967,7 +967,7 @@ li.fld .li-lab,li.lab .li-lab{font-size:12px;font-weight:700;color:var(--muted);
 </div><!-- /wrap -->
 
 <footer>
-  <div>❄️ <b>万龙,启动!</b> · v0.349 分享版</div>
+  <div>❄️ <b>万龙,启动!</b> · v0.350 分享版</div>
   
 </footer>
 
