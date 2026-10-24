@@ -919,7 +919,7 @@ footer b{color:#4a5468}
 </div><!-- /wrap -->
 
 <footer>
-  <div>❄️ <b>万龙,启动!</b> · v0.311 分享版</div>
+  <div>❄️ <b>万龙,启动!</b> · v0.312 分享版</div>
   
 </footer>
 
@@ -1147,6 +1147,8 @@ footer b{color:#4a5468}
   }
 
   var layer, row, btn;
+  var phase = 'idle';          // idle→departing→waitSuzhou→toBeijing→arrived
+  var suzhouResolve = null;    // 苏州北手动发车的等待句柄
   var route = card.querySelector('.froute');
   var stack = card.querySelector('.fstack');
   var fstop = card.querySelector('.fstop');
@@ -1225,6 +1227,7 @@ footer b{color:#4a5468}
   }
 
   function run(){
+    phase = 'departing';
     var o0 = origin();
     var rrW = route.getBoundingClientRect().width;
     var zR = fstop.getBoundingClientRect();
@@ -1279,7 +1282,14 @@ footer b{color:#4a5468}
         return wait(5200);
       },
       function(){ return walkIn(); },       // 走位完成,第 6 人独立留在队尾
-      function(){ return wait(3600); },   // 苏州北共停留 5 秒(含第6人走位 1.4s)
+      function(){
+        // 苏州北候客:按钮变亮等手动发车,点击后 1 秒出发
+        phase = 'waitSuzhou';
+        btn.disabled = false;
+        btn.innerHTML = ICO_PLAY;
+        btn.setAttribute('aria-label', '出发');
+        return new Promise(function(r){ suzhouResolve = r; });
+      },
       function(){
         // 6 节整列(5 节 row + 独立尾卡)与北京南居中;两者同曲线同速,视觉是一列车
         var w6 = rowW() + 16;
@@ -1308,8 +1318,10 @@ footer b{color:#4a5468}
     (function step(){
       if(i2 >= seq.length){
         // 到站常驻:按钮变「重新发车」,火车留在北京南不动
+        phase = 'arrived';
         btn.disabled = false;
         btn.innerHTML = ICO_REFRESH;
+        btn.setAttribute('aria-label', '重新发车');
         return;
       }
       Promise.resolve(seq[i2++]()).then(step);
@@ -1341,11 +1353,20 @@ footer b{color:#4a5468}
   })();
   btn.addEventListener('click', function(){
     if(btn.disabled) return;
+    if(phase === 'waitSuzhou'){
+      // 苏州北手动发车:按钮立即置灰,1 秒后火车驶向北京南
+      btn.disabled = true;
+      phase = 'toBeijing';
+      var r = suzhouResolve;
+      suzhouResolve = null;
+      setTimeout(function(){ if(r) r(); }, 1000);
+      return;
+    }
     btn.disabled = true;
     if(layer){
-      // 重新发车:先回默认布局(文字升回/胶囊再现/火车淡出),再从头播放
+      // 重新发车:全部复位在 run 内一帧完成,无过渡动画
       btn.innerHTML = ICO_PLAY;
-      run();   // 立即重置+重播:全部复位在 run 内一帧完成,无过渡动画
+      run();
     }else{
       btn.innerHTML = ICO_PLAY;
       start();
