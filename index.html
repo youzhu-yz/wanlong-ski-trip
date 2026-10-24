@@ -107,7 +107,7 @@ section{padding:18px 0 2px;scroll-margin-top:calc(var(--chip-h) + 8px)}
 
 /* ---------- 总览 ---------- */
 .ov-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-.ov-grid.w3{grid-template-columns:repeat(3,1fr)}   /* 天气三卡一行 */
+.ov-grid.w3{grid-template-columns:repeat(2,1fr)}   /* 删日照后两卡拉满 */   /* 天气三卡一行 */
 @media(min-width:680px){.ov-grid{grid-template-columns:repeat(3,1fr)}}
 .ov-card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:14px;box-shadow:var(--shadow)}
 .ov-card .k{font-size:11px;color:var(--muted);display:flex;align-items:center;gap:2px}
@@ -834,7 +834,7 @@ li.fld .li-lab,li.lab .li-lab{font-size:12px;font-weight:700;color:var(--muted);
   .grid{gap:14px}
   .grid.g2,.grid.g3,.grid.g4{grid-template-columns:1fr}
   .ov-grid{grid-template-columns:repeat(2,1fr);gap:14px}
-  .ov-grid.w3{grid-template-columns:repeat(3,1fr)}
+  .ov-grid.w3{grid-template-columns:repeat(2,1fr)}   /* 删日照后两卡拉满 */
   .mgrid{grid-template-columns:repeat(2,1fr);gap:16px}
   .mcard{padding:16px 18px}
   .mava{width:51px;height:51px;font-size:24px}   /* 横排布局:不再要旧版的下边距 */
@@ -951,7 +951,7 @@ li.fld .li-lab,li.lab .li-lab{font-size:12px;font-weight:700;color:var(--muted);
 <div class="hcard" data-card="stay|🏨 万龙 · 盛龙公寓"><h3>🏨 万龙 · 盛龙公寓</h3><div class="h-sub">11/07 · 入住一晚</div><ul class="dots"><li class="lab"><span class="li-lab">地址</span><span class="li-main"><button class="li-cp" type="button" aria-label="复制" data-copy="河北省张家口市崇礼区万龙滑雪场(盛龙公寓)"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h10"/></svg></button>河北省张家口市崇礼区万龙滑雪场(盛龙公寓)</span></li><li class="subwrap half"><div class="card rcard" data-card="stay|景观四人间 ×1"><div class="r-t">景观四人间 ×1</div><div class="r-avas"><span class="avrow"><img class="mimg" src="images/a/593abc6d7a.jpg" alt="辣椒面"><img class="mimg" src="images/a/2ac7c642cf.jpg" alt="阿蒙"></span><span class="r-avsep">/</span><span class="avrow"><img class="mimg" src="images/a/a17432ca0c.jpg" alt="范达尔"><img class="mimg" src="images/a/3545cfca7f.jpg" alt="幽助"></span></div><span class="r-go">›</span></div></li><li class="subwrap half"><div class="card rcard" data-card="stay|景观标间 ×1"><div class="r-t">景观标间 ×1</div><div class="r-avas"><span class="avrow"><img class="mimg" src="images/a/1b5af55d3b.jpg" alt="小郭"><img class="mimg" src="images/a/adbb15c823.jpg" alt="Z&amp;L"></span></div><span class="r-go">›</span></div></li></ul></div></div>
 </section>
 <section id="weather">
-  <div class="sec-head"><div class="sec-ico">❄️</div><div class="sec-txt"><h2>天气与穿着</h2><span class="sec-sub">崇礼 11月上旬 · 出发前一周再核实</span></div></div>
+  <div class="sec-head"><div class="sec-ico">❄️</div><div class="sec-txt"><h2>天气</h2><span class="sec-sub">崇礼 11月上旬 · 出发前一周再核实</span></div></div>
   <div class="ov-grid w3"><div class="ov-card"><div class="k">🌡️ 气温</div><div class="v">白天约 -5~3°C<small> 夜间 -15~-8°C · 山上风大更冷</small></div></div>
 <div class="ov-card"><div class="k">🌨️ 雪况</div><div class="v"><a href="https://www.windy.com/40.96/115.28" target="_blank" rel="noopener">开季初期 · 造雪为主</a><small> 点击查询实时天气/雪况</small></div></div></div>
 </section>
@@ -990,7 +990,7 @@ li.fld .li-lab,li.lab .li-lab{font-size:12px;font-weight:700;color:var(--muted);
 </div><!-- /wrap -->
 
 <footer>
-  <div>❄️ <b>万龙,启动!</b> · v0.361 分享版</div>
+  <div>❄️ <b>万龙,启动!</b> · v0.362 分享版</div>
   
 </footer>
 
