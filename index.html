@@ -586,7 +586,10 @@ ul.dots li.fld::before{display:none!important}   /* 屏蔽通用点号,只留标
   border-radius:999px;padding:3px 9px;white-space:nowrap;letter-spacing:-.2px}   /* 雪票档位:与胶囊同款 */
 .tk span{font-weight:600}
 .tk b{font-variant-numeric:tabular-nums;font-weight:800;color:var(--accent-deep)}
-.fld-note{font-size:10.5px;color:var(--muted);margin-top:2px;text-align:right}   /* 栈底右对齐,计入行整体高度 */
+.fld-note{font-size:10.5px;color:var(--muted);margin-top:2px;text-align:right}
+.fld-title{font-size:13.5px;font-weight:800;color:var(--ink)}
+.fld-desc{font-size:11.5px;color:var(--muted);text-align:right;line-height:1.5}
+#gear li.subwrap .rcard{background:none;border:none;box-shadow:none;padding:0}   /* 邮寄子卡去框 */   /* 栈底右对齐,计入行整体高度 */
 .chip.chip-off{background:#fff3e4;color:#c96a1a;border:1px solid #f2c9a0}   /* 早场(未开放):橙胶囊 */
 .time-stack{flex:1;min-width:0;display:flex;flex-direction:column;align-items:flex-end;gap:4px}
 .time-stack .chip-row{justify-content:flex-end}
@@ -951,13 +954,13 @@ li.fld .li-lab,li.lab .li-lab{font-size:12px;font-weight:700;color:var(--muted);
 </section>
 <section id="gear">
   <div class="sec-head"><div class="sec-ico">🎿</div><div class="sec-txt"><h2>雪具方案</h2><span class="sec-sub">邮寄(3人) vs 现场租赁(3人)</span></div></div>
-  <div class="grid g2"><div class="hcard no-dots" data-card="gear|📦 雪具邮寄"><h3>📦 雪具邮寄<span class="h-avas"><span class="avrow"><img class="mimg" src="images/a/a17432ca0c.jpg" alt="范达尔"><img class="mimg" src="images/a/2ac7c642cf.jpg" alt="阿蒙"><img class="mimg" src="images/a/3545cfca7f.jpg" alt="幽助"></span></span></h3><ul class="dots"><li class="subwrap subwrap-bak"><div class="card rcard" data-card="gear|方案一 · 寄到中转酒店"><span class="badge b-tbd">备</span><div class="r-t">方案一 · 寄到中转酒店</div><span class="r-go">›</span></div></li><li class="subwrap"><div class="card rcard" data-card="gear|寄到盛龙公寓|推荐"><div class="r-t">寄到盛龙公寓<em class="r-tag">推荐</em></div><div class="r-fields"><div class="r-field"><span class="rf-lab">地址</span><span class="rf-gap"></span><button class="li-cp" type="button" aria-label="复制地址" data-copy="河北省张家口市崇礼区万龙滑雪场(盛龙公寓)"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h10"/></svg></button><span class="rf-val rf-adj">河北省张家口市崇礼区万龙滑雪场(盛龙公寓)</span></div><div class="r-field"><span class="rf-lab">电话</span><span class="rf-val">待补充</span></div></div><span class="r-go">›</span></div></li></ul></div>
+  <div class="grid g2"><div class="hcard no-dots" data-card="gear|📦 提前邮寄"><h3>📦 提前邮寄<span class="h-avas"><span class="avrow"><img class="mimg" src="images/a/a17432ca0c.jpg" alt="范达尔"><img class="mimg" src="images/a/2ac7c642cf.jpg" alt="阿蒙"><img class="mimg" src="images/a/3545cfca7f.jpg" alt="幽助"></span></span></h3><ul class="dots"><li class="subwrap subwrap-bak"><div class="card rcard" data-card="gear|方案一 · 寄到中转酒店"><span class="badge b-tbd">备</span><div class="r-t">方案一 · 寄到中转酒店</div><span class="r-go">›</span></div></li><li class="subwrap"><div class="card rcard" data-card="gear|寄到盛龙公寓|推荐"><div class="r-t">寄到盛龙公寓<em class="r-tag">推荐</em></div><div class="r-fields"><div class="r-field"><span class="rf-lab">地址</span><span class="rf-gap"></span><button class="li-cp" type="button" aria-label="复制地址" data-copy="河北省张家口市崇礼区万龙滑雪场(盛龙公寓)"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h10"/></svg></button><span class="rf-val rf-adj">河北省张家口市崇礼区万龙滑雪场(盛龙公寓)</span></div><div class="r-field"><span class="rf-lab">电话</span><span class="rf-val">待补充</span></div></div><span class="r-go">›</span></div></li></ul></div>
 <div class="hcard no-dots" data-card="gear|🎿 现场租赁"><h3>🎿 现场租赁<span class="h-avas"><span class="avrow"><img class="mimg" src="images/a/593abc6d7a.jpg" alt="辣椒面"><img class="mimg" src="images/a/1b5af55d3b.jpg" alt="小郭"><img class="mimg" src="images/a/adbb15c823.jpg" alt="Z&amp;L"></span></span></h3><ul class="dots"><li class="fld"><span class="fld-lab">雪场租赁</span><div class="time-stack"><div class="chip-row"><span class="chip">雪板</span><span class="chip">雪鞋</span><span class="chip">头盔</span></div></div></li><li class="fld"><span class="fld-lab">雪具店租赁</span><div class="time-stack"><div class="chip-row"><span class="chip">雪服</span><span class="chip">护具</span></div></div></li></ul></div></div>
 </section>
 <section id="food">
   <div class="sec-head"><div class="sec-ico">🍜</div><div class="sec-txt"><h2>吃喝补给</h2><span class="sec-sub">雪场大食堂 / 双龙自助 + 能量补给</span></div></div>
-  <div class="grid g2"><div class="hcard no-dots" data-card="food|🍜 雪场就餐"><h3>🍜 雪场就餐</h3><ul class="dots"><li class="item"><span class="li-main">大食堂(雪具大厅上方 · 雪场自营)</span><span class="badge b-ref">参考</span><span class="li-note">各种食物都有,人均约 ¥50–100</span></li><li class="item"><span class="li-main">双龙酒店自助餐</span><span class="badge b-todo">待查</span><span class="li-note">约17:00开放(时间待核实),人均 ¥200+(待核实)</span></li></ul></div>
-<div class="hcard no-dots" data-card="food|🛒 补给"><h3>🛒 补给</h3><ul class="dots"><li class="item"><span class="li-main">士力架 / 能量棒等小零食</span><span class="li-note">滑雪日随身补充能量,提前备好</span></li></ul></div></div>
+  <div class="grid g2"><div class="hcard no-dots" data-card="food|分组"><h3>分组</h3><ul class="dots"><li class="lab"><span class="li-lab">状态</span><span class="li-main"><button class="li-cp" type="button" aria-label="复制" data-copy="要点"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h10"/></svg></button>要点</span><span class="li-note">说明</span></li></ul></div>
+<div class="hcard no-dots" data-card="food|🍜 吃喝补给"><h3>🍜 吃喝补给</h3><ul class="dots"><li class="fld"><span class="fld-lab">正餐</span><div class="time-stack"><div class="fld-title">大食堂</div><div class="fld-desc">雪具大厅上方 · 雪场自营</div><div class="fld-desc">各种食物都有</div><div class="fld-desc">人均约 ¥50–100</div></div></li><li class="fld"><span class="fld-lab">正餐</span><div class="time-stack"><div class="fld-title">双龙自助</div><div class="fld-desc">约17:00开放(时间待核实)</div><div class="fld-desc">人均 ¥200+(待核实)</div></div></li><li class="fld"><span class="fld-lab">随时恢复体力</span><div class="time-stack"><div class="chip-row"><span class="chip">士力架</span><span class="chip">能量棒</span><span class="chip">小零食</span></div><div class="fld-note">滑雪日随身补充能量,提前备好</div></div></li></ul></div></div>
 </section>
 <section id="costs">
   <div class="sec-head"><div class="sec-ico">💰</div><div class="sec-txt"><h2>费用均摊</h2><span class="sec-sub">车票 / 住宿 / 雪票 · 人均摊(金额待填)</span></div></div>
@@ -969,7 +972,7 @@ li.fld .li-lab,li.lab .li-lab{font-size:12px;font-weight:700;color:var(--muted);
 </div><!-- /wrap -->
 
 <footer>
-  <div>❄️ <b>万龙,启动!</b> · v0.354 分享版</div>
+  <div>❄️ <b>万龙,启动!</b> · v0.355 分享版</div>
   
 </footer>
 
