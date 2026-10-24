@@ -569,11 +569,11 @@ li.fld{display:flex;flex-wrap:wrap;align-items:flex-start;justify-content:space-
   gap:0 10px;padding:8px 0;border-top:1px dashed var(--line)}   /* 标签左、内容右;说明小字整行换行 */
 li.fld:first-child{border-top:none;padding-top:0}
 .fld-lab{flex:none;font-size:12px;font-weight:700;color:var(--muted);
-  letter-spacing:.5px;padding-top:5px}   /* 标签靠左 */
+  letter-spacing:.5px;line-height:26px}   /* 标签靠左,与胶囊行等高对齐 */
 .chip-row{display:flex;flex-wrap:wrap;gap:6px;justify-content:flex-end;flex:1;min-width:0}   /* 胶囊右对齐 */
 .chip{font-size:11px;font-weight:600;color:#3a5b8c;background:var(--accent-weak);
   border-radius:999px;padding:3px 9px;white-space:nowrap;letter-spacing:-.2px}   /* 胶囊:紧凑 */
-.tk-grid{display:flex;flex-wrap:wrap;gap:6px;justify-content:flex-end;margin-left:auto}   /* 两行两列,按内容宽,整组右对齐 */
+.tk-grid{display:flex;flex-wrap:wrap;gap:6px;justify-content:flex-end;flex:1;min-width:0}   /* 两行两列,按内容宽,整组右对齐 */
 .tk{display:inline-flex;align-items:center;gap:6px;
   font-size:11px;color:#3a5b8c;background:var(--accent-weak);
   border-radius:999px;padding:3px 9px;white-space:nowrap;letter-spacing:-.2px}   /* 雪票档位:与胶囊同款 */
@@ -939,7 +939,7 @@ li.fld .li-lab,li.lab .li-lab{font-size:12px;font-weight:700;color:var(--muted);
 </section>
 <section id="resorts">
   <div class="sec-head"><div class="sec-ico">🏔️</div><div class="sec-txt"><h2>雪场信息</h2><span class="sec-sub">10.23 已开板 · 日场 8:30–16:30 / 夜场 18:30–21:30</span></div></div>
-  <div class="grid g2"><div class="hcard" data-card="resorts|🏔️ 万龙滑雪场(张家口·崇礼)"><h3>🏔️ 万龙滑雪场(张家口·崇礼)</h3><ul class="dots"><li class="fld"><span class="fld-lab">位置</span><span class="fld-val">河北省张家口市崇礼区</span></li><li class="fld"><span class="fld-lab">开放雪道</span><div class="chip-row"><span class="chip">威龙(高级)</span><span class="chip">娇龙·上段</span><span class="chip">雨龙·上段</span></div><div class="fld-note">其余开放雪道持续补充中</div></li><li class="fld"><span class="fld-lab">开放索道</span><div class="chip-row"><span class="chip">4号吊椅(慢速索道)</span></div></li><li class="fld"><span class="fld-lab">开放时间</span><div class="time-stack"><div class="chip-row"><span class="chip chip-off">早场:尚未开放</span></div><div class="chip-row"><span class="chip">日场:8:30–16:30</span><span class="chip">夜场:18:30–21:30</span></div></div></li><li class="fld"><span class="fld-lab">雪票</span><div class="tk-grid"><div class="tk"><span>日场 4小时</span><b>¥239</b></div><div class="tk"><span>日场 6小时</span><b>¥289</b></div><div class="tk"><span>日场 8小时</span><b>¥349</b></div><div class="tk"><span>夜场 3小时</span><b>¥168</b></div></div><div class="fld-note">自带板·开板试滑价,仅供参考</div></li></ul></div></div>
+  <div class="grid g2"><div class="hcard no-dots" data-card="resorts|🏔️ 万龙滑雪场(张家口·崇礼)"><h3>🏔️ 万龙滑雪场(张家口·崇礼)</h3><ul class="dots"><li class="fld"><span class="fld-lab">位置</span><span class="fld-val">河北省张家口市崇礼区</span></li><li class="fld"><span class="fld-lab">开放雪道</span><div class="chip-row"><span class="chip">威龙(高级)</span><span class="chip">娇龙·上段</span><span class="chip">雨龙·上段</span></div><div class="fld-note">其余开放雪道持续补充中</div></li><li class="fld"><span class="fld-lab">开放索道</span><div class="chip-row"><span class="chip">4号吊椅(慢速索道)</span></div></li><li class="fld"><span class="fld-lab">开放时间</span><div class="time-stack"><div class="chip-row"><span class="chip chip-off">早场:尚未开放</span></div><div class="chip-row"><span class="chip">日场:8:30–16:30</span><span class="chip">夜场:18:30–21:30</span></div></div></li><li class="fld"><span class="fld-lab">雪票</span><div class="tk-grid"><div class="tk"><span>日场 4小时</span><b>¥239</b></div><div class="tk"><span>日场 6小时</span><b>¥289</b></div><div class="tk"><span>日场 8小时</span><b>¥349</b></div><div class="tk"><span>夜场 3小时</span><b>¥168</b></div></div><div class="fld-note">自带板·开板试滑价,仅供参考</div></li></ul></div></div>
   
 </section>
 <section id="gear">
@@ -962,7 +962,7 @@ li.fld .li-lab,li.lab .li-lab{font-size:12px;font-weight:700;color:var(--muted);
 </div><!-- /wrap -->
 
 <footer>
-  <div>❄️ <b>万龙,启动!</b> · v0.345 分享版</div>
+  <div>❄️ <b>万龙,启动!</b> · v0.346 分享版</div>
   
 </footer>
 
