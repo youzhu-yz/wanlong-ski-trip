@@ -572,6 +572,7 @@ li.fld:first-child{border-top:none;padding-top:0}
 .fld-lab{flex:none;font-size:12px;font-weight:700;color:var(--muted);
   letter-spacing:.5px}   /* 标签在当前行垂直居中 */
 ul.dots li.fld{padding-left:16px}
+ul.dots li.fld::before{display:none!important}   /* 屏蔽通用点号,只留标签上的新点号 */
 .fld-lab{position:relative}
 .fld-lab::before{content:"";position:absolute;left:-14px;top:50%;margin-top:-3px;width:6px;height:6px;
   border-radius:50%;background:var(--accent);opacity:.4}   /* 小蓝点挂标签上,任意行高都对齐标签中线 */
@@ -968,7 +969,7 @@ li.fld .li-lab,li.lab .li-lab{font-size:12px;font-weight:700;color:var(--muted);
 </div><!-- /wrap -->
 
 <footer>
-  <div>❄️ <b>万龙,启动!</b> · v0.351 分享版</div>
+  <div>❄️ <b>万龙,启动!</b> · v0.352 分享版</div>
   
 </footer>
 
