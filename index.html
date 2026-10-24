@@ -570,9 +570,10 @@ li.fld{display:flex;flex-wrap:wrap;align-items:flex-start;justify-content:space-
 li.fld:first-child{border-top:none;padding-top:0}
 .fld-lab{flex:none;font-size:12px;font-weight:700;color:var(--muted);
   letter-spacing:.5px;line-height:26px}   /* 标签靠左,与胶囊行等高对齐 */
-ul.dots li.fld{position:relative;padding-left:16px}
-ul.dots li.fld::before{content:"";position:absolute;left:2px;top:8px;width:6px;height:6px;
-  border-radius:50%;background:var(--accent);opacity:.4}   /* fld 行小蓝点,对齐标签中线 */
+ul.dots li.fld{padding-left:16px}
+.fld-lab{position:relative}
+.fld-lab::before{content:"";position:absolute;left:-14px;top:50%;margin-top:-3px;width:6px;height:6px;
+  border-radius:50%;background:var(--accent);opacity:.4}   /* 小蓝点挂标签上,任意行高都对齐标签中线 */
 .fld-val{font-size:12px;font-weight:600;color:var(--ink)}   /* 位置值:字号缩小 */
 .chip-row{display:flex;flex-wrap:wrap;gap:6px;justify-content:flex-end;flex:1;min-width:0}   /* 胶囊右对齐 */
 .chip{font-size:11px;font-weight:600;color:#3a5b8c;background:var(--accent-weak);
@@ -966,7 +967,7 @@ li.fld .li-lab,li.lab .li-lab{font-size:12px;font-weight:700;color:var(--muted);
 </div><!-- /wrap -->
 
 <footer>
-  <div>❄️ <b>万龙,启动!</b> · v0.348 分享版</div>
+  <div>❄️ <b>万龙,启动!</b> · v0.349 分享版</div>
   
 </footer>
 
