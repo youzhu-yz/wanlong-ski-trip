@@ -549,6 +549,12 @@ footer b{color:#4a5468}
   font-variant-numeric:tabular-nums;letter-spacing:.3px}
 
 /* ---------- 雪具/吃喝:item 小卡 + 涉及人头像行 ---------- */
+/* 雪具/吃喝:整卡列表去点号(item 行 flex 布局下点号会与文本重叠) */
+.hcard.no-dots ul.dots li{list-style:none}
+.hcard.no-dots ul.dots li::before{display:none!important}
+ul.dots li.item{list-style:none}
+ul.dots li.item::before{display:none!important}
+
 /* 雪具/吃喝 item 行:扁平式,虚线分隔,名称粗体+徽章右,说明小字贴底右对齐 */
 ul.dots li.item{display:flex;flex-wrap:wrap;align-items:center;gap:2px 10px;
   padding:9px 0;border-top:1px dashed var(--line)}
@@ -938,13 +944,13 @@ li.fld .li-lab,li.lab .li-lab{font-size:12px;font-weight:700;color:var(--muted);
 </section>
 <section id="gear">
   <div class="sec-head"><div class="sec-ico">🎿</div><div class="sec-txt"><h2>雪具方案</h2><span class="sec-sub">邮寄(3人) vs 现场租赁(3人)</span></div></div>
-  <div class="grid g2"><div class="hcard" data-card="gear|📦 雪具邮寄"><h3>📦 雪具邮寄<span class="h-avas"><span class="avrow"><img class="mimg" src="images/a/a17432ca0c.jpg" alt="范达尔"><img class="mimg" src="images/a/2ac7c642cf.jpg" alt="阿蒙"><img class="mimg" src="images/a/3545cfca7f.jpg" alt="幽助"></span></span></h3><ul class="dots"><li class="subwrap subwrap-bak"><div class="card rcard" data-card="gear|方案一 · 寄到中转酒店"><span class="badge b-tbd">备</span><div class="r-t">方案一 · 寄到中转酒店</div><span class="r-go">›</span></div></li><li class="subwrap"><div class="card rcard" data-card="gear|寄到盛龙公寓|推荐"><div class="r-t">寄到盛龙公寓<em class="r-tag">推荐</em></div><div class="r-fields"><div class="r-field"><span class="rf-lab">地址</span><span class="rf-gap"></span><button class="li-cp" type="button" aria-label="复制地址" data-copy="河北省张家口市崇礼区万龙滑雪场(盛龙公寓)"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h10"/></svg></button><span class="rf-val rf-adj">河北省张家口市崇礼区万龙滑雪场(盛龙公寓)</span></div><div class="r-field"><span class="rf-lab">电话</span><span class="rf-val">待补充</span></div></div><span class="r-go">›</span></div></li></ul></div>
-<div class="hcard" data-card="gear|🎿 现场租赁"><h3>🎿 现场租赁<span class="h-avas"><span class="avrow"><img class="mimg" src="images/a/593abc6d7a.jpg" alt="辣椒面"><img class="mimg" src="images/a/1b5af55d3b.jpg" alt="小郭"><img class="mimg" src="images/a/adbb15c823.jpg" alt="Z&amp;L"></span></span></h3><ul class="dots"><li class="item"><span class="li-main">雪板 / 雪鞋 / 头盔等全套</span><span class="badge b-todo">待查</span><span class="li-note">需确认雪票是否包含租赁</span></li><li class="item"><span class="li-main">雪服可能需要另外租</span><span class="badge b-todo">待查</span><span class="li-note">价格待核实</span></li></ul></div></div>
+  <div class="grid g2"><div class="hcard no-dots" data-card="gear|📦 雪具邮寄"><h3>📦 雪具邮寄<span class="h-avas"><span class="avrow"><img class="mimg" src="images/a/a17432ca0c.jpg" alt="范达尔"><img class="mimg" src="images/a/2ac7c642cf.jpg" alt="阿蒙"><img class="mimg" src="images/a/3545cfca7f.jpg" alt="幽助"></span></span></h3><ul class="dots"><li class="subwrap subwrap-bak"><div class="card rcard" data-card="gear|方案一 · 寄到中转酒店"><span class="badge b-tbd">备</span><div class="r-t">方案一 · 寄到中转酒店</div><span class="r-go">›</span></div></li><li class="subwrap"><div class="card rcard" data-card="gear|寄到盛龙公寓|推荐"><div class="r-t">寄到盛龙公寓<em class="r-tag">推荐</em></div><div class="r-fields"><div class="r-field"><span class="rf-lab">地址</span><span class="rf-gap"></span><button class="li-cp" type="button" aria-label="复制地址" data-copy="河北省张家口市崇礼区万龙滑雪场(盛龙公寓)"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h10"/></svg></button><span class="rf-val rf-adj">河北省张家口市崇礼区万龙滑雪场(盛龙公寓)</span></div><div class="r-field"><span class="rf-lab">电话</span><span class="rf-val">待补充</span></div></div><span class="r-go">›</span></div></li></ul></div>
+<div class="hcard no-dots" data-card="gear|🎿 现场租赁"><h3>🎿 现场租赁<span class="h-avas"><span class="avrow"><img class="mimg" src="images/a/593abc6d7a.jpg" alt="辣椒面"><img class="mimg" src="images/a/1b5af55d3b.jpg" alt="小郭"><img class="mimg" src="images/a/adbb15c823.jpg" alt="Z&amp;L"></span></span></h3><ul class="dots"><li class="item"><span class="li-main">雪板 / 雪鞋 / 头盔等全套</span><span class="badge b-todo">待查</span><span class="li-note">需确认雪票是否包含租赁</span></li><li class="item"><span class="li-main">雪服可能需要另外租</span><span class="badge b-todo">待查</span><span class="li-note">价格待核实</span></li></ul></div></div>
 </section>
 <section id="food">
   <div class="sec-head"><div class="sec-ico">🍜</div><div class="sec-txt"><h2>吃喝补给</h2><span class="sec-sub">雪场大食堂 / 双龙自助 + 能量补给</span></div></div>
-  <div class="grid g2"><div class="hcard" data-card="food|🍜 雪场就餐"><h3>🍜 雪场就餐</h3><ul class="dots"><li class="item"><span class="li-main">大食堂(雪具大厅上方 · 雪场自营)</span><span class="badge b-ref">参考</span><span class="li-note">各种食物都有,人均约 ¥50–100</span></li><li class="item"><span class="li-main">双龙酒店自助餐</span><span class="badge b-todo">待查</span><span class="li-note">约17:00开放(时间待核实),人均 ¥200+(待核实)</span></li></ul></div>
-<div class="hcard" data-card="food|🛒 补给"><h3>🛒 补给</h3><ul class="dots"><li class="item"><span class="li-main">士力架 / 能量棒等小零食</span><span class="li-note">滑雪日随身补充能量,提前备好</span></li></ul></div></div>
+  <div class="grid g2"><div class="hcard no-dots" data-card="food|🍜 雪场就餐"><h3>🍜 雪场就餐</h3><ul class="dots"><li class="item"><span class="li-main">大食堂(雪具大厅上方 · 雪场自营)</span><span class="badge b-ref">参考</span><span class="li-note">各种食物都有,人均约 ¥50–100</span></li><li class="item"><span class="li-main">双龙酒店自助餐</span><span class="badge b-todo">待查</span><span class="li-note">约17:00开放(时间待核实),人均 ¥200+(待核实)</span></li></ul></div>
+<div class="hcard no-dots" data-card="food|🛒 补给"><h3>🛒 补给</h3><ul class="dots"><li class="item"><span class="li-main">士力架 / 能量棒等小零食</span><span class="li-note">滑雪日随身补充能量,提前备好</span></li></ul></div></div>
 </section>
 <section id="costs">
   <div class="sec-head"><div class="sec-ico">💰</div><div class="sec-txt"><h2>费用均摊</h2><span class="sec-sub">车票 / 住宿 / 雪票 · 人均摊(金额待填)</span></div></div>
@@ -956,7 +962,7 @@ li.fld .li-lab,li.lab .li-lab{font-size:12px;font-weight:700;color:var(--muted);
 </div><!-- /wrap -->
 
 <footer>
-  <div>❄️ <b>万龙,启动!</b> · v0.343 分享版</div>
+  <div>❄️ <b>万龙,启动!</b> · v0.344 分享版</div>
   
 </footer>
 
