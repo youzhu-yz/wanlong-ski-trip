@@ -681,6 +681,10 @@ footer b{color:#4a5468}
   background:#fdf8ec;font-size:14px;font-weight:700;color:#b07d1a;text-align:center}
 .pop-hint::before{content:"";display:block;width:36px;height:3px;border-radius:2px;
   background:#d9a94b;margin:0 auto 10px}   /* 脱敏提示:居中+琥珀色加粗,一眼可见 */
+.tipbox.sec-hint{margin:14px 0;padding:16px 12px;border:1.5px dashed #d9a94b;border-radius:10px;
+  background:#fdf8ec;font-size:14px;font-weight:700;color:#b07d1a;text-align:center}
+.tipbox.sec-hint::before{content:"";display:block;width:36px;height:3px;border-radius:2px;
+  background:#d9a94b;margin:0 auto 10px}   /* 分享版写死的敏感提示同款 */
 .pop-more{margin-top:0;padding-top:0}
 /* 详情弹窗的多页签:固定在标题栏下方、滚动区之外(页签条占满一行) */
 .pop-tabs{display:flex;gap:8px;flex:none;background:#fff;
@@ -927,7 +931,7 @@ footer b{color:#4a5468}
 </div><!-- /wrap -->
 
 <footer>
-  <div>❄️ <b>万龙,启动!</b> · v0.326 分享版</div>
+  <div>❄️ <b>万龙,启动!</b> · v0.327 分享版</div>
   
 </footer>
 
@@ -1840,7 +1844,9 @@ footer b{color:#4a5468}
     } else if(bt.t === '文本'){
       var p = document.createElement('p'); p.textContent = bt.c || ' '; d.appendChild(p);
     } else if(bt.t === '提示'){
-      var tb = document.createElement('div'); tb.className = 'tipbox'; tb.textContent = bt.c; d.appendChild(tb);
+      var tb = document.createElement('div');
+      tb.className = 'tipbox' + (bt.c && bt.c.indexOf('此内容涉及敏感信息') >= 0 ? ' sec-hint' : '');
+      tb.textContent = bt.c; d.appendChild(tb);
     } else if(bt.t === 'HTML'){
       /* 生成器预算好的可信 HTML(如费用均摊明细表) */
       var hw = document.createElement('div'); hw.className = 'blk-html'; hw.innerHTML = bt.c; d.appendChild(hw);
