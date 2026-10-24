@@ -183,8 +183,7 @@ section{padding:18px 0 2px;scroll-margin-top:calc(var(--chip-h) + 8px)}
 .train-row img{width:25px;height:25px;border-radius:50%;object-fit:cover;
   border:2px solid var(--card);box-shadow:0 1px 3px rgba(16,24,40,.18);flex:none}
 .train-row img + img{margin-left:-9px}
-.train-row img{transition:margin-left .45s ease}
-.train-row img.train-join{margin-left:16px}   /* 从邻座头像下面滑出 */
+.train-row img{transition:transform .6s ease}   /* 兜底过渡;实际节奏(时长/传导延迟)由 gapWave 内联指定 */
 .train-walk{position:absolute;width:25px;height:25px;border-radius:50%;object-fit:cover;box-sizing:border-box;flex:none;
   border:2px solid var(--card);box-shadow:0 1px 3px rgba(16,24,40,.18);
   transition:transform 1s ease .15s}   /* 第6人自己走到队尾 */
@@ -942,7 +941,7 @@ li.fld .li-lab,li.lab .li-lab{font-size:12px;font-weight:700;color:var(--muted);
 <section id="flights">
   <div class="sec-head"><div class="sec-ico">🎫</div><div class="sec-txt"><h2>高铁 · 航班</h2><span class="sec-sub">G30 去程 · MU5166 返程 · 京张段见「交通」</span></div></div>
   <div class="fcard" data-card="flights|G30"><span class="fdir">去程</span><div class="fhead"><div class="fhead2"><span class="fno">G30</span><span class="fairline">复兴号</span><span class="fairline">CR400BF-BS</span></div><span class="fdate">11.06 周五</span></div><div class="froute"><div class="fport"><div class="ftime">18:52</div><div class="fair">上海虹桥站</div><div class="fcode"></div><div class="fstack"><img class="mimg" src="images/a/1b5af55d3b.jpg" alt="小郭"><img class="mimg" src="images/a/593abc6d7a.jpg" alt="辣椒面"><img class="mimg" src="images/a/2ac7c642cf.jpg" alt="阿蒙"><img class="mimg" src="images/a/a17432ca0c.jpg" alt="范达尔"><img class="mimg" src="images/a/3545cfca7f.jpg" alt="幽助"></div></div><div class="fmid"><span class="fplane">🚄</span><div class="fdur">4 小时 29 分</div><div class="fstop"><div class="fstop-t">苏州北 19:15</div><em><img class="mimg" src="images/a/adbb15c823.jpg" alt="Z&amp;L"> 上车</em></div></div><div class="fport"><div class="ftime">23:21</div><div class="fair">北京南站</div><div class="fcode"></div></div></div></div>
-<div class="fcard" data-card="flights|MU5166"><span class="fdir">返程</span><div class="fhead"><div class="fhead2"><span class="fno">MU5166</span><span class="fairline">中国东方航空</span><span class="fairline">B777</span></div><span class="fdate">11.08 周日</span></div><div class="froute"><div class="fport"><div class="ftime">21:30</div><div class="fair">北京首都 T2</div><div class="fcode">PEK</div><div class="fstack"><img class="mimg" src="images/a/1b5af55d3b.jpg" alt="小郭"><img class="mimg" src="images/a/593abc6d7a.jpg" alt="辣椒面"><img class="mimg" src="images/a/2ac7c642cf.jpg" alt="阿蒙"><img class="mimg" src="images/a/a17432ca0c.jpg" alt="范达尔"><img class="mimg" src="images/a/3545cfca7f.jpg" alt="幽助"><img class="mimg" src="images/a/adbb15c823.jpg" alt="Z&amp;L"></div></div><div class="fmid"><span class="fplane">✈</span><div class="fdur">2 小时 25 分</div></div><div class="fport"><div class="ftime">23:55</div><div class="fair">上海虹桥</div><div class="fcode">SHA</div></div></div></div>
+<div class="fcard" data-card="flights|MU5166"><span class="fdir">返程</span><div class="fhead"><div class="fhead2"><span class="fno">MU5166</span><span class="fairline">中国东方航空</span><span class="fairline">B777</span></div><span class="fdate">11.08 周日</span></div><div class="froute"><div class="fport"><div class="ftime">21:30</div><div class="fair">北京首都 T2</div><div class="fcode">PEK</div></div><div class="fmid"><span class="fplane">✈</span><div class="fdur">2 小时 25 分</div></div><div class="fport"><div class="ftime">23:55</div><div class="fair">上海虹桥</div><div class="fcode">SHA</div></div></div></div>
 </section>
 <section id="transport">
   <div class="sec-head"><div class="sec-ico">🚄</div><div class="sec-txt"><h2>交通</h2><span class="sec-sub">去程 / 返程分段 · 时刻以车票为准</span></div></div>
@@ -985,7 +984,7 @@ li.fld .li-lab,li.lab .li-lab{font-size:12px;font-weight:700;color:var(--muted);
 </div><!-- /wrap -->
 
 <footer>
-  <div>❄️ <b>万龙,启动!</b> · v0.402 分享版</div>
+  <div>❄️ <b>万龙,启动!</b> · v0.415 分享版</div>
   
 </footer>
 
@@ -1200,7 +1199,7 @@ li.fld .li-lab,li.lab .li-lab{font-size:12px;font-weight:700;color:var(--muted);
   });
 })();
 
-/* ---------- G30 去程:头像火车动画 v7(按钮触发:虹桥→中央带人→北京南常驻,重新发车重播) ---------- */
+/* ---------- G30 去程:头像火车动画 v16(一键发车:虹桥→苏州北带人停2秒→自动5秒到北京南;起速车头前蹿流动传导,进站长缓收波恰在停稳时归位,车尾全程锚定,重新发车重播) ---------- */
 (function(){
   var card = document.querySelector('.fcard');
   if(!card || !card.querySelector('.fstop')) return;
@@ -1213,8 +1212,6 @@ li.fld .li-lab,li.lab .li-lab{font-size:12px;font-weight:700;color:var(--muted);
   }
 
   var layer, row, btn;
-  var phase = 'idle';          // idle→departing→waitSuzhou→toBeijing→arrived
-  var suzhouResolve = null;    // 苏州北手动发车的等待句柄
   var route = card.querySelector('.froute');
   var stack = card.querySelector('.fstack');
   var fstop = card.querySelector('.fstop');
@@ -1280,7 +1277,12 @@ li.fld .li-lab,li.lab .li-lab{font-size:12px;font-weight:700;color:var(--muted);
   function resetRow(){
     row.style.transition = 'none';
     while(row.firstChild){ row.removeChild(row.firstChild); }
-    avas.forEach(function(a){ var im = document.createElement('img'); im.src = a.src; row.appendChild(im); });
+    avas.forEach(function(a, i){
+      var im = document.createElement('img');
+      im.src = a.src;
+      im.style.zIndex = i;   // 层级按队列顺序钉死:惯性平移带 transform 层叠上下文,不钉死会让车头(最右)沉底
+      row.appendChild(im);
+    });
     row.style.left = lane.sx + 'px';
     row.style.top = lane.sy + 'px';
     row.style.transform = 'none';
@@ -1293,7 +1295,6 @@ li.fld .li-lab,li.lab .li-lab{font-size:12px;font-weight:700;color:var(--muted);
   }
 
   function run(){
-    phase = 'departing';
     var o0 = origin();
     var rrW = route.getBoundingClientRect().width;
     var zR = fstop.getBoundingClientRect();
@@ -1338,10 +1339,24 @@ li.fld .li-lab,li.lab .li-lab{font-size:12px;font-weight:700;color:var(--muted);
       return wait(1400);
     }
 
+    function gapWave(px, step, lead, dur){   // 惯性波:以车尾(行内最左一枚)为锚,车尾永不动;
+      var ims = row.children, n = ims.length;   // 拉开=靠车头的车厢依次向前蹿,收拢=依次退回,偏移全为正向,起步没有后退还象
+      for(var i = 0; i < n; i++){
+        var ahead = i;   // 该车厢到车尾之间的间隙数,车尾本身=0
+        ims[i].style.transition = 'transform ' + dur + 's ease-in-out';
+        ims[i].style.transitionDelay = (lead + Math.max(0, n - 2 - i) * step) + 'ms';   // 车头侧先动,逐节向尾传导
+        ims[i].style.transform = ahead && px ? 'translateX(' + (ahead * px) + 'px)' : 'none';
+      }
+    }
+    function gapSpread(){ gapWave(2, 350, 150, 0.7); }    // 起速:后节在前节运动到一半时跟上,流动传导约2.3s拉满
+    function gapClose(){ gapWave(0, 150, 0, 1.8); }       // 进站减速:长缓收波,车头恰在停稳瞬间归位,不再把车头提前拽停
+
     var seq = [
       function(){ row.style.transition = 'transform 5s cubic-bezier(.45,.05,.55,.95)'; return wait(1000); },
       function(){
         row.style.transform = 'translateX(' + (rrW / 2 - rowW() / 2 - lane.sx) + 'px)';
+        gapSpread();                        // 起步惯性:间隙从头侧起多米诺传导拉开,行驶中保持
+        setTimeout(gapClose, 3300);         // 进站减速段:间隙从头侧起逐节收回,停稳前后正好收完
         var p1t = port1.querySelector('.fair').getBoundingClientRect();
         when(function(){ return row.getBoundingClientRect().left > p1t.right - 40; })
           .then(slotCollapse);              // 车尾完全出清虹桥站名,文字才下沉
@@ -1349,19 +1364,15 @@ li.fld .li-lab,li.lab .li-lab{font-size:12px;font-weight:700;color:var(--muted);
       },
       function(){ return walkIn(); },       // 走位完成,第 6 人独立留在队尾
       function(){
-        // 苏州北候客:按钮变亮等手动发车,点击后 1 秒出发
-        phase = 'waitSuzhou';
-        btn.disabled = false;
-        btn.innerHTML = ICO_PLAY;
-        btn.setAttribute('aria-label', '出发');
-        return new Promise(function(r){ suzhouResolve = r; });
+        // 苏州北停留:接上人后停 2 秒,自动发车去北京南(全程一键,无需再点)
+        return wait(2000);
       },
       function(){
         // 6 节整列(5 节 row + 独立尾卡)与北京南居中;两者同曲线同速,视觉是一列车
         var w6 = rowW() + 16;
         var newRowX = pxC - w6 / 2 + 16 - lane.sx;
         var delta = newRowX - rowX();
-        var tr = 'transform 10s cubic-bezier(.45,.05,.55,.95)';
+        var tr = 'transform 5s cubic-bezier(.45,.05,.55,.95)';
         row.style.transition = tr;
         if(walker){
           walker.style.transition = 'none';
@@ -1369,22 +1380,23 @@ li.fld .li-lab,li.lab .li-lab{font-size:12px;font-weight:700;color:var(--muted);
           walker.style.top = lane.sy + 'px';
           walker.style.transform = 'none';
           void walker.offsetWidth;
-          walker.style.transition = tr;
+          walker.style.transition = tr;   // 尾卡紧贴车尾随行,间隙不参与开合
           walker.style.transform = 'translateX(' + delta + 'px)';
         }
         row.style.transform = 'translateX(' + newRowX + 'px)';
+        gapSpread();                        // 起步惯性:间隙从头侧起多米诺传导拉开,行驶中保持
+        setTimeout(gapClose, 3300);         // 进站减速段:间隙从头侧起逐节收回,停稳前后正好收完
         stopEm.style.opacity = '0';         // 带上第 6 人开走后,候车胶囊才淡出(站名常驻)
         var arriveHeadV = o0.x + pxC + rowW() / 2 + 8 - 70;   // 到站车头视口X - 70
         when(function(){ return row.getBoundingClientRect().right > arriveHeadV; })
           .then(function(){ port2.style.transform = 'translateY(-11px)'; });  // 车头距到点 70px 即升
-        return wait(10300);
+        return wait(5300);
       }
     ];
     var i2 = 0;
     (function step(){
       if(i2 >= seq.length){
         // 到站常驻:按钮变「重新发车」,火车留在北京南不动
-        phase = 'arrived';
         btn.disabled = false;
         btn.innerHTML = ICO_REFRESH;
         btn.setAttribute('aria-label', '重新发车');
@@ -1419,22 +1431,13 @@ li.fld .li-lab,li.lab .li-lab{font-size:12px;font-weight:700;color:var(--muted);
   })();
   btn.addEventListener('click', function(){
     if(btn.disabled) return;
-    if(phase === 'waitSuzhou'){
-      // 苏州北手动发车:按钮立即置灰,1 秒后火车驶向北京南
-      btn.disabled = true;
-      phase = 'toBeijing';
-      var r = suzhouResolve;
-      suzhouResolve = null;
-      setTimeout(function(){ if(r) r(); }, 1000);
-      return;
-    }
     btn.disabled = true;
+    btn.innerHTML = ICO_PLAY;
+    btn.setAttribute('aria-label', '出发');
     if(layer){
       // 重新发车:全部复位在 run 内一帧完成,无过渡动画
-      btn.innerHTML = ICO_PLAY;
       run();
     }else{
-      btn.innerHTML = ICO_PLAY;
       start();
     }
   });
