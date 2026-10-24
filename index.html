@@ -371,6 +371,7 @@ ul.dots li.subwrap.half + li.subwrap.half{margin-left:10px}
 /* 夜宿休息行(去程睡觉):淡暮色底+左侧月色竖条,轻微区别于赶路行程 */
 .trow2.tnight{background:#f2f4fb;border-radius:8px;margin:2px -4px;
   padding-left:12px;padding-right:8px;position:relative;border-top:none!important}
+.trow2.tnight + .trow2{border-top:none!important}   /* 睡觉行与下一条(③D9271)之间的虚线去掉 */
 .trow2.tnight::before{content:"";position:absolute;left:0;top:6px;bottom:6px;width:3px;
   border-radius:2px;background:#8fa3c8}   /* 左侧月色竖条 */
 .cmp-mask .trow2.tnight{background:#f2f4fb}
@@ -990,7 +991,7 @@ li.fld .li-lab,li.lab .li-lab{font-size:12px;font-weight:700;color:var(--muted);
 </div><!-- /wrap -->
 
 <footer>
-  <div>❄️ <b>万龙,启动!</b> · v0.364 分享版</div>
+  <div>❄️ <b>万龙,启动!</b> · v0.365 分享版</div>
   
 </footer>
 
