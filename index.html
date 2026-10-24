@@ -567,13 +567,18 @@ li.fld:first-child{border-top:none;padding-top:0}
 .chip-row{display:flex;flex-wrap:wrap;gap:6px;justify-content:flex-end;flex:1;min-width:0}   /* 胶囊右对齐 */
 .chip{font-size:12px;font-weight:600;color:#3a5b8c;background:var(--accent-weak);
   border-radius:999px;padding:4px 12px;white-space:nowrap}   /* 开放雪道/时间:胶囊 */
-.tk-grid{display:grid;grid-template-columns:repeat(2,max-content);gap:6px;justify-content:end}   /* 两行两列,按内容宽,整组右对齐 */
+.tk-grid{display:grid;grid-template-columns:repeat(2,max-content);gap:6px;justify-content:end;margin-left:auto}   /* 两行两列,按内容宽,整组右对齐 */
 .tk{display:inline-flex;align-items:center;gap:8px;
   font-size:12px;color:#3a5b8c;background:#f4f8fd;border:1px solid #e3edf8;
   border-radius:8px;padding:6px 10px}   /* 雪票档位:两列小卡 */
 .tk span{font-weight:600}
 .tk b{font-variant-numeric:tabular-nums;font-weight:800;color:var(--accent-deep)}
 .fld-note{flex-basis:100%;font-size:10.5px;color:var(--muted);margin-top:5px;text-align:right}   /* 整行换行,置底右对齐 */
+.chip.chip-off{background:#fff3e4;color:#c96a1a;border:1px solid #f2c9a0}   /* 早场(未开放):橙胶囊 */
+.time-stack{flex:1;min-width:0;display:flex;flex-direction:column;align-items:flex-end;gap:6px}
+.time-stack .chip-row{justify-content:flex-end}
+li.fld .li-lab,li.lab .li-lab{font-size:12px;font-weight:700;color:var(--muted);
+  letter-spacing:.5px}   /* 位置/开板时间等单行字段标签与 fld-lab 同款 */
 
 /* ---------- 均摊费用 ---------- */
 #costs .hcard.has-zoom .zoom-btn{left:20px;right:auto;top:10px}   /* 左侧,对齐表头行垂直居中 */
@@ -928,7 +933,7 @@ li.fld:first-child{border-top:none;padding-top:0}
 </section>
 <section id="resorts">
   <div class="sec-head"><div class="sec-ico">🏔️</div><div class="sec-txt"><h2>雪场信息</h2><span class="sec-sub">10.23 已开板 · 日场 8:30–16:30 / 夜场 18:30–21:30</span></div></div>
-  <div class="grid g2"><div class="hcard" data-card="resorts|🏔️ 万龙滑雪场(张家口·崇礼)"><h3>🏔️ 万龙滑雪场(张家口·崇礼)</h3><ul class="dots"><li class="lab"><span class="li-lab">位置</span><span class="li-main"><button class="li-cp" type="button" aria-label="复制" data-copy="河北省张家口市崇礼区"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h10"/></svg></button>河北省张家口市崇礼区</span></li><li class="fld"><span class="fld-lab">开放雪道</span><div class="chip-row"><span class="chip">威龙道(高级)</span><span class="chip">娇龙道上段</span><span class="chip">雨龙道上段</span></div><div class="fld-note">其余开放雪道持续补充中</div></li><li class="fld"><span class="fld-lab">开放索道</span><div class="chip-row"><span class="chip">4号吊椅(慢速索道)</span></div></li><li class="fld"><span class="fld-lab">开放时间</span><div class="chip-row"><span class="chip">早场:尚未开放</span><span class="chip">日场:8:30–16:30</span><span class="chip">夜场:18:30–21:30</span></div></li><li class="fld"><span class="fld-lab">雪票</span><div class="tk-grid"><div class="tk"><span>日场 4小时</span><b>¥239</b></div><div class="tk"><span>日场 6小时</span><b>¥289</b></div><div class="tk"><span>日场 8小时</span><b>¥349</b></div><div class="tk"><span>夜场 3小时</span><b>¥168</b></div></div><div class="fld-note">自带板·开板试滑价,仅供参考</div></li></ul></div></div>
+  <div class="grid g2"><div class="hcard" data-card="resorts|🏔️ 万龙滑雪场(张家口·崇礼)"><h3>🏔️ 万龙滑雪场(张家口·崇礼)</h3><ul class="dots"><li class="fld"><span class="fld-lab">位置</span><span class="fld-val">河北省张家口市崇礼区</span></li><li class="fld"><span class="fld-lab">开放雪道</span><div class="chip-row"><span class="chip">威龙道(高级)</span><span class="chip">娇龙道上段</span><span class="chip">雨龙道上段</span></div><div class="fld-note">其余开放雪道持续补充中</div></li><li class="fld"><span class="fld-lab">开放索道</span><div class="chip-row"><span class="chip">4号吊椅(慢速索道)</span></div></li><li class="fld"><span class="fld-lab">开放时间</span><div class="time-stack"><div class="chip-row"><span class="chip chip-off">早场:尚未开放</span></div><div class="chip-row"><span class="chip">日场:8:30–16:30</span><span class="chip">夜场:18:30–21:30</span></div></div></li><li class="fld"><span class="fld-lab">雪票</span><div class="tk-grid"><div class="tk"><span>日场 4小时</span><b>¥239</b></div><div class="tk"><span>日场 6小时</span><b>¥289</b></div><div class="tk"><span>日场 8小时</span><b>¥349</b></div><div class="tk"><span>夜场 3小时</span><b>¥168</b></div></div><div class="fld-note">自带板·开板试滑价,仅供参考</div></li></ul></div></div>
   
 </section>
 <section id="gear">
@@ -951,7 +956,7 @@ li.fld:first-child{border-top:none;padding-top:0}
 </div><!-- /wrap -->
 
 <footer>
-  <div>❄️ <b>万龙,启动!</b> · v0.339 分享版</div>
+  <div>❄️ <b>万龙,启动!</b> · v0.343 分享版</div>
   
 </footer>
 
