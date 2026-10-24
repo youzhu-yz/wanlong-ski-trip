@@ -671,8 +671,10 @@ footer b{color:#4a5468}
 .pop-close:active{background:#e2e7ef}
 .pop-body{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;overscroll-behavior:contain;padding:10px;scrollbar-width:none}
 .pop-body::-webkit-scrollbar{display:none}   /* 竖向滚动条隐藏(仍可滑动) */
-.pop-hint{margin-top:14px;padding:12px;border:1px dashed var(--line);border-radius:8px;
-  font-size:12.5px;color:var(--muted);text-align:center}
+.pop-hint{margin-top:18px;padding:16px 12px;border:1.5px dashed #d9a94b;border-radius:10px;
+  background:#fdf8ec;font-size:14px;font-weight:700;color:#b07d1a;text-align:center}
+.pop-hint::before{content:"";display:block;width:36px;height:3px;border-radius:2px;
+  background:#d9a94b;margin:0 auto 10px}   /* 脱敏提示:居中+琥珀色加粗,一眼可见 */
 .pop-more{margin-top:0;padding-top:0}
 /* 详情弹窗的多页签:固定在标题栏下方、滚动区之外(页签条占满一行) */
 .pop-tabs{display:flex;gap:8px;flex:none;background:#fff;
@@ -919,7 +921,7 @@ footer b{color:#4a5468}
 </div><!-- /wrap -->
 
 <footer>
-  <div>❄️ <b>万龙,启动!</b> · v0.322 分享版</div>
+  <div>❄️ <b>万龙,启动!</b> · v0.323 分享版</div>
   
 </footer>
 
