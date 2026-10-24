@@ -588,11 +588,15 @@ ul.dots li.fld::before{display:none!important}   /* 屏蔽通用点号,只留标
 .tk b{font-variant-numeric:tabular-nums;font-weight:800;color:var(--accent-deep)}
 .fld-note{font-size:10.5px;color:var(--muted);margin-top:2px;text-align:right}
 .fld-title{font-size:13.5px;font-weight:800;color:var(--ink)}
-li.meal{position:relative;padding:10px 0 10px 16px;border-top:1px dashed var(--line)}
+/* 吃喝正餐行:小蓝点对齐标题中线,标题粗体左、描述逐行右 */
+li.meal{display:flex;align-items:center;justify-content:space-between;gap:0 10px;
+  padding:10px 0 10px 16px;border-top:1px dashed var(--line);position:relative}
 li.meal:first-child{border-top:none;padding-top:4px}
 li.meal::before{content:"";position:absolute;left:2px;top:50%;margin-top:-3px;width:6px;height:6px;
   border-radius:50%;background:var(--accent);opacity:.4}
-li.meal .fld-title{margin-bottom:3px}
+li.meal .fld-title{flex:none;font-size:13.5px;font-weight:800;color:var(--ink)}
+li.meal .meal-desc{flex:1;min-width:0;display:flex;flex-direction:column;align-items:flex-end;gap:2px}
+li.meal .fld-desc{font-size:11.5px;color:var(--muted);text-align:right;line-height:1.4}
 .fld-desc{font-size:11.5px;color:var(--muted);text-align:right;line-height:1.5}
 #gear li.subwrap .rcard{background:none;border:none;box-shadow:none;padding:0}   /* 邮寄子卡去框 */   /* 栈底右对齐,计入行整体高度 */
 .chip.chip-off{background:#fff3e4;color:#c96a1a;border:1px solid #f2c9a0}   /* 早场(未开放):橙胶囊 */
@@ -869,7 +873,7 @@ li.fld .li-lab,li.lab .li-lab{font-size:12px;font-weight:700;color:var(--muted);
     <a href="#weather">❄️ 天气</a>
     <a href="#resorts">🏔️ 雪场</a>
     <a href="#gear">🎿 雪具</a>
-    <a href="#food">🍜 吃喝</a>
+    <a href="#food">🍜 吃喝选择</a>
     <a href="#costs">💰 费用</a>
   </div>
 </nav>
@@ -972,10 +976,9 @@ li.fld .li-lab,li.lab .li-lab{font-size:12px;font-weight:700;color:var(--muted);
 网上联系老板,寄到雪场或酒店</span></li></ul></div></div>
 </section>
 <section id="food">
-  <div class="sec-head"><div class="sec-ico">🍜</div><div class="sec-txt"><h2>吃喝</h2><span class="sec-sub">雪场大食堂 / 双龙自助 + 能量补给</span></div></div>
+  <div class="sec-head"><div class="sec-ico">🍜</div><div class="sec-txt"><h2>吃喝选择</h2><span class="sec-sub">雪场大食堂 / 双龙自助 + 能量补给</span></div></div>
   <div class="grid g2"><div class="hcard no-dots" data-card="food|分组"><h3>分组</h3><ul class="dots"></ul></div>
-<div class="hcard no-dots" data-card="food|正餐"><h3>正餐</h3><ul class="dots"><li class="meal"><div class="fld-title">大食堂</div><div class="fld-desc">雪具大厅上方 · 雪场自营</div><div class="fld-desc">各种食物都有</div><div class="fld-desc">人均约 ¥50–100</div></li><li class="meal"><div class="fld-title">双龙自助</div><div class="fld-desc">约17:00开放(时间待核实)</div><div class="fld-desc">人均 ¥200+(待核实)</div></li></ul></div>
-<div class="hcard no-dots" data-card="food|补给"><h3>补给</h3><ul class="dots"><li class="fld"><span class="fld-lab">随时恢复体力</span><div class="time-stack"><div class="chip-row"><span class="chip">士力架</span><span class="chip">能量棒</span><span class="chip">小零食</span></div><div class="fld-note">滑雪日随身补充能量,提前备好</div></div></li></ul></div></div>
+<div class="hcard no-dots" data-card="food|🍜 吃喝选择"><h3>🍜 吃喝选择</h3><ul class="dots"></ul></div></div>
 </section>
 <section id="costs">
   <div class="sec-head"><div class="sec-ico">💰</div><div class="sec-txt"><h2>费用均摊</h2><span class="sec-sub">车票 / 住宿 / 雪票 · 人均摊(金额待填)</span></div></div>
@@ -987,7 +990,7 @@ li.fld .li-lab,li.lab .li-lab{font-size:12px;font-weight:700;color:var(--muted);
 </div><!-- /wrap -->
 
 <footer>
-  <div>❄️ <b>万龙,启动!</b> · v0.359 分享版</div>
+  <div>❄️ <b>万龙,启动!</b> · v0.361 分享版</div>
   
 </footer>
 
