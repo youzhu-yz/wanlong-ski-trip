@@ -549,21 +549,21 @@ footer b{color:#4a5468}
   font-variant-numeric:tabular-nums;letter-spacing:.3px}
 
 /* ---------- 雪场卡:多行内容网格化 ---------- */
-li.fld{display:flex;align-items:flex-start;justify-content:space-between;gap:10px;
-  padding:8px 0;border-top:1px dashed var(--line)}   /* 与位置行同款:标签左、内容右 */
+li.fld{display:flex;flex-wrap:wrap;align-items:flex-start;justify-content:space-between;
+  gap:0 10px;padding:8px 0;border-top:1px dashed var(--line)}   /* 标签左、内容右;说明小字整行换行 */
 li.fld:first-child{border-top:none;padding-top:0}
 .fld-lab{flex:none;font-size:12px;font-weight:700;color:var(--muted);
-  letter-spacing:.5px;padding-top:5px}   /* 标签靠左,与胶囊中线对齐 */
+  letter-spacing:.5px;padding-top:5px}   /* 标签靠左 */
 .chip-row{display:flex;flex-wrap:wrap;gap:6px;justify-content:flex-end;flex:1;min-width:0}   /* 胶囊右对齐 */
 .chip{font-size:12px;font-weight:600;color:#3a5b8c;background:var(--accent-weak);
   border-radius:999px;padding:4px 12px;white-space:nowrap}   /* 开放雪道/时间:胶囊 */
-.tk-grid{display:grid;grid-template-columns:1fr 1fr;gap:6px}
+.tk-grid{display:grid;grid-template-columns:1fr 1fr;gap:6px;flex:1;min-width:0}
 .tk{display:flex;justify-content:space-between;align-items:center;gap:6px;
   font-size:12px;color:#3a5b8c;background:#f4f8fd;border:1px solid #e3edf8;
   border-radius:8px;padding:6px 10px}   /* 雪票档位:两列小卡 */
 .tk span{font-weight:600}
 .tk b{font-variant-numeric:tabular-nums;font-weight:800;color:var(--accent-deep)}
-.fld-note{font-size:10.5px;color:var(--muted);margin-top:5px;text-align:right}
+.fld-note{flex-basis:100%;font-size:10.5px;color:var(--muted);margin-top:5px;text-align:right}   /* 整行换行,置底右对齐 */
 
 /* ---------- 均摊费用 ---------- */
 #costs .hcard.has-zoom .zoom-btn{left:20px;right:auto;top:10px}   /* 左侧,对齐表头行垂直居中 */
@@ -941,7 +941,7 @@ li.fld:first-child{border-top:none;padding-top:0}
 </div><!-- /wrap -->
 
 <footer>
-  <div>❄️ <b>万龙,启动!</b> · v0.333 分享版</div>
+  <div>❄️ <b>万龙,启动!</b> · v0.334 分享版</div>
   
 </footer>
 
