@@ -984,7 +984,7 @@ li.fld .li-lab,li.lab .li-lab{font-size:12px;font-weight:700;color:var(--muted);
 </div><!-- /wrap -->
 
 <footer>
-  <div>❄️ <b>万龙,启动!</b> · v0.415 分享版</div>
+  <div>❄️ <b>万龙,启动!</b> · v0.420 分享版</div>
   
 </footer>
 
@@ -1199,7 +1199,7 @@ li.fld .li-lab,li.lab .li-lab{font-size:12px;font-weight:700;color:var(--muted);
   });
 })();
 
-/* ---------- G30 去程:头像火车动画 v16(一键发车:虹桥→苏州北带人停2秒→自动5秒到北京南;起速车头前蹿流动传导,进站长缓收波恰在停稳时归位,车尾全程锚定,重新发车重播) ---------- */
+/* ---------- G30 去程:头像火车动画 v19(一键发车:虹桥→苏州北带人停2秒→自动5秒到北京南;起速车头前蹿平滑流动传导,尾卡入队后整列6节同波,进站长缓收波,重新发车重播) ---------- */
 (function(){
   var card = document.querySelector('.fcard');
   if(!card || !card.querySelector('.fstop')) return;
@@ -1339,17 +1339,20 @@ li.fld .li-lab,li.lab .li-lab{font-size:12px;font-weight:700;color:var(--muted);
       return wait(1400);
     }
 
-    function gapWave(px, step, lead, dur){   // 惯性波:以车尾(行内最左一枚)为锚,车尾永不动;
-      var ims = row.children, n = ims.length;   // 拉开=靠车头的车厢依次向前蹿,收拢=依次退回,偏移全为正向,起步没有后退还象
+    function gapWave(px, step, shrink, lead, dur, curve){   // 惯性波:以车尾为锚(无尾卡=行内最左,有尾卡=尾卡),锚定者永不动;
+      var ims = row.children, n = ims.length;   // waits[m]=距车头第 m 节的起动延迟;起步波 shrink>0 → 间隔逐节递减:车头越跑越快,挂钩被越快拽紧
+      var base = walker ? 1 : 0;   // 尾卡入队后,行内每节身后多一条间隙,全部要向前蹿一档(含原最左一枚)
+      var waits = [0];
+      for(var m = 1; m < n; m++) waits[m] = waits[m - 1] + Math.max(60, step - (m - 1) * shrink);
       for(var i = 0; i < n; i++){
-        var ahead = i;   // 该车厢到车尾之间的间隙数,车尾本身=0
-        ims[i].style.transition = 'transform ' + dur + 's ease-in-out';
-        ims[i].style.transitionDelay = (lead + Math.max(0, n - 2 - i) * step) + 'ms';   // 车头侧先动,逐节向尾传导
+        var ahead = base + i;   // 该车厢到锚定车尾之间的间隙数
+        ims[i].style.transition = 'transform ' + dur + 's ' + curve;
+        ims[i].style.transitionDelay = (lead + waits[n - 1 - i]) + 'ms';   // 车头先动,逐节向尾传导
         ims[i].style.transform = ahead && px ? 'translateX(' + (ahead * px) + 'px)' : 'none';
       }
     }
-    function gapSpread(){ gapWave(2, 350, 150, 0.7); }    // 起速:后节在前节运动到一半时跟上,流动传导约2.3s拉满
-    function gapClose(){ gapWave(0, 150, 0, 1.8); }       // 进站减速:长缓收波,车头恰在停稳瞬间归位,不再把车头提前拽停
+    function gapSpread(){ gapWave(2, 350, 0, 150, 0.7, 'ease-in-out'); }  // 起步:平滑流动传导,后节在前节半程时跟上,约2.3s拉满
+    function gapClose(){ gapWave(0, 150, 0, 0, 1.8, 'ease-in-out'); }   // 进站减速:匀速传导的长缓收波,车头恰在停稳瞬间归位
 
     var seq = [
       function(){ row.style.transition = 'transform 5s cubic-bezier(.45,.05,.55,.95)'; return wait(1000); },
