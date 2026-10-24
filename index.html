@@ -549,15 +549,14 @@ footer b{color:#4a5468}
   font-variant-numeric:tabular-nums;letter-spacing:.3px}
 
 /* ---------- 雪具/吃喝:item 小卡 + 涉及人头像行 ---------- */
-ul.dots li.item{display:flex;align-items:center;gap:8px;padding:7px 10px;
-  border:1px solid #e3edf8;border-radius:10px;background:#f7fafd;margin:6px 0}
-ul.dots li.item .li-main{flex:1;min-width:0;font-size:13px;font-weight:600;color:var(--ink)}
+/* 雪具/吃喝 item 行:扁平式,虚线分隔,名称粗体+徽章右,说明小字贴底右对齐 */
+ul.dots li.item{display:flex;flex-wrap:wrap;align-items:center;gap:2px 10px;
+  padding:9px 0;border-top:1px dashed var(--line)}
+ul.dots li.item:first-of-type{border-top:none}
+ul.dots li.item .li-main{flex:1;min-width:0;font-size:13.5px;font-weight:700;color:var(--ink)}
 ul.dots li.item .li-note{flex-basis:100%;font-size:11px;color:var(--muted);
-  margin-top:0;text-align:right}   /* 说明贴底右对齐 */
-ul.dots li.lab.ava-only{display:flex;justify-content:flex-end;padding:2px 0 6px;border:none}
-ul.dots li.lab.ava-only .avrow .mimg,ul.dots li.lab.ava-only .avrow .avt{
-  width:22px;height:22px}
-ul.dots li.lab.ava-only .avrow .mimg + .mimg{margin-left:-7px}   /* 头像排收紧 */
+  margin-top:3px;text-align:right}
+ul.dots li.item .badge{flex:none}
 
 /* ---------- 雪场卡:多行内容网格化 ---------- */
 li.fld{display:flex;flex-wrap:wrap;align-items:flex-start;justify-content:space-between;
@@ -952,7 +951,7 @@ li.fld:first-child{border-top:none;padding-top:0}
 </div><!-- /wrap -->
 
 <footer>
-  <div>❄️ <b>万龙,启动!</b> · v0.338 分享版</div>
+  <div>❄️ <b>万龙,启动!</b> · v0.339 分享版</div>
   
 </footer>
 
