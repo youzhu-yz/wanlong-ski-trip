@@ -557,8 +557,8 @@ li.fld:first-child{border-top:none;padding-top:0}
 .chip-row{display:flex;flex-wrap:wrap;gap:6px;justify-content:flex-end;flex:1;min-width:0}   /* 胶囊右对齐 */
 .chip{font-size:12px;font-weight:600;color:#3a5b8c;background:var(--accent-weak);
   border-radius:999px;padding:4px 12px;white-space:nowrap}   /* 开放雪道/时间:胶囊 */
-.tk-grid{display:grid;grid-template-columns:1fr 1fr;gap:6px;flex:1;min-width:0}
-.tk{display:flex;justify-content:space-between;align-items:center;gap:6px;
+.tk-grid{display:grid;grid-auto-flow:column;grid-auto-columns:max-content;gap:6px;margin-left:auto}   /* 自适应内容宽,整组右对齐,不撑满整行 */
+.tk{display:inline-flex;align-items:center;gap:8px;
   font-size:12px;color:#3a5b8c;background:#f4f8fd;border:1px solid #e3edf8;
   border-radius:8px;padding:6px 10px}   /* 雪票档位:两列小卡 */
 .tk span{font-weight:600}
@@ -941,7 +941,7 @@ li.fld:first-child{border-top:none;padding-top:0}
 </div><!-- /wrap -->
 
 <footer>
-  <div>❄️ <b>万龙,启动!</b> · v0.334 分享版</div>
+  <div>❄️ <b>万龙,启动!</b> · v0.335 分享版</div>
   
 </footer>
 
