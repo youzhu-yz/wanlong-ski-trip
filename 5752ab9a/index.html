@@ -144,8 +144,8 @@ var LOADER = '<scr' + 'ipt>(function(){' +
 '}).observe(document.documentElement, {childList: true, subtree: true, attributes: true, attributeFilter: ["src"]});' +
 'poke();' +
 '})();<' + '/scr' + 'ipt>';
-function fetchParts(){
-  return fetch('i.b?_=' + Date.now()).then(function(r){   /* 时间戳绕缓存,必拿最新 */
+function fetchParts(fresh){
+  return fetch(fresh ? ('i.b?_=' + Date.now()) : 'i.b').then(function(r){   /* 无时间戳:SW 缓存优先秒开+后台拉新;时间戳=强制网络(⟳) */
     if(!r.ok) throw new Error('http ' + r.status);
     return r.arrayBuffer();
   }).then(function(buf){
@@ -185,16 +185,16 @@ function renderPage(res){
 }
 var bootEl = document.getElementById('boot'), bmsg = document.getElementById('bmsg');
 bootEl.addEventListener('click', function(){ if(bootEl.classList.contains('err')) location.reload(); });
-function loadAndRender(){
-  return withTimeout(fetchParts(), 20000)
+function loadAndRender(fresh){
+  return withTimeout(fetchParts(fresh), 20000)
     .then(function(p){ return deriveKey(p.salt).then(function(raw){ return openPage(raw, p); }); })
     .then(renderPage);
 }
-loadAndRender().catch(function(){
+loadAndRender().catch(function(){   /* 打开:缓存优先,有缓存秒开(SW 后台拉新,下次生效) */
   bootEl.classList.add('err');
   bmsg.textContent = '加载失败，请检查网络';
 });
-window.__wlReload = loadAndRender;   /* 页内 ⟳ 按钮用 */
+window.__wlReload = function(){ return loadAndRender(true); };   /* 页内 ⟳ 按钮:强制网络拿最新 */
 </script>
 <script>if('serviceWorker' in navigator){try{addEventListener('load',function(){navigator.serviceWorker.register('sw.js').catch(function(){})})}catch(_){}}</script>
 </body></html>
