@@ -1,6 +1,6 @@
 // 万龙攻略 Service Worker:导航网络优先(保证拿到新版本),图片等缓存优先(离线可看)
 // 缓存名带版本号,每次构建发布后自动作废旧缓存
-var CACHE = 'wanlong-v0.1195';
+var CACHE = 'wanlong-v0.1196';
 self.addEventListener('install', function(e){ self.skipWaiting(); });
 self.addEventListener('activate', function(e){
   e.waitUntil(caches.keys().then(function(ks){
