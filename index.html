@@ -442,8 +442,8 @@ body.nav-top #chipbar{bottom:auto; top:calc(10px + env(safe-area-inset-top))}   
 .tstop{display:flex;flex-direction:column;align-items:center;line-height:1.35;min-width:0;
   border:1px solid #dbe4f0;border-radius:10px;padding:5px 11px 0;background:var(--card);
   box-shadow:0 1px 3px rgba(16,24,40,.05)}
-.tstop::after{content:"";display:block;width:auto;height:5px;background:#a8d0f5;
-  border-radius:0 0 9px 9px;margin:4px -11px 0}   /* 牌底浅蓝横条(取明显一档的蓝,太浅看不出来) */
+.tstop::after{content:"";display:block;align-self:stretch;height:5px;background:#a8d0f5;
+  border-radius:0 0 9px 9px;margin:4px -11px 0}   /* 牌底浅蓝横条:stretch 撑满宽(居中 flex 下空内容宽度会收缩为 0) */
 .dark .tstop{background:#232d3e;border-color:#31405c;box-shadow:none}
 .dark .tstop::after{background:#3a6ea8}
 .tstop b{font-size:11.5px;font-weight:600;white-space:nowrap}
@@ -1413,7 +1413,7 @@ li.fld .li-lab,li.lab .li-lab{font-size:12px;font-weight:700;color:var(--muted);
 </section>
 <section id="weather">
   <div class="sec-head"><div class="sec-ico">❄️</div><div class="sec-txt"><h2>天气</h2><span class="sec-sub">崇礼 11月上旬 · 出发前一周再核实</span></div></div>
-  <div id="wxBox"><div class="wx-card"><div class="wx-main"><div class="wx-left"><div class="wx-num">-1<span>°C</span></div><div class="wx-desc">晴 · 体感 -7°C</div></div><div class="wx-right"><div class="wx-ico">☀️</div><button class="wx-more" id="wxMore" type="button">未来7天</button></div></div><div class="wx-grid"><div class="wx-item"><span class="wx-ic">💨</span><div><em>风力风量</em><b>西北风 3级</b></div></div><div class="wx-item"><span class="wx-ic">🔆</span><div><em>紫外线强度</em><b>弱</b></div></div><div class="wx-item"><span class="wx-ic">💧</span><div><em>相对湿度</em><b>45%</b></div></div><div class="wx-item"><span class="wx-ic">🧥</span><div><em>穿衣指数</em><b>冷</b></div></div></div><div class="wx-src"><span class="wx-src-l">数据来源·<a href="https://www.qweather.com/" target="_blank" rel="noopener">Qweather 和风天气</a></span><span class="wx-time">10-31 03:21</span><button class="wx-refresh" id="wxRefresh" type="button" aria-label="刷新数据">⟳</button></div></div></div>
+  <div id="wxBox"><div class="wx-card"><div class="wx-main"><div class="wx-left"><div class="wx-num">-1<span>°C</span></div><div class="wx-desc">晴 · 体感 -7°C</div></div><div class="wx-right"><div class="wx-ico">☀️</div><button class="wx-more" id="wxMore" type="button">未来7天</button></div></div><div class="wx-grid"><div class="wx-item"><span class="wx-ic">💨</span><div><em>风力风量</em><b>西北风 3级</b></div></div><div class="wx-item"><span class="wx-ic">🔆</span><div><em>紫外线强度</em><b>弱</b></div></div><div class="wx-item"><span class="wx-ic">💧</span><div><em>相对湿度</em><b>45%</b></div></div><div class="wx-item"><span class="wx-ic">🧥</span><div><em>穿衣指数</em><b>冷</b></div></div></div><div class="wx-src"><span class="wx-src-l">数据来源·<a href="https://www.qweather.com/" target="_blank" rel="noopener">Qweather 和风天气</a></span><span class="wx-time">10-31 03:32</span><button class="wx-refresh" id="wxRefresh" type="button" aria-label="刷新数据">⟳</button></div></div></div>
 </section>
 <section id="flights">
   <div class="sec-head"><div class="sec-ico">🎫</div><div class="sec-txt"><h2>交通</h2><span class="sec-sub">G30 去程 · MU5166 返程 · 京张段见「交通」</span></div></div>
@@ -1450,7 +1450,7 @@ li.fld .li-lab,li.lab .li-lab{font-size:12px;font-weight:700;color:var(--muted);
 </div><!-- /wrap -->
 
 <footer>
-  <div>❄️ <b>万龙,启动!</b> · v0.1178 分享版</div>
+  <div>❄️ <b>万龙,启动!</b> · v0.1179 分享版</div>
   
 </footer>
 
