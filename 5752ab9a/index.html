@@ -1,13 +1,11 @@
 <!DOCTYPE html><html lang="zh-CN"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="robots" content="noindex,noarchive,nofollow">
-<title>请输入访问口令</title>
+<title>万龙滑雪</title>
 <style>
 *{box-sizing:border-box}
 body{margin:0;min-height:100vh;display:flex;align-items:center;justify-content:center;
   background:radial-gradient(120% 90% at 50% 0%,#1a2f52 0%,#101d36 46%,#0a1220 100%);
   font-family:system-ui,-apple-system,"PingFang SC","Microsoft YaHei",sans-serif;overflow:hidden}
-/* 落雪:两层伪元素只动 transform,循环下落 */
 body::before,body::after{content:'';position:fixed;left:-10%;top:-30vh;width:120%;height:60vh;pointer-events:none;
   background-image:radial-gradient(2px 2px at 12% 30%,rgba(255,255,255,.55) 50%,transparent 51%),
     radial-gradient(1.6px 1.6px at 34% 70%,rgba(255,255,255,.4) 50%,transparent 51%),
@@ -17,65 +15,24 @@ body::before,body::after{content:'';position:fixed;left:-10%;top:-30vh;width:120
   animation:snow 9s linear infinite}
 body::after{animation-duration:14s;animation-delay:-5s;opacity:.55;transform:scaleX(-1)}
 @keyframes snow{to{transform:translateY(150vh)}}
-@media (prefers-reduced-motion: reduce){body::before,body::after,.badge{animation:none}}
-/* 底部山影 */
+@media (prefers-reduced-motion: reduce){body::before,body::after{animation:none}}
 .mtns{position:fixed;left:0;right:0;bottom:0;height:26vh;pointer-events:none;opacity:.55}
-/* 玻璃卡片 */
-#lock{position:relative;width:min(340px,88vw);padding:38px 28px 26px;text-align:center;
-  background:linear-gradient(180deg,rgba(28,44,74,.72),rgba(16,27,48,.8));
-  border:1px solid rgba(130,170,230,.16);border-radius:22px;
-  backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);
-  box-shadow:0 24px 70px rgba(0,0,0,.5),inset 0 1px 0 rgba(255,255,255,.06)}
-.badge{width:64px;height:64px;margin:0 auto 18px;border-radius:50%;display:flex;align-items:center;justify-content:center;
-  background:linear-gradient(145deg,#3f7ec2,#2b5c99);
-  box-shadow:0 8px 24px rgba(47,107,176,.45),inset 0 1px 0 rgba(255,255,255,.25);
-  animation:floaty 3.2s ease-in-out infinite}
-@keyframes floaty{0%,100%{transform:translateY(0)}50%{transform:translateY(-5px)}}
-.badge svg{width:28px;height:28px;fill:none;stroke:#eaf3ff;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round}
-#lock h1{margin:0 0 22px;font-size:19px;font-weight:700;color:#eaf1fc;letter-spacing:2px}
-.row{display:flex;gap:9px}
-#pw{flex:1;min-width:0;padding:12px 14px;font-size:16px;color:#eaf1fc;background:rgba(9,16,30,.65);
-  border:1px solid rgba(120,155,215,.25);border-radius:12px;outline:none;transition:border-color .2s,box-shadow .2s}
-#pw::placeholder{color:#5d7295}
-#pw:focus{border-color:#4d8bd6;box-shadow:0 0 0 3px rgba(77,139,214,.22)}
-#go{padding:12px 18px;font-size:15px;font-weight:600;color:#fff;border:0;border-radius:12px;cursor:pointer;
-  background:linear-gradient(135deg,#4d8bd6,#2f6bb0);box-shadow:0 6px 18px rgba(47,107,176,.4);
-  transition:transform .12s;font-family:inherit;-webkit-tap-highlight-color:transparent}
-#go:active{transform:scale(.96)}
-#msg{min-height:22px;margin-top:16px;color:#8ba3c7;font-size:13px;letter-spacing:.5px}
-#msg.err{color:#eb9c7d}
-#msg:not(.err):not(:empty){animation:breath 1.6s ease-in-out infinite}
-@keyframes breath{0%,100%{opacity:1}50%{opacity:.45}}
-.dot{margin-top:18px;color:#44597e;font-size:11px;letter-spacing:4px}
-/* 自动解锁启动态:本机存有密钥时先藏起口令卡只留转圈,免得刷新先闪一下解锁界面再消失 */
-#boot{display:none;position:fixed;inset:0;align-items:center;justify-content:center}
-html.boot #boot{display:flex}
-html.boot #lock{display:none}
+#boot{position:relative;z-index:1;display:flex;flex-direction:column;align-items:center;gap:18px;padding:20px;text-align:center}
 .spin{width:30px;height:30px;border-radius:50%;border:3px solid rgba(130,170,230,.18);border-top-color:#6ea8e8;animation:spin .9s linear infinite}
 @keyframes spin{to{transform:rotate(360deg)}}
-@media (prefers-reduced-motion: reduce){.spin{animation-duration:3s}}
+#bmsg{min-height:18px;color:#8ba3c7;font-size:13px;letter-spacing:.5px}
+#boot.err .spin{display:none}
+#boot.err #bmsg{color:#eb9c7d;margin-bottom:2px}
+#boot.err::after{content:"点击重试";color:#dce9f8;font-size:14px;border:1px solid rgba(255,255,255,.25);border-radius:999px;padding:8px 24px;cursor:pointer}
 </style></head><body>
-<script>try{document.documentElement.className='boot';}catch(_){}</script>   <!-- 无口令模式:始终启动自动解锁(口令内置壳页),打开即看 -->
 <svg class="mtns" viewBox="0 0 480 150" preserveAspectRatio="none" aria-hidden="true">
   <path d="M0,150 L0,96 L64,58 L122,94 L182,46 L244,94 L298,62 L354,102 L426,64 L480,108 L480,150 Z" fill="rgba(120,155,215,.12)"/>
   <path d="M0,150 L0,112 L48,76 L96,108 L142,34 L192,88 L236,58 L278,98 L326,44 L372,86 L422,60 L480,102 L480,150 Z" fill="rgba(18,30,54,.9)"/>
 </svg>
-<div id="boot"><div class="spin"></div></div>
-<div id="lock">
-  <div class="badge"><svg viewBox="0 0 24 24"><rect x="4.5" y="10.5" width="15" height="10" rx="2.5"/><path d="M8 10.5V7.5a4 4 0 0 1 8 0v3"/><circle cx="12" cy="15.5" r="1.4"/></svg></div>
-  <h1>请输入访问口令</h1>
-  <div class="row"><input id="pw" type="password" placeholder="访问口令" autocomplete="off"><button id="go" type="button">解锁</button></div>
-  <div id="msg"></div>
-  <div class="dot">· · ·</div>
-</div>
-<script>window.__IB__='';</script>   <!-- 内嵌数据副本:壳页到手即有完整数据,弱网/断网也能打开(⟳仍走网络拿最新) -->
+<div id="boot"><div class="spin"></div><div id="bmsg">正在打开…</div></div>
 <script>
-/* i.b = "WL1"+salt(16)+nonce(12)+AES-256-GCM(完整页面HTML,仅几百KB);
-   图片在 images/**.b(WL2),由注入的加载器按视口懒加载解密。
-   PBKDF2-SHA256(口令,salt,210000)派生密钥,全部在浏览器内完成。
-   无口令模式:口令内置下方 PW,打开自动解锁——有链接即可看;
-   仓库里仍只有密文(敏感图不明文入库),密钥只是不对访问者保密 */
-var ITER = 210000;
+var ITER = 21000;   /* 口令已内置本页(密钥不对访问者保密),PBKDF2 只需防撞库级强度;2.1万次≈0.2秒,大幅快于旧21万次 */
+var PW = 'wanlong';
 var LOADER = '<scr' + 'ipt>(function(){' +
 'var RAW = window.__PK; if(!RAW) return;' +
 'var KEY = crypto.subtle.importKey("raw", RAW, "AES-GCM", false, ["decrypt"]);' +
@@ -187,16 +144,8 @@ var LOADER = '<scr' + 'ipt>(function(){' +
 '}).observe(document.documentElement, {childList: true, subtree: true, attributes: true, attributeFilter: ["src"]});' +
 'poke();' +
 '})();<' + '/scr' + 'ipt>';
-function parseIb(b64){   // 壳页内嵌数据副本(base64) → {salt,nonce,ct};大陆访问 github.io 不稳,壳页到手即有数据
-  var bin = atob(b64), d = new Uint8Array(bin.length);
-  for(var i = 0; i < bin.length; i++){ d[i] = bin.charCodeAt(i); }
-  if(!(d.length > 31 && d[0] === 87 && d[1] === 76 && d[2] === 49)) throw new Error('fmt');
-  return { salt: d.slice(3, 19), nonce: d.slice(19, 31), ct: d.slice(31) };
-}
-function fetchParts(fresh){
-  if(!fresh && window.__IB__){ return Promise.resolve().then(function(){ return parseIb(window.__IB__); }); }
-  var url = fresh ? ('i.b?_=' + Date.now()) : 'i.b';   // 时间戳参数绕缓存:微信等 webview 对 fetch cache:'reload' 兼容差(请求会挂起)
-  return fetch(url).then(function(r){
+function fetchParts(){
+  return fetch('i.b?_=' + Date.now()).then(function(r){   /* 时间戳绕缓存,必拿最新 */
     if(!r.ok) throw new Error('http ' + r.status);
     return r.arrayBuffer();
   }).then(function(buf){
@@ -205,96 +154,47 @@ function fetchParts(fresh){
     return { salt: d.slice(3, 19), nonce: d.slice(19, 31), ct: d.slice(31) };
   });
 }
-function deriveKey(pw, salt){
-  return crypto.subtle.importKey('raw', new TextEncoder().encode(pw), 'PBKDF2', false, ['deriveBits'])
+function deriveKey(salt){
+  return crypto.subtle.importKey('raw', new TextEncoder().encode(PW), 'PBKDF2', false, ['deriveBits'])
     .then(function(k){
       return crypto.subtle.deriveBits({name:'PBKDF2', salt:salt, iterations:ITER, hash:'SHA-256'}, k, 256);
     });
 }
-function openPage(raw, parts){
+function openPage(raw, p){
   return crypto.subtle.importKey('raw', raw, 'AES-GCM', false, ['decrypt']).then(function(k){
-    return crypto.subtle.decrypt({name:'AES-GCM', iv:parts.nonce}, k, parts.ct);
+    return crypto.subtle.decrypt({name:'AES-GCM', iv:p.nonce}, k, p.ct);
   }).then(function(pt){
     return { raw: raw, html: new TextDecoder().decode(pt) };
   });
 }
-function toHex(buf){ var u = new Uint8Array(buf), s = '', i; for(i = 0; i < u.length; i++){ s += (u[i] < 16 ? '0' : '') + u[i].toString(16); } return s; }
-function fromHex(s){ var u = new Uint8Array(s.length / 2), i; for(i = 0; i < u.length; i++){ u[i] = parseInt(s.substr(i * 2, 2), 16); } return u.buffer; }
+function withTimeout(pr, ms){
+  return Promise.race([pr, new Promise(function(_, rej){ setTimeout(function(){ rej(new Error('timeout')); }, ms); })]);
+}
 function renderPage(res){
   var html = res.html.split('src="images/').join('data-psrc="images/');
   if(html.indexOf('</body>') >= 0){ html = html.replace('</body>', LOADER + '</body>'); }
-  window.__PK = res.raw;   // document.open/write 不换 window,密钥位给注入的图片加载器用
-  document.open();
-  document.write(html);
-  document.close();
-  // 挂起兜底:个别 webview(微信)write 大页面可能不渲染——2秒后页面骨架(#chips)不存在则强刷一次(sessionStorage 防循环)
-  setTimeout(function(){
+  window.__PK = res.raw;
+  document.open(); document.write(html); document.close();
+  setTimeout(function(){   /* 个别 webview write 大页可能不渲染:2秒后骨架缺失则强刷一次 */
     try{
       if(!document.getElementById('chips')){
-        var n = +(sessionStorage.getItem('wl-writefix') || 0);
-        if(n < 1){ sessionStorage.setItem('wl-writefix', '1'); location.reload(); }
-      } else { sessionStorage.removeItem('wl-writefix'); }
+        if(+(sessionStorage.getItem('wl-wf') || 0) < 1){ sessionStorage.setItem('wl-wf', '1'); location.reload(); }
+      } else { sessionStorage.removeItem('wl-wf'); }
     }catch(_){}
   }, 2000);
 }
-var msgEl = document.getElementById('msg');
-function fail(t){
-  msgEl.className = 'err'; msgEl.textContent = t;
-  var p = document.getElementById('pw'); p.select(); p.focus();
-}
-function withTimeout(pr, ms, tag){   // 兜底:个别 webview(如微信)请求可能挂起不落地,超时转为报错而不是永远转圈
-  return Promise.race([
-    pr,
-    new Promise(function(_, rej){ setTimeout(function(){ rej(new Error('timeout:' + tag)); }, ms); })
-  ]);
-}
-function unlock(){
-  var pw = document.getElementById('pw').value || 'wanlong';   // 无口令模式:留空也按内置口令试,按钮当"重试"用
-  msgEl.className = ''; msgEl.textContent = '正在重试，稍候…';
-  withTimeout(fetchParts(true), 12000, 'unlock')
-    .then(function(p){ return deriveKey(pw, p.salt).then(function(raw){ return openPage(raw, p); }); })
-    .then(function(res){
-      try{ localStorage.setItem('wl-pk', toHex(res.raw)); }catch(e){}   // 记住本设备(存派生密钥,不存口令):下次免输
-      renderPage(res);
-    })
-    .catch(function(){ fail('网络访问受限，稍后再试或开代理后重试'); });
-}
-(function(){   // 无口令模式:口令内置在壳页里自动解锁——有链接即可看;
-  // GitHub 仓库里仍只有密文(i.b/图片.b),敏感图照旧不明文入库,密钥只是不再对访问者保密
-  var PW = 'wanlong';   // gen.py 发布时注入当前口令(script/密码.txt)
-  var k = null;
-  try{ k = localStorage.getItem('wl-pk'); }catch(e){}
-  var decrypt = function(p){   // 有密钥直用;无密钥(首次)用内置口令现场派生(约1秒),之后存密钥免派生
-    if(k && k.length === 64){ return openPage(fromHex(k), p); }
-    return deriveKey(PW, p.salt).then(function(raw){
-      try{ localStorage.setItem('wl-pk', toHex(raw)); }catch(e2){}
-      return openPage(raw, p);
-    });
-  };
-  var boot = withTimeout(fetchParts(true), 20000, 'boot')   // 网络拿最新 i.b(壳页保持 ~10KB 小体积,高丢包链路才挤得过去)
-    .then(decrypt);
-  boot
-    .then(renderPage)
-    .catch(function(){
-      try{ localStorage.removeItem('wl-pk'); }catch(e){}
-      document.documentElement.classList.remove('boot');   // 内嵌副本也解不开(壳页损坏/换口令):揭口令卡兜底
-      msgEl.className = 'err';
-      msgEl.textContent = '打开失败，可点击解锁重试';
-    });
-})();
-/* 页面内「刷新数据」按钮用:绕缓存重拉 i.b → 本机密钥解密 → document.write 整页重建;
-   顶层函数在 document.write 后仍存活,故打开的完整页面里随时可再调 */
-window.__wlReload = function(){
-  var k = null;
-  try{ k = localStorage.getItem('wl-pk'); }catch(e){}
-  if(!k || k.length !== 64){ return Promise.reject(new Error('nokey')); }
-  return withTimeout(fetchParts(true), 12000, 'reload')
-    .then(function(p){ return openPage(fromHex(k), p); })
+var bootEl = document.getElementById('boot'), bmsg = document.getElementById('bmsg');
+bootEl.addEventListener('click', function(){ if(bootEl.classList.contains('err')) location.reload(); });
+function loadAndRender(){
+  return withTimeout(fetchParts(), 20000)
+    .then(function(p){ return deriveKey(p.salt).then(function(raw){ return openPage(raw, p); }); })
     .then(renderPage);
-};
-document.getElementById('go').addEventListener('click', unlock);
-document.getElementById('pw').addEventListener('keydown', function(e){ if(e.key === 'Enter') unlock(); });
-if(!document.documentElement.classList.contains('boot')){ document.getElementById('pw').focus(); }   // 自动解锁中不抢焦点
+}
+loadAndRender().catch(function(){
+  bootEl.classList.add('err');
+  bmsg.textContent = '加载失败，请检查网络';
+});
+window.__wlReload = loadAndRender;   /* 页内 ⟳ 按钮用 */
 </script>
 <script>if('serviceWorker' in navigator){try{addEventListener('load',function(){navigator.serviceWorker.register('sw.js').catch(function(){})})}catch(_){}}</script>
 </body></html>
