@@ -1,0 +1,21 @@
+{
+ "name": "万龙滑雪行程攻略",
+ "short_name": "万龙滑雪",
+ "start_url": "./",
+ "scope": "./",
+ "display": "standalone",
+ "background_color": "#10203a",
+ "theme_color": "#10203a",
+ "icons": [
+  {
+   "src": "icon-192.png",
+   "sizes": "192x192",
+   "type": "image/png"
+  },
+  {
+   "src": "icon-512.png",
+   "sizes": "512x512",
+   "type": "image/png"
+  }
+ ]
+}
