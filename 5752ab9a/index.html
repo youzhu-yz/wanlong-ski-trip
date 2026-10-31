@@ -54,7 +54,7 @@ var LOADER = '<scr' + 'ipt>(function(){' +
 '  return d;' +
 '}' +
 'function rmTip(t){ if(t && t.parentNode) t.parentNode.removeChild(t); }' +
-'function loadEl(el){' +
+'function loadEl(el, my){' +
 '  var url = el.getAttribute("data-psrc"); if(!url) return Promise.resolve();' +
 '  if(blobOf[url]){ el.src = blobOf[url]; return Promise.resolve(); }' +
 '  if(wait[url]){ wait[url].push(el); return Promise.resolve(); }' +
@@ -83,14 +83,29 @@ var LOADER = '<scr' + 'ipt>(function(){' +
 '    .then(function(buf){' +
 '      var u = URL.createObjectURL(new Blob([buf]));' +
 '      blobOf[url] = u;' +
-'      wait[url].forEach(function(e){ e.src = u; });' +
-'      wait[url] = null;' +
-'      rmTip(tip);' +
-'    }).catch(function(){ wait[url] = null; rmTip(tip); });' +
-'  return p.catch(function(){});' +   /* 串行队列:失败也放行下一张 */
+'      showInOrder(my, function(){   /* 上屏严格按页面序:前一张显示了才轮到这张 */' +
+'        wait[url].forEach(function(e){ e.src = u; });' +
+'        wait[url] = null;' +
+'        rmTip(tip);' +
+'      });' +
+'    }).catch(function(){' +
+'      showInOrder(my, function(){ wait[url] = null; rmTip(tip); });' +   /* 失败也占位释放顺序 */
+'    });' +
+'  return p.catch(function(){});' +   /* 下载失败不阻塞并发池 */
 '}' +
-'var chain = Promise.resolve();   /* 同屏命中按页面顺序串行:前一张完成再下一张,显示顺序=DOM顺序 */' +
-'function enqueue(el){ chain = chain.then(function(){ return loadEl(el); }); }' +
+'var MAXDL = 3, active = 0, dq = [], nextSeq = 0, showWait = {}, nextShow = 0;' +
+'function showInOrder(my, fn){   /* 按序号排队上屏:序号到了立即执行(同步),保证视觉顺序=DOM顺序 */' +
+'  if(my === undefined){ fn(); return; }' +
+'  showWait[my] = fn;' +
+'  while(showWait[nextShow]){ var f = showWait[nextShow]; delete showWait[nextShow]; f(); nextShow++; }' +
+'}' +
+'function pumpQ(){   /* 受控并发:同时最多 MAXDL 张在下载,槽位由显示完成释放 */' +
+'  while(active < MAXDL && dq.length){' +
+'    var el = dq.shift(); active++;' +
+'    loadEl(el, el.__seq).then(function(){ active--; pumpQ(); });' +
+'  }' +
+'}' +
+'function enqueue(el){ el.__seq = nextSeq++; dq.push(el); pumpQ(); }' +
 'function poke(){   /* 滚动驱动懒加载:视口±500px 才下载,越靠后越晚;几何判定不依赖渲染帧 */' +
 '  if(!pending.length) return;' +
 '  var vh = window.innerHeight, i, el, r, zero = false, hit = [];' +
