@@ -801,32 +801,34 @@ ul.dots li.subwrap.subwrap-bak{display:none}   /* 备选子卡(如中转酒店)�
 .rcard .r-field .li-cp{margin-left:0}
 .rcard .r-field .rf-gap{flex:1}   /* 地址行:空隙把按钮+值顶到右边 */
 .rcard .rf-val.rf-adj{flex:0 1 auto}   /* 地址值自适应宽,按钮贴住文字块 */
-/* 市内交通四象限路线图(fcard 样式):地铁2号线主题(线路绿)——线路号圆标+浅色底板+绿色箭头/站牌底条/耗时胶囊 */
-.city-card{margin-bottom:14px;--metro:#7cb233;--metro-ink:#55801e}
-.dark .city-card{--metro:#8fc84a;--metro-ink:#b9dd8f}
+/* 市内交通四象限路线图(fcard 样式):全部沿用页面蓝色基调——蓝圆标+浅蓝底板+灰蓝箭头+蓝底条+白底耗时胶囊 */
 .cg-badge{display:inline-flex;align-items:center;justify-content:center;width:22px;height:22px;border-radius:50%;
-  background:linear-gradient(145deg,#a3d957,#79ad2f);color:#fff;font-size:12.5px;font-weight:800;flex:none;
-  box-shadow:0 1px 4px rgba(122,172,47,.45)}   /* 地铁线路号圆标 */
+  background:var(--accent);color:#fff;font-size:12.5px;font-weight:800;flex:none;
+  box-shadow:0 1px 4px rgba(24,137,224,.35)}   /* 地铁线路号圆标 */
 .city-grid{position:relative;display:grid;grid-template-columns:1fr 1fr;
   grid-template-rows:80px 80px;margin-top:12px;width:100%;
-  background:linear-gradient(165deg,#f3f8fd,#f0f6ec);border-radius:14px;padding:9px 6px}
-.dark .city-grid{background:#1a2330}
+  background:var(--accent-weak);border-radius:14px;padding:9px 6px;
+  box-shadow:inset 0 0 0 1px rgba(24,137,224,.07)}
+.dark .city-grid{box-shadow:inset 0 0 0 1px rgba(74,165,236,.09)}
 .cg-node{display:inline-flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;justify-self:center;align-self:center;position:relative;
   background:var(--card);color:var(--ink);border:1px solid #d9e3f1;border-radius:10px;
   padding:6px 11px 8px;font-size:11px;font-weight:600;white-space:nowrap;
   box-shadow:0 2px 5px rgba(16,24,40,.06)}
 .dark .cg-node{background:#232d3e;border-color:#31405c;box-shadow:none}
 .cg-node::after{content:"";position:absolute;left:3px;right:3px;bottom:0;height:3px;
-  background:var(--metro);border-radius:0 0 8px 8px}
+  background:#a8d0f5;border-radius:0 0 8px 8px}
+.dark .cg-node::after{background:#3a6ea8}
 .cg-node .cg-vsub{font-size:9.5px;padding:1px 6px;border-radius:999px}
 /* 箭头定位在两象限的中缝(上排中缝 y=25%、右列中缝 x=75%、下排中缝 y=75%),运行时按节点实际边缘微调 */
 .cg-arr{position:absolute;display:flex;align-items:center;line-height:1}
-.cg-arr i{font-style:normal;font-size:9px;font-weight:700;color:var(--metro-ink);white-space:nowrap;
-  background:rgba(124,178,51,.13);border-radius:999px;padding:1.5px 7px}
-.dark .cg-arr i{background:rgba(143,200,74,.16)}
+.cg-arr i{font-style:normal;font-size:9px;font-weight:700;color:var(--accent-deep);white-space:nowrap;
+  background:var(--card);border:1px solid #d3e4f6;border-radius:999px;padding:1px 7px}
+.dark .cg-arr i{background:#232d3e;border-color:#31405c;color:var(--accent-deep)}
 .cg-arr svg{flex:none}
-.cg-arr svg .eln{fill:none;stroke:var(--metro);stroke-width:1.8}
-.cg-arr svg .ah{fill:var(--metro)}
+.cg-arr svg .eln{fill:none;stroke:#7fa8d9;stroke-width:1.8}
+.cg-arr svg .ah{fill:#7fa8d9}
+.dark .cg-arr svg .eln{stroke:#5c88bd}
+.dark .cg-arr svg .ah{fill:#5c88bd}
 .cg-h{left:50%;transform:translate(-50%,-50%);flex-direction:column;gap:3px}
 .cg-h.cg-r{top:25%}
 .cg-h.cg-l{top:75%}
@@ -834,6 +836,7 @@ ul.dots li.subwrap.subwrap-bak{display:none}   /* 备选子卡(如中转酒店)�
 .cg-h.cg-l svg{transform:scaleX(-1)}
 .cg-v{left:75%;top:50%;transform:translate(-50%,-50%);gap:5px;flex-direction:row-reverse;justify-content:flex-end}
 .cg-v svg{width:8px;height:36px}
+.city-card{margin-bottom:14px}
 .cmp-mask{position:fixed;inset:0;z-index:110;background:rgba(240,244,249,.98);display:none;
   overflow-y:auto;-webkit-overflow-scrolling:touch}
 .cmp-mask.open{display:block}
@@ -1458,7 +1461,7 @@ li.fld .li-lab,li.lab .li-lab{font-size:12px;font-weight:700;color:var(--muted);
 </section>
 <section id="weather">
   <div class="sec-head"><div class="sec-ico">❄️</div><div class="sec-txt"><h2>天气</h2><span class="sec-sub">崇礼 11月上旬 · 出发前一周再核实</span></div></div>
-  <div id="wxBox"><div class="wx-card"><div class="wx-main"><div class="wx-left"><div class="wx-num">-1<span>°C</span></div><div class="wx-desc">晴 · 体感 -7°C</div></div><div class="wx-right"><div class="wx-ico">☀️</div><button class="wx-more" id="wxMore" type="button">未来7天</button></div></div><div class="wx-grid"><div class="wx-item"><span class="wx-ic">💨</span><div><em>风力风量</em><b>西北风 3级</b></div></div><div class="wx-item"><span class="wx-ic">🔆</span><div><em>紫外线强度</em><b>弱</b></div></div><div class="wx-item"><span class="wx-ic">💧</span><div><em>相对湿度</em><b>45%</b></div></div><div class="wx-item"><span class="wx-ic">🧥</span><div><em>穿衣指数</em><b>冷</b></div></div></div><div class="wx-src"><span class="wx-src-l">数据来源·<a href="https://www.qweather.com/" target="_blank" rel="noopener">Qweather 和风天气</a></span><span class="wx-time">11-01 01:05</span><button class="wx-refresh" id="wxRefresh" type="button" aria-label="刷新数据">⟳</button></div></div></div>
+  <div id="wxBox"><div class="wx-card"><div class="wx-main"><div class="wx-left"><div class="wx-num">-1<span>°C</span></div><div class="wx-desc">晴 · 体感 -7°C</div></div><div class="wx-right"><div class="wx-ico">☀️</div><button class="wx-more" id="wxMore" type="button">未来7天</button></div></div><div class="wx-grid"><div class="wx-item"><span class="wx-ic">💨</span><div><em>风力风量</em><b>西北风 3级</b></div></div><div class="wx-item"><span class="wx-ic">🔆</span><div><em>紫外线强度</em><b>弱</b></div></div><div class="wx-item"><span class="wx-ic">💧</span><div><em>相对湿度</em><b>45%</b></div></div><div class="wx-item"><span class="wx-ic">🧥</span><div><em>穿衣指数</em><b>冷</b></div></div></div><div class="wx-src"><span class="wx-src-l">数据来源·<a href="https://www.qweather.com/" target="_blank" rel="noopener">Qweather 和风天气</a></span><span class="wx-time">11-01 01:18</span><button class="wx-refresh" id="wxRefresh" type="button" aria-label="刷新数据">⟳</button></div></div></div>
 </section>
 <section id="flights">
   <div class="sec-head"><div class="sec-ico">🎫</div><div class="sec-txt"><h2>交通</h2><span class="sec-sub">G30 去程 · MU5166 返程 · 京张段见「交通」</span></div></div>
@@ -1496,7 +1499,7 @@ li.fld .li-lab,li.lab .li-lab{font-size:12px;font-weight:700;color:var(--muted);
 </div><!-- /wrap -->
 
 <footer>
-  <div>❄️ <b>万龙,启动!</b> · v0.1244 分享版</div>
+  <div>❄️ <b>万龙,启动!</b> · v0.1246 分享版</div>
   
 </footer>
 
