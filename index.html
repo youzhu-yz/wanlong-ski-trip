@@ -949,12 +949,12 @@ footer b{color:#4a5468}
 .imgview-bar button:active{background:rgba(45,58,78,.7)}
 /* 原图按钮:查看器左下角 */
 #imgViewOrig{position:absolute;z-index:2;left:calc(14px + env(safe-area-inset-left));
-  bottom:calc(14px + env(safe-area-inset-bottom));height:34px;padding:0 16px;border:none;
+  top:calc(14px + env(safe-area-inset-top));height:34px;min-width:64px;padding:0 16px;border:none;
   border-radius:999px;cursor:pointer;background:rgba(17,24,39,.55);border:1px solid rgba(255,255,255,.18);
   color:#fff;font-size:13px;line-height:1;font-family:inherit;backdrop-filter:blur(6px);
-  -webkit-backdrop-filter:blur(6px);-webkit-tap-highlight-color:transparent}
+  -webkit-backdrop-filter:blur(6px);-webkit-tap-highlight-color:transparent;text-align:center}
 #imgViewOrig:active{background:rgba(45,58,78,.7)}
-#imgViewOrig.busy{opacity:.55}
+#imgViewOrig.busy{opacity:.85;cursor:default}
 #imgViewOrig.on{border-color:#6fb3ff;color:#9ecbff}
 /* 底部统一控制区:zoombar + ctrl 融为一体,同宽同风格 */
 .imgview-ctrl-group{position:absolute;left:50%;transform:translateX(-50%);z-index:2;
@@ -1425,7 +1425,7 @@ li.fld .li-lab,li.lab .li-lab{font-size:12px;font-weight:700;color:var(--muted);
 </section>
 <section id="weather">
   <div class="sec-head"><div class="sec-ico">❄️</div><div class="sec-txt"><h2>天气</h2><span class="sec-sub">崇礼 11月上旬 · 出发前一周再核实</span></div></div>
-  <div id="wxBox"><div class="wx-card"><div class="wx-main"><div class="wx-left"><div class="wx-num">-1<span>°C</span></div><div class="wx-desc">晴 · 体感 -7°C</div></div><div class="wx-right"><div class="wx-ico">☀️</div><button class="wx-more" id="wxMore" type="button">未来7天</button></div></div><div class="wx-grid"><div class="wx-item"><span class="wx-ic">💨</span><div><em>风力风量</em><b>西北风 3级</b></div></div><div class="wx-item"><span class="wx-ic">🔆</span><div><em>紫外线强度</em><b>弱</b></div></div><div class="wx-item"><span class="wx-ic">💧</span><div><em>相对湿度</em><b>45%</b></div></div><div class="wx-item"><span class="wx-ic">🧥</span><div><em>穿衣指数</em><b>冷</b></div></div></div><div class="wx-src"><span class="wx-src-l">数据来源·<a href="https://www.qweather.com/" target="_blank" rel="noopener">Qweather 和风天气</a></span><span class="wx-time">10-31 19:22</span><button class="wx-refresh" id="wxRefresh" type="button" aria-label="刷新数据">⟳</button></div></div></div>
+  <div id="wxBox"><div class="wx-card"><div class="wx-main"><div class="wx-left"><div class="wx-num">-1<span>°C</span></div><div class="wx-desc">晴 · 体感 -7°C</div></div><div class="wx-right"><div class="wx-ico">☀️</div><button class="wx-more" id="wxMore" type="button">未来7天</button></div></div><div class="wx-grid"><div class="wx-item"><span class="wx-ic">💨</span><div><em>风力风量</em><b>西北风 3级</b></div></div><div class="wx-item"><span class="wx-ic">🔆</span><div><em>紫外线强度</em><b>弱</b></div></div><div class="wx-item"><span class="wx-ic">💧</span><div><em>相对湿度</em><b>45%</b></div></div><div class="wx-item"><span class="wx-ic">🧥</span><div><em>穿衣指数</em><b>冷</b></div></div></div><div class="wx-src"><span class="wx-src-l">数据来源·<a href="https://www.qweather.com/" target="_blank" rel="noopener">Qweather 和风天气</a></span><span class="wx-time">10-31 20:18</span><button class="wx-refresh" id="wxRefresh" type="button" aria-label="刷新数据">⟳</button></div></div></div>
 </section>
 <section id="flights">
   <div class="sec-head"><div class="sec-ico">🎫</div><div class="sec-txt"><h2>交通</h2><span class="sec-sub">G30 去程 · MU5166 返程 · 京张段见「交通」</span></div></div>
@@ -1462,7 +1462,7 @@ li.fld .li-lab,li.lab .li-lab{font-size:12px;font-weight:700;color:var(--muted);
 </div><!-- /wrap -->
 
 <footer>
-  <div>❄️ <b>万龙,启动!</b> · v0.1216 分享版</div>
+  <div>❄️ <b>万龙,启动!</b> · v0.1218 分享版</div>
   
 </footer>
 
@@ -3458,15 +3458,34 @@ if(!location.hash){ try{ window.scrollTo(0, 0); }catch(_){} }
     if(!curPsrc || origBtn.classList.contains('busy')) return;
     if(origBlob[curPsrc]){ showOrig(origBlob[curPsrc]); return; }
     origBtn.classList.add('busy');
+    origBtn.textContent = '0%';
     fetch(curPsrc.replace('images/a/', 'images/o/') + '.b')
-      .then(function(r){ if(!r.ok) throw 0; return r.arrayBuffer(); })
+      .then(function(r){
+        if(!r.ok) throw 0;
+        var total = +(r.headers.get('content-length') || 0);
+        if(!r.body || !r.body.getReader){ origBtn.textContent = '加载中'; return r.arrayBuffer(); }
+        var rd = r.body.getReader(), chunks = [], got = 0;   /* 流式读:按钮上实时显示下载百分比 */
+        function pump(){
+          return rd.read().then(function(x){
+            if(x.done){
+              var out = new Uint8Array(got), o = 0;
+              chunks.forEach(function(c){ out.set(c, o); o += c.length; });
+              return out.buffer;
+            }
+            chunks.push(x.value); got += x.value.length;
+            origBtn.textContent = total ? Math.min(99, Math.round(got / total * 100)) + '%' : ((got / 1024) | 0) + 'KB';
+            return pump();
+          });
+        }
+        return pump();
+      })
       .then(decWl2)
       .then(function(pt){
         origBlob[curPsrc] = URL.createObjectURL(new Blob([pt]));
         showOrig(origBlob[curPsrc]);
       })
       .catch(function(){ origBtn.hidden = true; })   // 无原图/失败:藏起按钮
-      .then(function(){ origBtn.classList.remove('busy'); updOrigBtn(); });
+      .then(function(){ origBtn.classList.remove('busy'); origBtn.textContent = '原图'; updOrigBtn(); });
   });
   function showOrig(u){
     st.rot = 0; st.s = 1; st.tx = 0; st.ty = 0; st.nw = 0; st.nh = 0;
