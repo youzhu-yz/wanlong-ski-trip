@@ -947,6 +947,15 @@ footer b{color:#4a5468}
   display:flex;align-items:center;justify-content:center;backdrop-filter:blur(6px);
   -webkit-backdrop-filter:blur(6px)}
 .imgview-bar button:active{background:rgba(45,58,78,.7)}
+/* 原图按钮:查看器左下角 */
+#imgViewOrig{position:absolute;z-index:2;left:calc(14px + env(safe-area-inset-left));
+  bottom:calc(14px + env(safe-area-inset-bottom));height:34px;padding:0 16px;border:none;
+  border-radius:999px;cursor:pointer;background:rgba(17,24,39,.55);border:1px solid rgba(255,255,255,.18);
+  color:#fff;font-size:13px;line-height:1;font-family:inherit;backdrop-filter:blur(6px);
+  -webkit-backdrop-filter:blur(6px);-webkit-tap-highlight-color:transparent}
+#imgViewOrig:active{background:rgba(45,58,78,.7)}
+#imgViewOrig.busy{opacity:.55}
+#imgViewOrig.on{border-color:#6fb3ff;color:#9ecbff}
 /* 底部统一控制区:zoombar + ctrl 融为一体,同宽同风格 */
 .imgview-ctrl-group{position:absolute;left:50%;transform:translateX(-50%);z-index:2;
   bottom:calc(12px + env(safe-area-inset-bottom));
@@ -1311,7 +1320,7 @@ li.fld .li-lab,li.lab .li-lab{font-size:12px;font-weight:700;color:var(--muted);
 /* ---------- 打印 / PDF(iOS 离线适配:构建时用系统自带 Edge 无头转 PDF,iPhone 免装App原生可看) ---------- */
 @media print{
   #chipbar,#totop,.src-entry,.src-mask,.pop-mask,.zoom-btn,.clamp-more{display:none!important}
-  #themeBtn,#navHandle,#sideSwap,#lpQuads,#avaTip,.imgview,.train-btn,.ov-go{display:none!important}   /* 悬浮控件/交互按钮不进PDF */
+  #themeBtn,#navHandle,#sideSwap,#lpQuads,#avaTip,.imgview,#imgViewOrig,.train-btn,.ov-go{display:none!important}   /* 悬浮控件/交互按钮不进PDF */
   body{background:#fff;font-size:12px}
   .card-anim{opacity:1!important;transform:none!important}
   .day .d-body-wrap{grid-template-rows:1fr!important}   /* 每日行程卡片全部展开(交互折叠在PDF里无效) */
@@ -1416,7 +1425,7 @@ li.fld .li-lab,li.lab .li-lab{font-size:12px;font-weight:700;color:var(--muted);
 </section>
 <section id="weather">
   <div class="sec-head"><div class="sec-ico">❄️</div><div class="sec-txt"><h2>天气</h2><span class="sec-sub">崇礼 11月上旬 · 出发前一周再核实</span></div></div>
-  <div id="wxBox"><div class="wx-card"><div class="wx-main"><div class="wx-left"><div class="wx-num">-1<span>°C</span></div><div class="wx-desc">晴 · 体感 -7°C</div></div><div class="wx-right"><div class="wx-ico">☀️</div><button class="wx-more" id="wxMore" type="button">未来7天</button></div></div><div class="wx-grid"><div class="wx-item"><span class="wx-ic">💨</span><div><em>风力风量</em><b>西北风 3级</b></div></div><div class="wx-item"><span class="wx-ic">🔆</span><div><em>紫外线强度</em><b>弱</b></div></div><div class="wx-item"><span class="wx-ic">💧</span><div><em>相对湿度</em><b>45%</b></div></div><div class="wx-item"><span class="wx-ic">🧥</span><div><em>穿衣指数</em><b>冷</b></div></div></div><div class="wx-src"><span class="wx-src-l">数据来源·<a href="https://www.qweather.com/" target="_blank" rel="noopener">Qweather 和风天气</a></span><span class="wx-time">10-31 18:29</span><button class="wx-refresh" id="wxRefresh" type="button" aria-label="刷新数据">⟳</button></div></div></div>
+  <div id="wxBox"><div class="wx-card"><div class="wx-main"><div class="wx-left"><div class="wx-num">-1<span>°C</span></div><div class="wx-desc">晴 · 体感 -7°C</div></div><div class="wx-right"><div class="wx-ico">☀️</div><button class="wx-more" id="wxMore" type="button">未来7天</button></div></div><div class="wx-grid"><div class="wx-item"><span class="wx-ic">💨</span><div><em>风力风量</em><b>西北风 3级</b></div></div><div class="wx-item"><span class="wx-ic">🔆</span><div><em>紫外线强度</em><b>弱</b></div></div><div class="wx-item"><span class="wx-ic">💧</span><div><em>相对湿度</em><b>45%</b></div></div><div class="wx-item"><span class="wx-ic">🧥</span><div><em>穿衣指数</em><b>冷</b></div></div></div><div class="wx-src"><span class="wx-src-l">数据来源·<a href="https://www.qweather.com/" target="_blank" rel="noopener">Qweather 和风天气</a></span><span class="wx-time">10-31 19:15</span><button class="wx-refresh" id="wxRefresh" type="button" aria-label="刷新数据">⟳</button></div></div></div>
 </section>
 <section id="flights">
   <div class="sec-head"><div class="sec-ico">🎫</div><div class="sec-txt"><h2>交通</h2><span class="sec-sub">G30 去程 · MU5166 返程 · 京张段见「交通」</span></div></div>
@@ -1453,7 +1462,7 @@ li.fld .li-lab,li.lab .li-lab{font-size:12px;font-weight:700;color:var(--muted);
 </div><!-- /wrap -->
 
 <footer>
-  <div>❄️ <b>万龙,启动!</b> · v0.1214 分享版</div>
+  <div>❄️ <b>万龙,启动!</b> · v0.1215 分享版</div>
   
 </footer>
 
@@ -1487,6 +1496,7 @@ li.fld .li-lab,li.lab .li-lab{font-size:12px;font-weight:700;color:var(--muted);
     <button id="imgViewClose" aria-label="关闭" title="关闭">×</button>
   </div>
   <div class="imgview-count" id="imgViewCount"></div>
+  <button id="imgViewOrig" type="button" aria-label="加载原图" title="查看原图" hidden>原图</button>
   <div class="imgview-ctrl-group">
     <div class="imgview-zoombar" id="imgViewZoombar">
       <div class="zb-track" id="zbTrack"><div class="zb-fill" id="zbFill"></div><div class="zb-thumb" id="zbThumb"></div></div>
@@ -3428,6 +3438,46 @@ if(!location.hash){ try{ window.scrollTo(0, 0); }catch(_){} }
   }
   var grp = [], gi = 0;   // 当前图组与索引
   var countEl = document.getElementById('imgViewCount');
+  /* 「原图」:当前图是加密懒加载图(data-psrc)时,同名 o/ 目录存原图;
+     点击按需下载→解密→替换大图并重置缩放;blob 缓存避免重复下载 */
+  var origBtn = document.getElementById('imgViewOrig');
+  var origBlob = {}, curPsrc = null;
+  function updOrigBtn(){
+    origBtn.hidden = !(curPsrc && window.__PK);   // 分享版/离线版(无 __PK)或非懒加载图不显示
+    origBtn.classList.remove('busy');
+    origBtn.classList.toggle('on', !!origBlob[curPsrc]);
+  }
+  function decWl2(buf){
+    var u8 = new Uint8Array(buf);
+    return crypto.subtle.importKey('raw', window.__PK, 'AES-GCM', false, ['decrypt'])
+      .then(function(k){
+        return crypto.subtle.decrypt({name: 'AES-GCM', iv: u8.slice(3, 15)}, k, u8.slice(15));
+      });
+  }
+  origBtn.addEventListener('click', function(){
+    if(!curPsrc || origBtn.classList.contains('busy')) return;
+    if(origBlob[curPsrc]){ showOrig(origBlob[curPsrc]); return; }
+    origBtn.classList.add('busy');
+    fetch(curPsrc.replace('images/a/', 'images/o/') + '.b')
+      .then(function(r){ if(!r.ok) throw 0; return r.arrayBuffer(); })
+      .then(decWl2)
+      .then(function(pt){
+        origBlob[curPsrc] = URL.createObjectURL(new Blob([pt]));
+        showOrig(origBlob[curPsrc]);
+      })
+      .catch(function(){ origBtn.hidden = true; })   // 无原图/失败:藏起按钮
+      .then(function(){ origBtn.classList.remove('busy'); updOrigBtn(); });
+  });
+  function showOrig(u){
+    st.rot = 0; st.s = 1; st.tx = 0; st.ty = 0; st.nw = 0; st.nh = 0;
+    img.style.width = img.style.height = '';
+    img.onload = function(){
+      st.nw = img.naturalWidth || 1; st.nh = img.naturalHeight || 1;
+      fit(); apply(false);
+    };
+    img.src = u;
+    updOrigBtn();
+  }
   function show(){
     var src = grp[gi];
     st.rot = 0; st.s = 1; st.tx = 0; st.ty = 0; st.nw = 0; st.nh = 0;
@@ -3442,15 +3492,19 @@ if(!location.hash){ try{ window.scrollTo(0, 0); }catch(_){} }
       st.nw = img.naturalWidth; st.nh = img.naturalHeight; fit(); apply(false);
     }
     countEl.textContent = grp.length > 1 ? (gi + 1) + ' / ' + grp.length : '';
+    curPsrc = psrcOf[gi] || null;   // 翻页后同步原图按钮指向
+    updOrigBtn();
     if(window.__syncSlider) window.__syncSlider();
   }
+  var psrcOf = [];   // 与 grp 平行:每张图页面元素的 data-psrc(无则 undefined)
   function open(src){
     // 收集同组图片:仅当前可见页签内的 .blk img(offsetParent 非空 = 正在显示)
     var host = document.querySelector('.pop-mask.open .pop-body') || document.body;
-    grp = [].slice.call(host.querySelectorAll('.blk img'))
-      .filter(function(m){ return m.offsetParent !== null; })
-      .map(function(m){ return m.src; });
-    if(grp.indexOf(src) < 0){ grp = [src]; }
+    var els = [].slice.call(host.querySelectorAll('.blk img'))
+      .filter(function(m){ return m.offsetParent !== null; });
+    grp = els.map(function(m){ return m.src; });
+    psrcOf = els.map(function(m){ return m.getAttribute('data-psrc'); });
+    if(grp.indexOf(src) < 0){ grp = [src]; psrcOf = [null]; }
     gi = grp.indexOf(src) >= 0 ? grp.indexOf(src) : 0;
     show();
     view.classList.add('open');
