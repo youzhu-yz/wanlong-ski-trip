@@ -167,8 +167,12 @@ var LOADER = '<scr' + 'ipt>(function(){' +
 'if("scrollRestoration" in history){ try{ history.scrollRestoration = "manual"; }catch(e){} }' +
 'try{' +
 '  var _sy = +(sessionStorage.getItem("wl-scroll") || 0);' +
+'  var _rk = false;   /* 用户一碰屏幕就停止校正,避免和刚打开后的点标签跳转打架 */' +
+'  ["touchstart","wheel","keydown"].forEach(function(ev){' +
+'    addEventListener(ev, function(){ _rk = true; }, {passive: true, once: true});' +
+'  });' +
 '  if(_sy > 0){' +
-'    var _rs = function(){ window.scrollTo(0, _sy); };' +
+'    var _rs = function(){ if(!_rk) window.scrollTo(0, _sy); };' +
 '    _rs(); setTimeout(_rs, 200); setTimeout(_rs, 700); setTimeout(_rs, 1500);' +
 '  }' +
 '}catch(e){}' +
