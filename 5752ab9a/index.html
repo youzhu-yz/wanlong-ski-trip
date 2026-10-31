@@ -163,6 +163,20 @@ var LOADER = '<scr' + 'ipt>(function(){' +
 '  });' +
 '  if(added){ poke(); setTimeout(poke, 350); }' +
 '}).observe(document.documentElement, {childList: true, subtree: true, attributes: true, attributeFilter: ["src"]});' +
+'/* 刷新后回到原浏览位置:滚动位置节流存 sessionStorage;渲染后多次校正跳回(图片占位会改变页高) */' +
+'if("scrollRestoration" in history){ try{ history.scrollRestoration = "manual"; }catch(e){} }' +
+'try{' +
+'  var _sy = +(sessionStorage.getItem("wl-scroll") || 0);' +
+'  if(_sy > 0){' +
+'    var _rs = function(){ window.scrollTo(0, _sy); };' +
+'    _rs(); setTimeout(_rs, 200); setTimeout(_rs, 700); setTimeout(_rs, 1500);' +
+'  }' +
+'}catch(e){}' +
+'var _sst = null;' +
+'window.addEventListener("scroll", function(){' +
+'  if(_sst) return;' +
+'  _sst = setTimeout(function(){ _sst = null; try{ sessionStorage.setItem("wl-scroll", String(window.scrollY)); }catch(e){} }, 250);' +
+'}, {passive: true});' +
 'poke();' +
 '})();<' + '/scr' + 'ipt>';
 function fetchParts(fresh){
