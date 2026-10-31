@@ -1,5 +1,6 @@
-// 私有版 Service Worker(priv-6):页面/时间戳请求=网络优先(navigate 4秒超时回缓存);其余=缓存优先秒开+后台拉新。
-var CACHE = 'priv-6';
+// 私有版 Service Worker(priv-7):只缓存子资源(i.b/加密图片)——导航请求完全不拦,
+// 页面打开永远直连(webview 冻结 SW 也挂不了导航);子资源缓存优先秒回+后台拉新,带 ?_= 的强网络。
+var CACHE = 'priv-7';
 self.addEventListener('install', function(e){ self.skipWaiting(); });
 self.addEventListener('activate', function(e){
   e.waitUntil(caches.keys().then(function(ks){
@@ -8,6 +9,7 @@ self.addEventListener('activate', function(e){
 });
 self.addEventListener('fetch', function(e){
   if(e.request.method !== 'GET') return;
+  if(e.request.mode === 'navigate') return;   // 页面本体不拦:浏览器 HTTP 缓存接管
   var u = new URL(e.request.url);
   if(u.origin !== location.origin) return;
   var key = u.origin + u.pathname;   // 固定键=去时间戳:绕缓存请求不膨胀缓存
@@ -15,25 +17,11 @@ self.addEventListener('fetch', function(e){
     if(r && r.ok){ var cp = r.clone(); caches.open(CACHE).then(function(c){ c.put(key, cp); }); }
     return r;
   };
-  var cached = function(){ return caches.match(key); };
-  if(e.request.mode === 'navigate' || u.search.indexOf('_=') >= 0){   // 页面本体/主动绕缓存:网络优先
-    e.respondWith(new Promise(function(resolve){
-      var settled = false;
-      var fallback = function(){ cached().then(function(h){ resolve(h || Response.error()); }); };
-      var timer = e.request.mode === 'navigate' ? setTimeout(function(){
-        if(!settled){ settled = true; fallback(); }
-      }, 4000) : 0;
-      fetch(e.request).then(function(r){
-        if(settled){ return; }
-        settled = true; if(timer){ clearTimeout(timer); } save(r); resolve(r);
-      }).catch(function(){
-        if(settled){ return; }
-        settled = true; if(timer){ clearTimeout(timer); } fallback();
-      });
-    }));
+  if(u.search.indexOf('_=') >= 0){   // 主动绕缓存(⟳/解锁):网络优先,失败回缓存
+    e.respondWith(fetch(e.request).then(save).catch(function(){ return caches.match(key); }));
     return;
   }
-  e.respondWith(cached().then(function(hit){   // 其余(图片等):缓存优先+后台拉新
+  e.respondWith(caches.match(key).then(function(hit){   // 其余(i.b/图片):缓存优先秒回+后台拉新
     var net = fetch(e.request).then(save).catch(function(){ return hit; });
     return hit || net;
   }));
