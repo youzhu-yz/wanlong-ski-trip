@@ -1014,11 +1014,11 @@ footer b{color:#4a5468}
 #imgViewOrig.on{border-color:#6fb3ff;color:#9ecbff}
 /* 底部控制区:缩放条(下沉:贴底+内凹阴影)+旋转钮在其右 */
 .imgview-ctrl-group{position:absolute;left:50%;transform:translateX(-50%);z-index:2;
-  bottom:calc(5px + env(safe-area-inset-bottom));
+  bottom:calc(15px + env(safe-area-inset-bottom));
   display:flex;flex-direction:row;align-items:center;gap:7px;
   touch-action:auto!important}
 .imgview-zoombar{display:flex;align-items:center;gap:10px;
-  width:min(160px,50vw);padding:4px 12px;
+  width:min(160px,50vw);height:30px;padding:0 12px;box-sizing:border-box;
   background:rgba(9,14,23,.66);border:1px solid rgba(255,255,255,.12);border-radius:999px;
   box-shadow:inset 0 2px 6px rgba(0,0,0,.5), 0 1px 0 rgba(255,255,255,.05);
   backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
@@ -1031,22 +1031,22 @@ footer b{color:#4a5468}
   background:#fff;box-shadow:0 1px 4px rgba(0,0,0,.4);pointer-events:none}
 .zb-val{font-size:11.5px;font-weight:600;color:rgba(255,255,255,.85);font-variant-numeric:tabular-nums;
   min-width:30px;text-align:right;cursor:pointer;-webkit-tap-highlight-color:transparent}
-.iv-rot{width:34px;height:34px;flex:none;border:1px solid rgba(255,255,255,.12);border-radius:50%;
+.iv-rot{width:30px;height:30px;flex:none;border:1px solid rgba(255,255,255,.12);border-radius:50%;
   cursor:pointer;background:rgba(9,14,23,.66);color:#fff;display:flex;align-items:center;justify-content:center;
   box-shadow:inset 0 2px 6px rgba(0,0,0,.5), 0 1px 0 rgba(255,255,255,.05);
   -webkit-tap-highlight-color:transparent}
 .iv-rot:active{background:rgba(45,58,78,.7)}
 .iv-rot svg{width:15px;height:15px;stroke:#fff;fill:none;stroke-width:1.9;
   stroke-linecap:round;stroke-linejoin:round}
-/* 图片左右两侧的切换钮(参考闲置物品项目:圆形半透明浮在图侧,垂直居中;单图时隐藏) */
+/* 图片左右两侧的切换钮(参考闲置物品项目:圆形浮在图侧,垂直居中;单图时隐藏) */
 .iv-nav{position:absolute;top:50%;transform:translateY(-50%);z-index:3;
-  width:44px;height:44px;border-radius:50%;border:none;cursor:pointer;
-  background:rgba(255,255,255,.12);color:#fff;display:flex;align-items:center;justify-content:center;
-  padding:0;-webkit-tap-highlight-color:transparent}
-.iv-nav:active{background:rgba(255,255,255,.28)}
+  width:30px;height:30px;border-radius:50%;border:none;cursor:pointer;
+  background:rgba(255,255,255,.34);color:#fff;display:flex;align-items:center;justify-content:center;
+  padding:0;box-shadow:0 1px 5px rgba(0,0,0,.4);-webkit-tap-highlight-color:transparent}
+.iv-nav:active{background:rgba(255,255,255,.55)}
 .iv-nav.prev{left:calc(10px + env(safe-area-inset-left))}
 .iv-nav.next{right:calc(10px + env(safe-area-inset-right))}
-.iv-nav svg{width:22px;height:22px;fill:none;stroke:currentColor;stroke-width:2.5;
+.iv-nav svg{width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:2.8;
   stroke-linecap:round;stroke-linejoin:round}
 .imgview-count{position:absolute;z-index:2;left:50%;transform:translateX(-50%);
   top:calc(20px + env(safe-area-inset-top));color:rgba(255,255,255,.85);font-size:13px;
@@ -1489,7 +1489,7 @@ li.fld .li-lab,li.lab .li-lab{font-size:12px;font-weight:700;color:var(--muted);
 </section>
 <section id="weather">
   <div class="sec-head"><div class="sec-ico">❄️</div><div class="sec-txt"><h2>天气</h2><span class="sec-sub">崇礼 11月上旬 · 出发前一周再核实</span></div></div>
-  <div id="wxBox"><div class="wx-card"><div class="wx-main"><div class="wx-left"><div class="wx-num">-1<span>°C</span></div><div class="wx-desc">晴 · 体感 -7°C</div></div><div class="wx-right"><div class="wx-ico">☀️</div><button class="wx-more" id="wxMore" type="button">未来7天</button></div></div><div class="wx-grid"><div class="wx-item"><span class="wx-ic">💨</span><div><em>风力风量</em><b>西北风 3级</b></div></div><div class="wx-item"><span class="wx-ic">🔆</span><div><em>紫外线强度</em><b>弱</b></div></div><div class="wx-item"><span class="wx-ic">💧</span><div><em>相对湿度</em><b>45%</b></div></div><div class="wx-item"><span class="wx-ic">🧥</span><div><em>穿衣指数</em><b>冷</b></div></div></div><div class="wx-src"><span class="wx-src-l">数据来源·<a href="https://www.qweather.com/" target="_blank" rel="noopener">Qweather 和风天气</a></span><span class="wx-time">11-01 05:38</span><button class="wx-refresh" id="wxRefresh" type="button" aria-label="刷新数据">⟳</button></div></div></div>
+  <div id="wxBox"><div class="wx-card"><div class="wx-main"><div class="wx-left"><div class="wx-num">-1<span>°C</span></div><div class="wx-desc">晴 · 体感 -7°C</div></div><div class="wx-right"><div class="wx-ico">☀️</div><button class="wx-more" id="wxMore" type="button">未来7天</button></div></div><div class="wx-grid"><div class="wx-item"><span class="wx-ic">💨</span><div><em>风力风量</em><b>西北风 3级</b></div></div><div class="wx-item"><span class="wx-ic">🔆</span><div><em>紫外线强度</em><b>弱</b></div></div><div class="wx-item"><span class="wx-ic">💧</span><div><em>相对湿度</em><b>45%</b></div></div><div class="wx-item"><span class="wx-ic">🧥</span><div><em>穿衣指数</em><b>冷</b></div></div></div><div class="wx-src"><span class="wx-src-l">数据来源·<a href="https://www.qweather.com/" target="_blank" rel="noopener">Qweather 和风天气</a></span><span class="wx-time">11-01 05:49</span><button class="wx-refresh" id="wxRefresh" type="button" aria-label="刷新数据">⟳</button></div></div></div>
 </section>
 <section id="flights">
   <div class="sec-head"><div class="sec-ico">🎫</div><div class="sec-txt"><h2>交通</h2><span class="sec-sub">G30 去程 · MU5166 返程 · 京张段见「交通」</span></div></div>
@@ -1527,7 +1527,7 @@ li.fld .li-lab,li.lab .li-lab{font-size:12px;font-weight:700;color:var(--muted);
 </div><!-- /wrap -->
 
 <footer>
-  <div>❄️ <b>万龙,启动!</b> · v0.1276 分享版</div>
+  <div>❄️ <b>万龙,启动!</b> · v0.1278 分享版</div>
   
 </footer>
 
