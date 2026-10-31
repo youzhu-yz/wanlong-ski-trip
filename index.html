@@ -812,9 +812,8 @@ ul.dots li.subwrap.subwrap-bak{display:none}   /* 备选子卡(如中转酒店)�
 .cg-toggle svg{width:14px;height:14px;fill:none;stroke:var(--muted);stroke-width:2.2;
   stroke-linecap:round;stroke-linejoin:round;transition:transform .25s}
 .cg-toggle.on svg{transform:rotate(180deg)}
-/* 方框详情按钮:页尾脚本把它移进按钮组;默认(收起)隐藏,展开才显示 */
-.city-card .zoom-btn{position:static;display:none}
-.city-card.cg-open .zoom-btn{display:flex}
+/* 方框详情按钮:页尾脚本把它移到展开区末尾(右下角);收起时随折叠区一起隐藏 */
+.cg-inner .zoom-btn{position:static;display:block;margin:2px 2px 0 auto}
 .cg-body{display:grid;grid-template-rows:0fr;transition:grid-template-rows .32s ease}
 .cg-body.open{grid-template-rows:1fr}
 .cg-inner{overflow:hidden;min-height:0}
@@ -1223,6 +1222,7 @@ li.fld .li-lab,li.lab .li-lab{font-size:12px;font-weight:700;color:var(--muted);
 .day .zoom-btn{top:auto;bottom:12px}
 .fcard .fhead{padding-right:0}
 .fcard.has-zoom .fhead{padding-right:42px}   /* 有放大按钮时日期胶囊让位 */
+.fcard.city-card.has-zoom .fhead{padding-right:0}   /* 市内卡:方框详情按钮已移入展开区,头部不再让位 */
 .hcard h3{padding-right:34px}
 .ckgroup .ckhead{padding-right:40px}
 
@@ -1471,7 +1471,7 @@ li.fld .li-lab,li.lab .li-lab{font-size:12px;font-weight:700;color:var(--muted);
 </section>
 <section id="weather">
   <div class="sec-head"><div class="sec-ico">❄️</div><div class="sec-txt"><h2>天气</h2><span class="sec-sub">崇礼 11月上旬 · 出发前一周再核实</span></div></div>
-  <div id="wxBox"><div class="wx-card"><div class="wx-main"><div class="wx-left"><div class="wx-num">-1<span>°C</span></div><div class="wx-desc">晴 · 体感 -7°C</div></div><div class="wx-right"><div class="wx-ico">☀️</div><button class="wx-more" id="wxMore" type="button">未来7天</button></div></div><div class="wx-grid"><div class="wx-item"><span class="wx-ic">💨</span><div><em>风力风量</em><b>西北风 3级</b></div></div><div class="wx-item"><span class="wx-ic">🔆</span><div><em>紫外线强度</em><b>弱</b></div></div><div class="wx-item"><span class="wx-ic">💧</span><div><em>相对湿度</em><b>45%</b></div></div><div class="wx-item"><span class="wx-ic">🧥</span><div><em>穿衣指数</em><b>冷</b></div></div></div><div class="wx-src"><span class="wx-src-l">数据来源·<a href="https://www.qweather.com/" target="_blank" rel="noopener">Qweather 和风天气</a></span><span class="wx-time">11-01 02:30</span><button class="wx-refresh" id="wxRefresh" type="button" aria-label="刷新数据">⟳</button></div></div></div>
+  <div id="wxBox"><div class="wx-card"><div class="wx-main"><div class="wx-left"><div class="wx-num">-1<span>°C</span></div><div class="wx-desc">晴 · 体感 -7°C</div></div><div class="wx-right"><div class="wx-ico">☀️</div><button class="wx-more" id="wxMore" type="button">未来7天</button></div></div><div class="wx-grid"><div class="wx-item"><span class="wx-ic">💨</span><div><em>风力风量</em><b>西北风 3级</b></div></div><div class="wx-item"><span class="wx-ic">🔆</span><div><em>紫外线强度</em><b>弱</b></div></div><div class="wx-item"><span class="wx-ic">💧</span><div><em>相对湿度</em><b>45%</b></div></div><div class="wx-item"><span class="wx-ic">🧥</span><div><em>穿衣指数</em><b>冷</b></div></div></div><div class="wx-src"><span class="wx-src-l">数据来源·<a href="https://www.qweather.com/" target="_blank" rel="noopener">Qweather 和风天气</a></span><span class="wx-time">11-01 02:44</span><button class="wx-refresh" id="wxRefresh" type="button" aria-label="刷新数据">⟳</button></div></div></div>
 </section>
 <section id="flights">
   <div class="sec-head"><div class="sec-ico">🎫</div><div class="sec-txt"><h2>交通</h2><span class="sec-sub">G30 去程 · MU5166 返程 · 京张段见「交通」</span></div></div>
@@ -1509,7 +1509,7 @@ li.fld .li-lab,li.lab .li-lab{font-size:12px;font-weight:700;color:var(--muted);
 </div><!-- /wrap -->
 
 <footer>
-  <div>❄️ <b>万龙,启动!</b> · v0.1255 分享版</div>
+  <div>❄️ <b>万龙,启动!</b> · v0.1258 分享版</div>
   
 </footer>
 
@@ -2724,7 +2724,7 @@ if(!location.hash){ try{ window.scrollTo(0, 0); }catch(_){} }
   }, true);
 })();
 
-/* ---------- 市内卡展开/收起:纯图标按钮切换,grid-rows 动画;展开时卡片加 cg-open(方框详情按钮随之显示) ---------- */
+/* ---------- 市内卡展开/收起:纯图标按钮(头部最右)切换,grid-rows 动画 ---------- */
 (function(){
   document.addEventListener('click', function(e){
     var b = e.target.closest ? e.target.closest('.cg-toggle') : null;
@@ -2735,7 +2735,6 @@ if(!location.hash){ try{ window.scrollTo(0, 0); }catch(_){} }
     var body = card.querySelector('.cg-body');
     var open = body.classList.toggle('open');
     b.classList.toggle('on', open);
-    card.classList.toggle('cg-open', open);
     if(open && typeof window.__layoutCity === 'function') window.__layoutCity();
   }, true);
 })();
@@ -4149,12 +4148,12 @@ if(!location.hash){ try{ window.scrollTo(0, 0); }catch(_){} }
   if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', layoutCity);
   else layoutCity();
   window.addEventListener('resize', layoutCity);
-  /* 市内卡:方框详情按钮(详情脚本挂在卡尾)移入头部按钮组最左;此脚本在详情脚本之后执行,按钮已存在 */
+  /* 市内卡:方框详情按钮(详情脚本挂在卡尾)移到展开区末尾右下角;此脚本在详情脚本之后执行,按钮已存在 */
   (function(){
     var card = document.querySelector('.city-card');
     if(!card) return;
-    var zb = card.querySelector('.zoom-btn'), cgh = card.querySelector('.cgh-btns');
-    if(zb && cgh) cgh.insertBefore(zb, cgh.firstChild);
+    var zb = card.querySelector('.zoom-btn'), inner = card.querySelector('.cg-inner');
+    if(zb && inner) inner.appendChild(zb);
   })();
 })();
 </script>
