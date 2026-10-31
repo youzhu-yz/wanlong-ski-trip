@@ -55,9 +55,10 @@ var LOADER = '<scr' + 'ipt>(function(){' +
 '}' +
 'function rmTip(t){ if(t && t.parentNode) t.parentNode.removeChild(t); }' +
 'function loadEl(el, my){' +
-'  var url = el.getAttribute("data-psrc"); if(!url) return Promise.resolve();' +
-'  if(blobOf[url]){ el.src = blobOf[url]; return Promise.resolve(); }' +
-'  if(wait[url]){ wait[url].push(el); return Promise.resolve(); }' +
+'  var url = el.getAttribute("data-psrc");' +
+'  if(!url){ showInOrder(my, function(){}); return Promise.resolve(); }' +
+'  if(blobOf[url]){ showInOrder(my, function(){ el.src = blobOf[url]; }); return Promise.resolve(); }' +
+'  if(wait[url]){ wait[url].push(el); showInOrder(my, function(){}); return Promise.resolve(); }' +   /* 同图复用:显示并进首图,此处只占位释放序号 */
 '  wait[url] = [el];' +
 '  var tip = mkTip(el);' +
 '  var p = fetch(url + ".b").then(function(r){' +
