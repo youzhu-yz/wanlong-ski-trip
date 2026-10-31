@@ -55,12 +55,12 @@ var LOADER = '<scr' + 'ipt>(function(){' +
 '}' +
 'function rmTip(t){ if(t && t.parentNode) t.parentNode.removeChild(t); }' +
 'function loadEl(el){' +
-'  var url = el.getAttribute("data-psrc"); if(!url) return;' +
-'  if(blobOf[url]){ el.src = blobOf[url]; return; }' +
-'  if(wait[url]){ wait[url].push(el); return; }' +
+'  var url = el.getAttribute("data-psrc"); if(!url) return Promise.resolve();' +
+'  if(blobOf[url]){ el.src = blobOf[url]; return Promise.resolve(); }' +
+'  if(wait[url]){ wait[url].push(el); return Promise.resolve(); }' +
 '  wait[url] = [el];' +
 '  var tip = mkTip(el);' +
-'  fetch(url + ".b").then(function(r){' +
+'  var p = fetch(url + ".b").then(function(r){' +
 '    if(!r.ok) throw 0;' +
 '    var total = +(r.headers.get("content-length") || 0);' +
 '    if(!r.body || !r.body.getReader){ return r.arrayBuffer(); }' +
@@ -87,15 +87,20 @@ var LOADER = '<scr' + 'ipt>(function(){' +
 '      wait[url] = null;' +
 '      rmTip(tip);' +
 '    }).catch(function(){ wait[url] = null; rmTip(tip); });' +
+'  return p.catch(function(){});' +   /* 串行队列:失败也放行下一张 */
 '}' +
+'var chain = Promise.resolve();   /* 同屏命中按页面顺序串行:前一张完成再下一张,显示顺序=DOM顺序 */' +
+'function enqueue(el){ chain = chain.then(function(){ return loadEl(el); }); }' +
 'function poke(){   /* 滚动驱动懒加载:视口±500px 才下载,越靠后越晚;几何判定不依赖渲染帧 */' +
 '  if(!pending.length) return;' +
-'  var vh = window.innerHeight, i, el, r, zero = false;' +
+'  var vh = window.innerHeight, i, el, r, zero = false, hit = [];' +
 '  for(i = pending.length - 1; i >= 0; i--){' +
 '    el = pending[i]; r = el.getBoundingClientRect();' +
 '    if(r.width === 0 && r.height === 0){ zero = true; continue; }   /* display:none/弹窗动画中:暂缓 */' +
-'    if(r.top < vh + 500 && r.bottom > -500){ pending.splice(i, 1); loadEl(el); }' +
+'    if(r.top < vh + 500 && r.bottom > -500){ pending.splice(i, 1); hit.push(el); }' +
 '  }' +
+'  hit.reverse();' +   /* 倒序收集,正回 DOM 顺序 */
+'  hit.forEach(enqueue);' +
 '  if(zero){ setTimeout(poke, 400); }   /* 还有暂不可见的:定时重探,元素一出现即加载(弹窗内部滚动不冒泡,靠这里补) */' +
 '}' +
 'function reg(el){ pending.push(el); }' +
