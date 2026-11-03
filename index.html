@@ -418,12 +418,17 @@ body.nav-top #chipbar{bottom:auto; top:calc(10px + env(safe-area-inset-top))}   
   display:flex;align-items:center;justify-content:space-between;gap:8px}
 .wx-src a{color:inherit;text-decoration:none}
 .wx-src-l{opacity:.66}   /* 来源小字弱化:比时间更不显眼 */
-/* 日出日落小行(卡底):与上方 .wx-item 格子同款底色/圆角/内距与图标圆底;日落(左)/日出(右)贴边 */
+/* 日出日落小行(卡底):与上方 .wx-item 格子同款底色/圆角/内距与图标圆底;
+   顺序:日出单元在前。默认(夜)row-reverse → 日落左/日出右;白天 JS 加 .day → 日出左/日落右 */
 .wx-sun{margin-top:8px;background:#f2f5fa;border-radius:12px;padding:9px 12px 10px}
 .wx-sun-heads{display:flex}
+.wx-sun-heads,.wx-sun-times{flex-direction:row-reverse}
+.wx-sun.day .wx-sun-heads,.wx-sun.day .wx-sun-times{flex-direction:row}
 .wx-sun-h{flex:1;display:flex;align-items:center;gap:9px;font-size:11px;color:var(--muted)}
-.wx-sun-h:first-child{justify-content:flex-start}   /* 日落贴左 */
-.wx-sun-h:last-child{justify-content:flex-end}      /* 日出贴右 */
+.wx-sun-h:first-child{justify-content:flex-end}      /* 夜:日出单元在右侧,内容贴右 */
+.wx-sun-h:last-child{justify-content:flex-start}     /* 夜:日落单元在左侧,内容贴左 */
+.wx-sun.day .wx-sun-h:first-child{justify-content:flex-start}
+.wx-sun.day .wx-sun-h:last-child{justify-content:flex-end}
 .wx-sic{flex:none;width:30px;height:30px;border-radius:50%;background:var(--card);
   display:flex;align-items:center;justify-content:center}   /* 同 .wx-ic 图标圆底 */
 .wx-sic svg{width:16px;height:16px;color:#e8a33d;flex:none}
@@ -439,8 +444,10 @@ body.nav-top #chipbar{bottom:auto; top:calc(10px + env(safe-area-inset-top))}   
 .wx-sun-times{display:flex}
 .wx-sun-times b{flex:1;text-align:center;font-size:15px;font-weight:800;letter-spacing:.5px;
   font-variant-numeric:tabular-nums}
-.wx-sun-times b:first-child{text-align:left}    /* 时间贴左 */
-.wx-sun-times b:last-child{text-align:right}    /* 时间贴右 */
+.wx-sun-times b:first-child{text-align:right}        /* 夜:日出时间贴右 */
+.wx-sun-times b:last-child{text-align:left}          /* 夜:日落时间贴左 */
+.wx-sun.day .wx-sun-times b:first-child{text-align:left}
+.wx-sun.day .wx-sun-times b:last-child{text-align:right}
 .wx-time{margin-left:auto;white-space:nowrap}   /* 时间右对齐,紧贴刷新按钮 */
 .wx-refresh{flex:none;width:26px;height:26px;border-radius:50%;border:1px solid var(--line);
   background:var(--card);color:var(--muted);font-size:14px;line-height:1;cursor:pointer;padding:0;
@@ -1515,7 +1522,7 @@ li.fld .li-lab,li.lab .li-lab{font-size:12px;font-weight:700;color:var(--muted);
 </section>
 <section id="weather">
   <div class="sec-head"><div class="sec-ico">❄️</div><div class="sec-txt"><h2>天气</h2><span class="sec-sub">崇礼 11月上旬 · 出发前一周再核实</span></div></div>
-  <div id="wxBox"><div class="wx-card"><div class="wx-main"><div class="wx-left"><div class="wx-num">-1<span>°C</span></div><div class="wx-desc">晴 · 体感 -7°C</div></div><div class="wx-right"><div class="wx-ico">☀️</div><button class="wx-more" id="wxMore" type="button">未来7天</button></div></div><div class="wx-grid"><div class="wx-item"><span class="wx-ic">💨</span><div><em>风力风量</em><b>西北风 3级</b></div></div><div class="wx-item"><span class="wx-ic">🔆</span><div><em>紫外线强度</em><b>弱</b></div></div><div class="wx-item"><span class="wx-ic">💧</span><div><em>相对湿度</em><b>45%</b></div></div><div class="wx-item"><span class="wx-ic">🧥</span><div><em>穿衣指数</em><b>冷</b></div></div></div><div class="wx-sun" id="wxSun" hidden><div class="wx-sun-heads"><span class="wx-sun-h"><span class="wx-sic"><svg viewBox="0 0 22 22" aria-hidden="true"><circle cx="11" cy="13.6" r="4.2" fill="currentColor"/><path d="M3.6 13.6h2.2M16.2 13.6h2.2" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" fill="none"/><path d="M11 2v6M8.6 5.6L11 8l2.4-2.4" stroke="currentColor" stroke-width="1.8" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></span><i>日落</i></span><span class="wx-sun-h"><span class="wx-sic"><svg viewBox="0 0 22 22" aria-hidden="true"><circle cx="11" cy="13.6" r="4.2" fill="currentColor"/><path d="M3.6 13.6h2.2M16.2 13.6h2.2" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" fill="none"/><path d="M11 8V2M8.6 4.4L11 2l2.4 2.4" stroke="currentColor" stroke-width="1.8" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></span><i>日出</i></span></div><div class="wx-sun-track"><span class="wx-sun-fill" id="wxSunFill"></span><span class="wx-sun-moon" id="wxSunMoon">🌙</span></div><div class="wx-sun-times"><b id="wxSetTime">--:--</b><b id="wxRiseTime">--:--</b></div></div><div class="wx-src"><span class="wx-src-l">数据来源·<a href="https://www.qweather.com/" target="_blank" rel="noopener">Qweather 和风天气</a></span><span class="wx-time">11-03 23:02</span><button class="wx-refresh" id="wxRefresh" type="button" aria-label="刷新数据">⟳</button></div></div></div>
+  <div id="wxBox"><div class="wx-card"><div class="wx-main"><div class="wx-left"><div class="wx-num">-1<span>°C</span></div><div class="wx-desc">晴 · 体感 -7°C</div></div><div class="wx-right"><div class="wx-ico">☀️</div><button class="wx-more" id="wxMore" type="button">未来7天</button></div></div><div class="wx-grid"><div class="wx-item"><span class="wx-ic">💨</span><div><em>风力风量</em><b>西北风 3级</b></div></div><div class="wx-item"><span class="wx-ic">🔆</span><div><em>紫外线强度</em><b>弱</b></div></div><div class="wx-item"><span class="wx-ic">💧</span><div><em>相对湿度</em><b>45%</b></div></div><div class="wx-item"><span class="wx-ic">🧥</span><div><em>穿衣指数</em><b>冷</b></div></div></div><div class="wx-sun" id="wxSun" hidden><div class="wx-sun-heads"><span class="wx-sun-h"><span class="wx-sic"><svg viewBox="0 0 22 22" aria-hidden="true"><circle cx="11" cy="13.6" r="4.2" fill="currentColor"/><path d="M3.6 13.6h2.2M16.2 13.6h2.2" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" fill="none"/><path d="M11 8V2M8.6 4.4L11 2l2.4 2.4" stroke="currentColor" stroke-width="1.8" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></span><i>日出</i></span><span class="wx-sun-h"><span class="wx-sic"><svg viewBox="0 0 22 22" aria-hidden="true"><circle cx="11" cy="13.6" r="4.2" fill="currentColor"/><path d="M3.6 13.6h2.2M16.2 13.6h2.2" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" fill="none"/><path d="M11 2v6M8.6 5.6L11 8l2.4-2.4" stroke="currentColor" stroke-width="1.8" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></span><i>日落</i></span></div><div class="wx-sun-track"><span class="wx-sun-fill" id="wxSunFill"></span><span class="wx-sun-moon" id="wxSunMoon">🌙</span></div><div class="wx-sun-times"><b id="wxRiseTime">--:--</b><b id="wxSetTime">--:--</b></div></div><div class="wx-src"><span class="wx-src-l">数据来源·<a href="https://www.qweather.com/" target="_blank" rel="noopener">Qweather 和风天气</a></span><span class="wx-time">11-03 23:12</span><button class="wx-refresh" id="wxRefresh" type="button" aria-label="刷新数据">⟳</button></div></div></div>
 </section>
 <section id="flights">
   <div class="sec-head"><div class="sec-ico">🎫</div><div class="sec-txt"><h2>交通</h2><span class="sec-sub">G30 去程 · MU5166 返程 · 京张段见「交通」</span></div></div>
@@ -1553,7 +1560,7 @@ li.fld .li-lab,li.lab .li-lab{font-size:12px;font-weight:700;color:var(--muted);
 </div><!-- /wrap -->
 
 <footer>
-  <div>❄️ <b>万龙,启动!</b> · v0.1298 分享版</div>
+  <div>❄️ <b>万龙,启动!</b> · v0.1301 分享版</div>
   
 </footer>
 
@@ -1768,8 +1775,7 @@ if(!location.hash){ try{ window.scrollTo(0, 0); }catch(_){} }
     }else if(nowM < setM){
       setTime = d0.sunset; riseTime = d0.sunrise;
       off = -1; span = 1;                    // 白天:未入夜
-    }else{
-      var nrise = (d1 && d1.sunrise) || d0.sunrise;   // 明天日出:3d拿不到才退回今天
+    }else{      var nrise = (d1 && d1.sunrise) || d0.sunrise;   // 明天日出:3d拿不到才退回今天
       setTime = d0.sunset; riseTime = nrise;
       var nriseM = hm(nrise); if(nriseM == null) nriseM = riseM;
       span = (24 * 60 - setM) + nriseM;      // 夜长:今晚日落→明晨日出
@@ -1777,6 +1783,7 @@ if(!location.hash){ try{ window.scrollTo(0, 0); }catch(_){} }
     }
     document.getElementById('wxSetTime').textContent = setTime;
     document.getElementById('wxRiseTime').textContent = riseTime;
+    box.classList.toggle('day', nowM >= riseM && nowM < setM);   // 白天:日出左/日落右;夜:日落左/日出右
     var pct = off < 0 ? 0 : Math.min(1, off / span);
     document.getElementById('wxSunFill').style.width = (pct * 100).toFixed(1) + '%';
     document.getElementById('wxSunMoon').style.left = (pct * 100).toFixed(1) + '%';
