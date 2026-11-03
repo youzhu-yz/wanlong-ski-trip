@@ -418,6 +418,26 @@ body.nav-top #chipbar{bottom:auto; top:calc(10px + env(safe-area-inset-top))}   
   display:flex;align-items:center;justify-content:space-between;gap:8px}
 .wx-src a{color:inherit;text-decoration:none}
 .wx-src-l{opacity:.66}   /* 来源小字弱化:比时间更不显眼 */
+/* 日出日落小行(卡底):日落(左)/日出(右),图标+标签上、昼夜进度条骑月居中、时间大字下 */
+.wx-sun{margin-top:12px;background:#eef4fb;border:1px solid rgba(24,137,224,.10);
+  border-radius:10px;padding:10px 14px 11px}
+.dark .wx-sun{background:#1d2a42;border-color:#31405c}
+.wx-sun-heads{display:flex}
+.wx-sun-h{flex:1;display:flex;align-items:center;justify-content:center;gap:5px;
+  font-size:11px;color:var(--muted)}
+.wx-sun-h svg{width:17px;height:17px;color:#e8a33d;flex:none}
+.dark .wx-sun-h svg{color:#f0b45a}
+.wx-sun-h i{font-style:normal}
+.wx-sun-track{position:relative;height:2px;background:rgba(24,137,224,.18);
+  border-radius:2px;margin:9px 8px 7px}
+.dark .wx-sun-track{background:#31456b}
+.wx-sun-fill{position:absolute;left:0;top:0;bottom:0;width:0;border-radius:2px;
+  background:#e8a33d;opacity:.5}
+.wx-sun-moon{position:absolute;top:50%;left:0;transform:translate(-50%,-50%);
+  font-size:13px;line-height:1}
+.wx-sun-times{display:flex}
+.wx-sun-times b{flex:1;text-align:center;font-size:15px;font-weight:800;letter-spacing:.5px;
+  font-variant-numeric:tabular-nums}
 .wx-time{margin-left:auto;white-space:nowrap}   /* 时间右对齐,紧贴刷新按钮 */
 .wx-refresh{flex:none;width:26px;height:26px;border-radius:50%;border:1px solid var(--line);
   background:var(--card);color:var(--muted);font-size:14px;line-height:1;cursor:pointer;padding:0;
@@ -1492,7 +1512,7 @@ li.fld .li-lab,li.lab .li-lab{font-size:12px;font-weight:700;color:var(--muted);
 </section>
 <section id="weather">
   <div class="sec-head"><div class="sec-ico">❄️</div><div class="sec-txt"><h2>天气</h2><span class="sec-sub">崇礼 11月上旬 · 出发前一周再核实</span></div></div>
-  <div id="wxBox"><div class="wx-card"><div class="wx-main"><div class="wx-left"><div class="wx-num">-1<span>°C</span></div><div class="wx-desc">晴 · 体感 -7°C</div></div><div class="wx-right"><div class="wx-ico">☀️</div><button class="wx-more" id="wxMore" type="button">未来7天</button></div></div><div class="wx-grid"><div class="wx-item"><span class="wx-ic">💨</span><div><em>风力风量</em><b>西北风 3级</b></div></div><div class="wx-item"><span class="wx-ic">🔆</span><div><em>紫外线强度</em><b>弱</b></div></div><div class="wx-item"><span class="wx-ic">💧</span><div><em>相对湿度</em><b>45%</b></div></div><div class="wx-item"><span class="wx-ic">🧥</span><div><em>穿衣指数</em><b>冷</b></div></div></div><div class="wx-src"><span class="wx-src-l">数据来源·<a href="https://www.qweather.com/" target="_blank" rel="noopener">Qweather 和风天气</a></span><span class="wx-time">11-01 17:03</span><button class="wx-refresh" id="wxRefresh" type="button" aria-label="刷新数据">⟳</button></div></div></div>
+  <div id="wxBox"><div class="wx-card"><div class="wx-main"><div class="wx-left"><div class="wx-num">-1<span>°C</span></div><div class="wx-desc">晴 · 体感 -7°C</div></div><div class="wx-right"><div class="wx-ico">☀️</div><button class="wx-more" id="wxMore" type="button">未来7天</button></div></div><div class="wx-grid"><div class="wx-item"><span class="wx-ic">💨</span><div><em>风力风量</em><b>西北风 3级</b></div></div><div class="wx-item"><span class="wx-ic">🔆</span><div><em>紫外线强度</em><b>弱</b></div></div><div class="wx-item"><span class="wx-ic">💧</span><div><em>相对湿度</em><b>45%</b></div></div><div class="wx-item"><span class="wx-ic">🧥</span><div><em>穿衣指数</em><b>冷</b></div></div></div><div class="wx-sun" id="wxSun" hidden><div class="wx-sun-heads"><span class="wx-sun-h"><svg viewBox="0 0 22 22" aria-hidden="true"><circle cx="11" cy="13.6" r="4.2" fill="currentColor"/><path d="M3.6 13.6h2.2M16.2 13.6h2.2" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" fill="none"/><path d="M11 2v6M8.6 5.6L11 8l2.4-2.4" stroke="currentColor" stroke-width="1.8" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg><i>日落</i></span><span class="wx-sun-h"><svg viewBox="0 0 22 22" aria-hidden="true"><circle cx="11" cy="13.6" r="4.2" fill="currentColor"/><path d="M3.6 13.6h2.2M16.2 13.6h2.2" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" fill="none"/><path d="M11 8V2M8.6 4.4L11 2l2.4 2.4" stroke="currentColor" stroke-width="1.8" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg><i>日出</i></span></div><div class="wx-sun-track"><span class="wx-sun-fill" id="wxSunFill"></span><span class="wx-sun-moon" id="wxSunMoon">🌙</span></div><div class="wx-sun-times"><b id="wxSetTime">--:--</b><b id="wxRiseTime">--:--</b></div></div><div class="wx-src"><span class="wx-src-l">数据来源·<a href="https://www.qweather.com/" target="_blank" rel="noopener">Qweather 和风天气</a></span><span class="wx-time">11-03 22:27</span><button class="wx-refresh" id="wxRefresh" type="button" aria-label="刷新数据">⟳</button></div></div></div>
 </section>
 <section id="flights">
   <div class="sec-head"><div class="sec-ico">🎫</div><div class="sec-txt"><h2>交通</h2><span class="sec-sub">G30 去程 · MU5166 返程 · 京张段见「交通」</span></div></div>
@@ -1530,7 +1550,7 @@ li.fld .li-lab,li.lab .li-lab{font-size:12px;font-weight:700;color:var(--muted);
 </div><!-- /wrap -->
 
 <footer>
-  <div>❄️ <b>万龙,启动!</b> · v0.1290 分享版</div>
+  <div>❄️ <b>万龙,启动!</b> · v0.1292 分享版</div>
   
 </footer>
 
@@ -1719,13 +1739,37 @@ if(!location.hash){ try{ window.scrollTo(0, 0); }catch(_){} }
       break;
     }
   }
+  /* 日出日落小行:今天 3d 预报带 sunrise/sunset;进度条=日落→次日日出的夜长,🌙骑在当前时刻(白天 clamp 到日落端) */
+  function renderSun(d0){
+    var box = document.getElementById('wxSun');
+    if(!box || !d0 || !d0.sunrise || !d0.sunset) return;
+    box.hidden = false;
+    document.getElementById('wxSetTime').textContent = d0.sunset;
+    document.getElementById('wxRiseTime').textContent = d0.sunrise;
+    function hm(s){ var m = /^(\d{1,2}):(\d{2})/.exec(s || ''); return m ? (+m[1]) * 60 + (+m[2]) : null; }
+    var setM = hm(d0.sunset), riseM = hm(d0.sunrise);
+    if(setM == null || riseM == null) return;
+    var n = new Date(), nowM = n.getHours() * 60 + n.getMinutes();
+    var span = (24 * 60 - setM) + riseM;   // 夜长
+    var off;
+    if(nowM >= setM) off = nowM - setM;                 // 今晚:日落之后
+    else if(nowM < riseM) off = nowM + (24 * 60) - setM;   // 午夜后~日出前(承接昨夜,昨今日落差1-2分钟忽略)
+    else off = -1;                                      // 白天:还没入夜
+    var pct = off < 0 ? 0 : Math.min(1, off / span);
+    document.getElementById('wxSunFill').style.width = (pct * 100).toFixed(1) + '%';
+    document.getElementById('wxSunMoon').style.left = (pct * 100).toFixed(1) + '%';
+  }
   Promise.all([
     fetchJSON(API + '/v7/weather/now?location=' + LOC + '&key=' + conf.key),
     fetchJSON(API + '/v7/indices/1d?type=3,5&location=' + LOC + '&key=' + conf.key)
-      .catch(function(){ return null })   // 指数失败不拖垮实况
+      .catch(function(){ return null }),   // 指数失败不拖垮实况
+    fetchJSON(API + '/v7/weather/3d?location=' + LOC + '&key=' + conf.key)
+      .catch(function(){ return null })    // 日出日落失败不拖垮实况
   ]).then(function(rs){
     if(rs[0] && rs[0].code === '200')
       render(rs[0].now, (rs[1] && rs[1].code === '200') ? rs[1].daily : null);
+    if(rs[2] && rs[2].code === '200' && rs[2].daily && rs[2].daily[0])
+      renderSun(rs[2].daily[0]);
   }).catch(function(){ /* 静默降级:保持表格静态值 */ });
   /* ⟳ 按钮走 __wlReload 整页重建,重建后本段脚本重新执行即自动再拉一次 */
 })();
