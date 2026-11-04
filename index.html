@@ -431,8 +431,9 @@ body.nav-top #chipbar{bottom:auto; top:calc(10px + env(safe-area-inset-top))}   
 .wx-sun.day .wx-sun-h:first-child{flex-direction:row}
 .wx-sun.day .wx-sun-h:last-child{flex-direction:row-reverse}   /* 白天:日落到右 */
 .wx-sic{flex:none;width:30px;height:30px;border-radius:50%;background:var(--card);
+  border:1px solid #dbe4f0;   /* 浅色:白圆底在浅蓝底上会融掉,加浅描边立起来 */
   display:flex;align-items:center;justify-content:center}   /* 同 .wx-ic 图标圆底 */
-.dark .wx-sic{background:#1b2333}
+.dark .wx-sic{background:#1b2333;border-color:transparent}
 .wx-sic svg{width:16px;height:16px;color:#e8a33d;flex:none}
 .dark .wx-sic svg{color:#f0b45a}
 .wx-sun-h i{font-style:normal}
@@ -442,9 +443,9 @@ body.nav-top #chipbar{bottom:auto; top:calc(10px + env(safe-area-inset-top))}   
 .wx-sun-fill{position:absolute;left:0;top:0;bottom:0;width:0;border-radius:2px;
   background:#e8a33d;opacity:.5}
 .wx-sun-moon{position:absolute;top:50%;left:0;transform:translate(-50%,-50%);
-  width:19px;height:19px;border-radius:50%;background:#fff;   /* 浅色:白色不透明圆底 */
+  width:19px;height:19px;border-radius:50%;background:#fff;border:1px solid #dbe4f0;   /* 浅色:白底+浅描边不融入背景 */
   display:flex;align-items:center;justify-content:center;font-size:12px;line-height:1}
-.dark .wx-sun-moon{background:#243350;border:1px solid rgba(255,255,255,.4)}   /* 深色:深色圆钮+浅描边 */
+.dark .wx-sun-moon{background:#243350;border-color:#33487e}   /* 深色:描边换成接近底色的深蓝,不要白边 */
 .wx-sun-times{display:flex}
 .wx-sun-times b{flex:1;text-align:center;font-size:15px;font-weight:800;letter-spacing:.5px;
   font-variant-numeric:tabular-nums}
@@ -1526,7 +1527,7 @@ li.fld .li-lab,li.lab .li-lab{font-size:12px;font-weight:700;color:var(--muted);
 </section>
 <section id="weather">
   <div class="sec-head"><div class="sec-ico">❄️</div><div class="sec-txt"><h2>天气</h2><span class="sec-sub">崇礼 11月上旬 · 出发前一周再核实</span></div></div>
-  <div id="wxBox"><div class="wx-card"><div class="wx-main"><div class="wx-left"><div class="wx-num">-1<span>°C</span></div><div class="wx-desc">晴 · 体感 -7°C</div></div><div class="wx-right"><div class="wx-ico">☀️</div><button class="wx-more" id="wxMore" type="button">未来7天</button></div></div><div class="wx-grid"><div class="wx-item"><span class="wx-ic">💨</span><div><em>风力风量</em><b>西北风 3级</b></div></div><div class="wx-item"><span class="wx-ic">🔆</span><div><em>紫外线强度</em><b>弱</b></div></div><div class="wx-item"><span class="wx-ic">💧</span><div><em>相对湿度</em><b>45%</b></div></div><div class="wx-item"><span class="wx-ic">🧥</span><div><em>穿衣指数</em><b>冷</b></div></div></div><div class="wx-sun" id="wxSun" hidden><div class="wx-sun-heads"><span class="wx-sun-h"><span class="wx-sic"><svg viewBox="0 0 22 22" aria-hidden="true"><circle cx="11" cy="13.6" r="4.2" fill="currentColor"/><path d="M3.6 13.6h2.2M16.2 13.6h2.2" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" fill="none"/><path d="M11 8V2M8.6 4.4L11 2l2.4 2.4" stroke="currentColor" stroke-width="1.8" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></span><i>日出</i></span><span class="wx-sun-h"><span class="wx-sic"><svg viewBox="0 0 22 22" aria-hidden="true"><circle cx="11" cy="13.6" r="4.2" fill="currentColor"/><path d="M3.6 13.6h2.2M16.2 13.6h2.2" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" fill="none"/><path d="M11 2v6M8.6 5.6L11 8l2.4-2.4" stroke="currentColor" stroke-width="1.8" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></span><i>日落</i></span></div><div class="wx-sun-track"><span class="wx-sun-fill" id="wxSunFill"></span><span class="wx-sun-moon" id="wxSunMoon">🌙</span></div><div class="wx-sun-times"><b id="wxRiseTime">--:--</b><b id="wxSetTime">--:--</b></div></div><div class="wx-src"><span class="wx-src-l">数据来源·<a href="https://www.qweather.com/" target="_blank" rel="noopener">Qweather 和风天气</a></span><span class="wx-time">11-04 09:06</span><button class="wx-refresh" id="wxRefresh" type="button" aria-label="刷新数据">⟳</button></div></div></div>
+  <div id="wxBox"><div class="wx-card"><div class="wx-main"><div class="wx-left"><div class="wx-num">-1<span>°C</span></div><div class="wx-desc">晴 · 体感 -7°C</div></div><div class="wx-right"><div class="wx-ico">☀️</div><button class="wx-more" id="wxMore" type="button">未来7天</button></div></div><div class="wx-grid"><div class="wx-item"><span class="wx-ic">💨</span><div><em>风力风量</em><b>西北风 3级</b></div></div><div class="wx-item"><span class="wx-ic">🔆</span><div><em>紫外线强度</em><b>弱</b></div></div><div class="wx-item"><span class="wx-ic">💧</span><div><em>相对湿度</em><b>45%</b></div></div><div class="wx-item"><span class="wx-ic">🧥</span><div><em>穿衣指数</em><b>冷</b></div></div></div><div class="wx-sun" id="wxSun" hidden><div class="wx-sun-heads"><span class="wx-sun-h"><span class="wx-sic"><svg viewBox="0 0 22 22" aria-hidden="true"><circle cx="11" cy="13.6" r="4.2" fill="currentColor"/><path d="M3.6 13.6h2.2M16.2 13.6h2.2" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" fill="none"/><path d="M11 8V2M8.6 4.4L11 2l2.4 2.4" stroke="currentColor" stroke-width="1.8" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></span><i>日出</i></span><span class="wx-sun-h"><span class="wx-sic"><svg viewBox="0 0 22 22" aria-hidden="true"><circle cx="11" cy="13.6" r="4.2" fill="currentColor"/><path d="M3.6 13.6h2.2M16.2 13.6h2.2" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" fill="none"/><path d="M11 2v6M8.6 5.6L11 8l2.4-2.4" stroke="currentColor" stroke-width="1.8" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></span><i>日落</i></span></div><div class="wx-sun-track"><span class="wx-sun-fill" id="wxSunFill"></span><span class="wx-sun-moon" id="wxSunMoon">🌙</span></div><div class="wx-sun-times"><b id="wxRiseTime">--:--</b><b id="wxSetTime">--:--</b></div></div><div class="wx-src"><span class="wx-src-l">数据来源·<a href="https://www.qweather.com/" target="_blank" rel="noopener">Qweather 和风天气</a></span><span class="wx-time">11-04 09:22</span><button class="wx-refresh" id="wxRefresh" type="button" aria-label="刷新数据">⟳</button></div></div></div>
 </section>
 <section id="flights">
   <div class="sec-head"><div class="sec-ico">🎫</div><div class="sec-txt"><h2>交通</h2><span class="sec-sub">G30 去程 · MU5166 返程 · 京张段见「交通」</span></div></div>
@@ -1564,7 +1565,7 @@ li.fld .li-lab,li.lab .li-lab{font-size:12px;font-weight:700;color:var(--muted);
 </div><!-- /wrap -->
 
 <footer>
-  <div>❄️ <b>万龙,启动!</b> · v0.1309 分享版</div>
+  <div>❄️ <b>万龙,启动!</b> · v0.1311 分享版</div>
   
 </footer>
 
