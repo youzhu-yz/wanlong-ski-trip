@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#10203a">
-<title>万龙,启动! · 行程攻略</title>
+<title>YOTTA GAMES 外滑小分队 · 行程攻略</title>
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E%E2%9D%84%EF%B8%8F%3C/text%3E%3C/svg%3E">
 
 <script>try{if(localStorage.getItem('theme')==='dark'){document.documentElement.classList.add('dark');document.documentElement.style.colorScheme='dark';}}catch(e){}</script>   <!-- 首帧前应用深色,杜绝刷新闪浅色 -->
@@ -461,7 +461,7 @@ body.nav-top #chipbar{bottom:auto; top:calc(10px + env(safe-area-inset-top))}   
 .wx-refresh.busy{animation:wxspin 1s linear infinite}
 /* 往返卡尾部的分段路线折叠区(交通内容并入,默认收起):pill 小按钮带箭头,放折叠区之后——
    收起时在卡尾,展开后被内容推到底部(同一按钮位置随折叠移动) */
-.fexp{margin-top:4px}
+.fexpposition:relative;{margin-top:4px}
 .fexp-btn{display:flex;align-items:center;justify-content:center;width:40px;height:20px;
   border-radius:999px;border:1px solid var(--line);background:var(--card);margin:4px auto;
   cursor:pointer;padding:0;-webkit-tap-highlight-color:transparent}
@@ -476,6 +476,7 @@ body.nav-top #chipbar{bottom:auto; top:calc(10px + env(safe-area-inset-top))}   
 .fexp-body .trow2:last-child{padding-bottom:6px}
 /* 站牌式分段:每站一块圆角站牌(站名/时间两行,含线路三行),左对齐,箭头连接 */
 .tstops{display:flex;align-items:center;justify-content:flex-start;gap:4px;flex-wrap:wrap;margin-top:5px}
+.tstops .tstop{flex:1;min-width:0;align-items:center}   /* 站牌同宽 */
 .tstop{display:flex;flex-direction:column;align-items:center;justify-content:flex-end;line-height:1.3;min-width:0;
   position:relative;border:1px solid #dbe4f0;border-radius:9px;padding:6px 8px 7px;background:var(--card);
   box-shadow:0 1px 3px rgba(16,24,40,.05)}   /* 内容沉底:底部留 7px 给蓝条,上方留白多,文字整体靠下 */
@@ -489,6 +490,9 @@ body.nav-top #chipbar{bottom:auto; top:calc(10px + env(safe-area-inset-top))}   
 .dark .tstop em{background:#1b2333;color:#a8b6ca}
 .tstop i{font-style:normal;font-size:10px;font-weight:700;color:var(--accent-deep);
   font-variant-numeric:tabular-nums;white-space:nowrap}
+.tstop i[style*="cursor"]{text-decoration:underline dotted var(--accent);text-underline-offset:2px}
+.tstop i[style*="cursor"]::after{content:"⇄";font-size:7px;color:var(--accent);opacity:.6;
+  margin-left:1px;vertical-align:super}
 .tsarrow{color:var(--muted);font-size:10px;line-height:1}
 /* 名称行:胶囊左排,行内备注推到行右 */
 .tname{display:flex;align-items:center;flex-wrap:wrap;gap:2px}
@@ -517,6 +521,7 @@ body.nav-top #chipbar{bottom:auto; top:calc(10px + env(safe-area-inset-top))}   
   background:transparent;color:var(--muted);font-size:11px;line-height:1;padding:6px 12px;border-radius:999px;
   cursor:pointer;font-family:inherit;-webkit-tap-highlight-color:transparent}
 .wx-more:active{background:#f2f5fa}
+.wx-more[hidden]{display:none!important}   /* 作者级 display 压过 UA 的 [hidden],离线版隐藏入口需显式声明 */
 .wx-more.busy{opacity:.55}
 .pop-title.wx7-title{white-space:nowrap;font-size:18px;font-weight:800;
   position:absolute;left:50%;transform:translateX(-50%);   /* 绝对定位强制居中:不受两侧元素/字宽影响 */
@@ -540,14 +545,15 @@ body.nav-top #chipbar{bottom:auto; top:calc(10px + env(safe-area-inset-top))}   
 /* ---------- 每日行程(时间轴) ---------- */
 .day{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);
   margin-bottom:14px;overflow:hidden}
-.day .d-head{cursor:pointer;display:flex;align-items:center;gap:12px;padding:14px 16px;user-select:none;-webkit-tap-highlight-color:transparent}
-.day .d-num{width:44px;height:44px;flex:none;border-radius:var(--radius);display:flex;flex-direction:column;
-  align-items:center;justify-content:center;background:linear-gradient(135deg,#173257,#1e4a7d);color:#fff}
-.day .d-num b{font-size:15px;line-height:1.1}
-.day .d-num span{font-size:10px;opacity:.8}
+.day .d-head{cursor:pointer;display:flex;align-items:center;gap:10px;padding:10px 16px;user-select:none;-webkit-tap-highlight-color:transparent}
+.day .d-num{width:40px;height:40px;flex:none;border-radius:var(--radius);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  background:linear-gradient(135deg,#173257,#1e4a7d);color:#fff}
+.day .d-num b{font-size:15px;font-weight:800;line-height:1.1}
+.day .d-num span{font-size:9px;opacity:.8}
 .day .d-title{flex:1;min-width:0}
 .day .d-title b{font-size:16px}
-.day .d-title .d-sub{font-size:11px;color:var(--muted)}
+.day .d-title .d-sub{display:none}   /* 副标题(抵达·采购/返程等)已按要求隐藏 */
 .day .d-arrow{width:30px;height:30px;flex:none;border-radius:50%;background:#f1f4f9;
   display:flex;align-items:center;justify-content:center;transition:transform .2s,background .2s}
 .day .d-arrow svg{width:16px;height:16px;stroke:#4a5468;fill:none;stroke-width:2.4;
@@ -560,6 +566,13 @@ body.nav-top #chipbar{bottom:auto; top:calc(10px + env(safe-area-inset-top))}   
 .day .d-body .trow:last-child{padding-bottom:25px}
 .trow{display:flex;gap:12px;padding:11px 0;border-top:1px dashed var(--line);align-items:flex-start}
 .trow:first-child{border-top:none}
+.trow.tspot{background:#fff6e8;border-radius:8px;margin:3px -10px;padding:11px 10px;
+  position:relative;border-top:none!important}   /* 游览/采买活动行:暖米色底,区别于睡觉的淡蓝 */
+.trow.tspot + .trow{border-top:none!important}   /* 活动行上下的虚线都不画 */
+.trow.tspot::before{content:"";position:absolute;left:0;top:6px;bottom:6px;width:3px;
+  border-radius:2px;background:#e2a23f}   /* 左侧琥珀色竖条 */
+.dark .trow.tspot{background:#332917}
+.dark .trow.tspot::before{background:#c98f2f}
 .ttime{min-width:56px;font-weight:800;font-size:14px;color:var(--accent-deep);font-variant-numeric:tabular-nums;padding-top:1px;white-space:pre-line}   /* pre-line:时段列支持换行(如「次日\n00:21」) */
 .tbody{flex:1;min-width:0}
 .twhat{font-size:14.5px;font-weight:600}
@@ -676,19 +689,17 @@ body.nav-top #chipbar{bottom:auto; top:calc(10px + env(safe-area-inset-top))}   
 .fmeta b{color:var(--ink)}
 
 /* ---------- 人员 ---------- */
-.mgrid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
-@media(min-width:680px){.mgrid{grid-template-columns:repeat(3,1fr)}}
-@media(min-width:920px){.mgrid{grid-template-columns:repeat(4,1fr)}}
+.mgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}   /* 一行固定 3 个 */
 .mcard{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);
-  padding:13px 14px;display:flex;align-items:center;gap:12px;position:relative}
-/* 头像在左、信息在右,左右两栏水平对齐(垂直居中) */
+  padding:14px 8px 12px;display:flex;flex-direction:column;align-items:center;gap:9px;
+  text-align:center;position:relative}
+/* 头像在上、名字在下,整卡竖排居中 */
 .mcard.tbd{border-style:dashed;box-shadow:none;background:#fbfcfe}
-.mava{width:40px;height:40px;flex:none;border-radius:50%;background:var(--accent-weak);
-  display:flex;align-items:center;justify-content:center;font-size:19px;overflow:hidden}
+.mava{width:46px;height:46px;flex:none;border-radius:50%;background:var(--accent-weak);
+  display:flex;align-items:center;justify-content:center;font-size:21px;overflow:hidden}
 .mava img{width:100%;height:100%;object-fit:cover;display:block}
 .mcard.tbd .mava{background:#f0f2f7;opacity:.6}
-.m-body{flex:1;min-width:0;display:flex;flex-direction:column;align-items:center;margin-right:5px}   /* 右侧内容保持居中对齐,并整体内移 5px */
-.mava{margin-left:5px}   /* 头像内移 5px */
+.m-body{display:flex;flex-direction:column;align-items:center}   /* 名字区:头像下方居中 */
 .mname{font-size:12px;font-weight:800}
 .mline{font-size:11px;color:#4a5468;margin-top:3px;word-break:break-all;text-align:center}
 .mline .wx-ico{width:12px;height:12px;vertical-align:-1.5px;margin-right:2px}
@@ -751,10 +762,86 @@ ul.dots li.lab::before{top:50%;transform:translateY(-50%)}  /* 圆点跟随字�
   background:rgba(100,116,139,.12);pointer-events:none;z-index:5}
 .pop.alt .pop-head,.pop.alt .pop-tabs,.pop.alt .pop-body{opacity:.66}   /* 白底大字下 72% 观感不足,微压到 66% 与卡片弱化观感对齐 */
 /* ---------- 默认收起的卡片:只露两行,底部渐变暗示还有内容,箭头点击展开 ---------- */
+/* 行程「班次」切换:点左侧时间格切下一班(⇄ 小标提示可点;联动规格在 .day 的 data-link) */
+/* 每日顶部「线路预览」:节点+连线,交通图标(扁平)骑在线上方(随卡片展开显示) */
+.dprev{display:flex;align-items:flex-start;width:90%;margin:2px auto 4px;padding:4px 2px 0;overflow-x:auto;
+  scrollbar-width:none}
+.dprev:not(.noicon){padding-top:14px}   /* 有图标:给上方留空放图标 */   /* 有图标的多留一点给图标 */   /* 整体宽度收窄 10%(居中);手机上不出灰色滚动条,挤不下时靠内部收缩 */
+.dprev::-webkit-scrollbar{display:none}
+.dprev .dp-n{flex:none;display:flex;flex-direction:column;align-items:center;gap:5px}
+.dprev .dp-n i{width:9px;height:9px;border-radius:50%;background:var(--accent);
+  box-shadow:0 0 0 3px var(--accent-weak)}
+.dprev .dp-n span{font-size:10.5px;font-weight:600;color:var(--muted);white-space:nowrap}
+.dprev .dp-l{flex:1;min-width:14px;height:9px;position:relative}
+.dprev .dp-l::before{content:"";position:absolute;left:0;right:0;top:3.5px;height:2px;
+  border-radius:2px;background:var(--accent);opacity:.3}
+.dprev .dp-l svg{position:absolute;left:50%;top:-13px;width:15px;height:15px;
+  transform:translateX(-50%);color:var(--accent)}
+.dprev .dp-l.dash{flex:0 1 15%;min-width:0;max-width:15%}   /* 活动条两端的"开始/结束"虚线段(各15%宽);窄屏可收缩 */
+.dprev:has(.dp-l.dash){padding-left:10%;padding-right:10%}   /* 虚线条整体再收窄:砍掉的空间留在条外(两侧留白),不被中间实线吸收 */
+.dprev .dp-l.dash::before{height:2px;border-radius:0;opacity:.55;
+  background:repeating-linear-gradient(90deg,var(--accent) 0 5px,transparent 5px 11px)}
+.trow2.thint .tname{color:#c79100;font-weight:700}
+.dark .trow2.thint .tname{color:#e2b83f}
+.trow.hide{display:none}
+.tseg[hidden]{display:none}   /* 交通版本段:未选中的版本隐藏 */   /* 分支线/版本:未选中的行整行隐藏 */
+/* 航班卡「乘机信息」内联折叠区(原详情弹窗内容) + fexp 按钮带文字标签 */
+.fexp-btn.fx-label{width:auto;padding:0 12px;gap:5px;font-size:11px;font-weight:600;
+  color:var(--muted);letter-spacing:.5px}
+.fexp .dver-btn{display:block;width:fit-content;margin:14px auto 8px;
+  padding:4px 14px;border-radius:999px;border:1px solid var(--accent);
+  background:var(--accent-weak);color:var(--accent-deep);
+  font-size:11px;font-weight:700;font-family:inherit;cursor:pointer;
+  -webkit-tap-highlight-color:transparent}
+.fexp .fexp-body::before{content:"";display:block;border-top:1px dashed var(--line);
+  margin-top:6px;order:-1}   /* 展开区顶部虚线:分隔航班信息与交通方案 */
+.fcard.fexp{margin-top:0}   /* 返程卡整体作为 .fexp 容器:展开区在卡片顶部(从上方展开),按钮留在卡底 */
+.fcard.fexp > .fexp-wrap .fexp-body::before{display:none}
+.fcard.fexp > .fexp-wrap .fexp-body::after{content:"";display:block;
+  border-bottom:1px dashed var(--line);margin:6px 0 8px}   /* 顶置展开区:分隔虚线改画在底部 */
+.fexp .tseg > .trow2:first-child,.fexp .fexp-body > .trow2:first-of-type{border-top:none}   /* 按钮下方紧邻的首行不再画虚线(顶部已有一条;去程有版本段/返程直挂两种结构) */
+.fexp-btn.fx-label svg{width:13px;height:13px}
+.fxinfo .fexp-body{padding-top:10px}
+.fx-h{font-size:12px;font-weight:800;color:var(--accent-deep);letter-spacing:1px;
+  margin:10px 0 4px;padding-left:8px;border-left:3px solid var(--accent)}
+.fxinfo .fexp-body .fx-h:first-child{margin-top:0}
+.fx-sub{font-size:11.5px;font-weight:700;color:var(--muted);margin:8px 0 3px}
+.fx-f{display:flex;align-items:center;gap:8px;padding:5px 0;border-top:1px dashed var(--line);
+  font-size:12.5px}
+.fx-f:first-of-type{border-top:none}
+.fx-f span{flex:none;color:var(--muted);font-weight:600;min-width:72px}
+.fx-f b{flex:1;min-width:0;color:var(--ink);word-break:break-all}
+.fx-link{display:inline-block;margin-top:6px;padding:6px 16px;border-radius:999px;
+  background:var(--accent);color:#fff;font-size:12.5px;font-weight:700;text-decoration:none}
+.fx-img{display:block;width:100%;border-radius:10px;margin:6px 0;border:1px solid var(--line)}
+.fx-tip{font-size:11.5px;color:var(--muted);padding:6px 8px;background:var(--accent-weak);
+  border-radius:8px;margin:6px 0}
+.fx-tip.strong{background:#fff4e0;color:#8a5a12;font-weight:600}
+.dark .fx-tip.strong{background:#3a2e14}
+/* 行程版本循环按钮:日期星期文字右侧(行内),单击循环切版本;内容与预览条滑入滑出 */
+.dver-btn{display:inline-flex;align-items:center;vertical-align:middle;margin:0 6px 0 9px;
+  padding:3px 10px;border-radius:999px;
+  border:1px solid var(--accent);background:var(--accent-weak);color:var(--accent-deep);
+  font-size:11px;font-weight:700;font-family:inherit;cursor:pointer;white-space:nowrap;
+  -webkit-tap-highlight-color:transparent}
+.dver-btn:active{opacity:.7}
+.dark .dver-btn{background:#1d3450}
+.dprev.hide{display:none}
+@keyframes vOut{from{transform:translateX(0);opacity:1}to{transform:translateX(-26px);opacity:0}}
+@keyframes vIn{from{transform:translateX(26px);opacity:0}to{transform:translateX(0);opacity:1}}
+.d-body.vout,.dprev.vout{animation:vOut .15s ease forwards}
+.d-body.vin,.dprev.vin{animation:vIn .22s ease both}
+.ttime.sw{cursor:pointer;-webkit-tap-highlight-color:transparent;user-select:none}
+.ttime.sw::after{content:"⇄";display:block;font-size:9px;line-height:1;color:var(--accent);
+  opacity:.55;margin-top:1px}
+.ttime.sw:active{color:var(--accent-deep)}
+.ttime.sw.alt{color:#c79100}   /* 非默认班次(第2班以外)的时间标黄 */
+.dark .ttime.sw.alt{color:#e2b83f}
 .hcard.is-clamp .dots{max-height:72px;overflow:hidden;
   -webkit-mask-image:linear-gradient(180deg,#000 80%,transparent);
   mask-image:linear-gradient(180deg,#000 80%,transparent);
   transition:max-height .38s ease}
+.hcard.is-clamp.is-alt .dots{max-height:38px}   /* 备选卡折叠只露第一行(标题+车程),其余展开看 */
 .hcard.is-clamp.open .dots{max-height:none;-webkit-mask-image:none;mask-image:none}
 .clamp-more{display:flex;align-items:center;justify-content:center;width:100%;
   margin:2px -16px -16px;padding:11px 16px 13px;border:none;border-top:1px dashed var(--line);
@@ -825,6 +912,9 @@ ul.dots li.subwrap.subwrap-bak{display:none}   /* 备选子卡(如中转酒店)�
   cursor:pointer;font-family:inherit;text-decoration:underline dotted;text-underline-offset:3px;
   -webkit-tap-highlight-color:transparent}
 .bak-entry button:active{color:var(--accent-deep)}
+.hcard.bak-card{display:none}   /* 收进「备选方案」入口的备选整卡不在版面平铺 */
+.cmp-row .hcard{margin:0}   /* 弹层里的备选整卡 */
+.cmp-row .clamp-more{display:none}   /* 弹层里已全展开,不需要折叠箭头 */
 .cmp-row .rcard{margin:0}   /* 弹层里的备选酒店/雪具小卡 */
 .cmp-mask .card-anim{opacity:1;transform:none}   /* 弹层里不走入场动画,防克隆卡透明 */
 .cmp-row li.subwrap{display:block;padding:0}   /* 弹层里解开隐藏规则 */
@@ -965,8 +1055,13 @@ ul.dots li.subwrap.subwrap-bak{display:none}   /* 备选子卡(如中转酒店)�
 /* ---------- 清单(条目双列网格,紧凑行高) ---------- */
 .ckgroup{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);
   padding:12px 14px;margin-bottom:12px}
-.ckhead{display:flex;align-items:center;gap:8px;font-size:15.5px;font-weight:800;margin-bottom:8px}
-.ckprog{margin-left:auto;font-size:12px;font-weight:600;color:var(--muted);background:#f1f4f9;
+.ckhead{display:flex;align-items:center;gap:8px;font-size:15.5px;font-weight:800;margin-bottom:8px;width:100%}
+.ck-t{flex:1;min-width:0}
+.ckprog{margin-left:0;margin-right:0;flex:none;font-size:12px;font-weight:600;color:var(--muted);background:#f1f4f9;
+.ckbar{height:3px;border-radius:2px;background:var(--line);margin-top:8px;overflow:hidden}
+.ckbar i{display:block;height:100%;width:0;border-radius:2px;background:var(--accent);transition:width .3s ease}
+.ckgroup.ck-done .ckbar i{background:var(--ok)}
+.ckgroup.ck-done .ckhead{color:var(--ok)}
   border-radius:999px;padding:2px 10px;font-variant-numeric:tabular-nums}
 .ckitems{display:grid;grid-template-columns:1fr;gap:6px}
 .ckitem{display:flex;align-items:flex-start;gap:8px;padding:6px 9px;border:1px solid var(--line);
@@ -1273,13 +1368,16 @@ li.fld .li-lab,li.lab .li-lab{font-size:12px;font-weight:700;color:var(--muted);
   display:flex;align-items:center;justify-content:center}
 .zoom-btn:active{background:rgba(31,58,95,.18)}
 .zoom-btn svg{width:11px;height:11px;stroke:currentColor;fill:none;stroke-width:2.2;stroke-linecap:round}
+h3 .zoom-btn.zoom-inline{position:static;display:inline-flex;vertical-align:middle;
+  width:24px;height:24px;margin-left:6px}   /* 酒店卡:详情按钮行内跟在酒店名后 */
 .ov-card .zoom-btn{top:6px;right:6px}
 .day .zoom-btn{top:auto;bottom:12px}
 .fcard .fhead{padding-right:0}
 .fcard.has-zoom .fhead{padding-right:42px}   /* 有放大按钮时日期胶囊让位 */
 .fcard.city-card.has-zoom .fhead{padding-right:0}   /* 市内卡:方框详情按钮已移入展开区,头部不再让位 */
 .hcard h3{padding-right:34px}
-.ckgroup .ckhead{padding-right:40px}
+.ckgroup .ckhead{padding-right:0}   /* 计数贴右;万一有详情按钮的组再让位 */
+.ckgroup:has(.zoom-btn) .ckhead{padding-right:40px}
 
 .pop-mask{position:fixed;inset:0;z-index:90;background:rgba(15,23,42,.45);display:none;
   align-items:center;justify-content:center;padding:12px;
@@ -1448,15 +1546,18 @@ li.fld .li-lab,li.lab .li-lab{font-size:12px;font-weight:700;color:var(--muted);
   <button class="bar-arrow" id="barPrev" type="button" aria-label="上一板块">‹</button>
   <div class="chips" id="chips">
     <a href="#overview" class="on"><span class="chip-ico">📋</span><span class="chip-txt">总览</span></a>
-<a href="#members"><span class="chip-ico">👥</span><span class="chip-txt">人员</span></a>
 <a href="#days"><span class="chip-ico">🗓️</span><span class="chip-txt">行程</span></a>
-<a href="#weather"><span class="chip-ico">❄️</span><span class="chip-txt">天气</span></a>
-<a href="#flights"><span class="chip-ico">🎫</span><span class="chip-txt">交通</span></a>
+<a href="#flights"><span class="chip-ico">🎫</span><span class="chip-txt">高铁&amp;航班</span></a>
+<a href="#members"><span class="chip-ico">👥</span><span class="chip-txt">人员</span></a>
 <a href="#stay"><span class="chip-ico">🏠</span><span class="chip-txt">住宿</span></a>
+<a href="#weather"><span class="chip-ico">❄️</span><span class="chip-txt">天气</span></a>
 <a href="#resorts"><span class="chip-ico">🏔️</span><span class="chip-txt">雪场</span></a>
 <a href="#gear"><span class="chip-ico">🎿</span><span class="chip-txt">雪具</span></a>
 <a href="#food"><span class="chip-ico">🍜</span><span class="chip-txt">吃喝</span></a>
-<a href="#costs"><span class="chip-ico">💰</span><span class="chip-txt">费用</span></a>
+<a href="#shopping">🛍️ 购物</a>
+<a href="#fx">💱 汇率</a>
+<a href="#checklist">🧳 清单</a>
+<a href="#apps">📲 推荐应用</a>
   </div>
   <button class="bar-arrow" id="barNext" type="button" aria-label="下一板块">›</button>
 </nav>
@@ -1472,8 +1573,8 @@ li.fld .li-lab,li.lab .li-lab{font-size:12px;font-weight:700;color:var(--muted);
   </svg></div>
   <button id="themeBtn" type="button" aria-label="切换深色模式">🌙</button>
   <div class="wrap">
-    <span class="tag">🏂 2026-27 雪季开板   崇礼 · 万龙</span>
-    <h1>万龙,启动!</h1>
+    <span class="tag">❄️ 2026 冬 · 北海道滑雪之旅</span>
+    <h1>YOTTA GAMES 外滑小分队</h1>
     <div class="sub">11/06(五) – 11/08(日) · 3天2晚 · 6人同行</div>
     
     <div class="countdown">
@@ -1493,21 +1594,30 @@ li.fld .li-lab,li.lab .li-lab{font-size:12px;font-weight:700;color:var(--muted);
 
 <!-- ================= 总览 ================= -->
 <section id="overview">
-  <div class="sec-head"><div class="sec-ico">📋</div><div class="sec-txt"><h2>总览</h2><span class="sec-sub">关键信息一屏速览</span></div></div>
-  <div class="ov-grid"><a class="ov-card ov-link" href="#members" aria-label="前往日期"><div class="k">📅 日期<span class="ov-go">›</span></div><div class="v">11/06 – 11/08</div><small>3天2晚 · 6人</small></a>
-<a class="ov-card ov-link" href="#days" aria-label="前往行程"><div class="k">🎿 行程<span class="ov-go">›</span></div><div class="v">两个滑雪日</div><small>Day 1 9小时 · Day 2 6小时</small></a>
+  <div class="sec-head"><div class="sec-ico">📋</div><div class="sec-txt"><h2>行程总览</h2><span class="sec-sub">关键信息一屏速览</span></div></div>
+  <div class="ov-grid"><a class="ov-card ov-link" href="#members" aria-label="前往日期 · 人员"><div class="k">📅 日期 · 人员<span class="ov-go">›</span></div><div class="v">11/06 – 11/08</div><small>3天2晚<br>6人(名单已确认)</small></a>
+<a class="ov-card ov-link" href="#days" aria-label="前往滑雪安排"><div class="k">🎿 滑雪安排<span class="ov-go">›</span></div><div class="v">两个滑雪日</div><small>上午+下午<br>夜滑看情况</small></a>
 <a class="ov-card ov-link" href="#weather" aria-label="前往天气"><div class="k">❄️ 天气<span class="ov-go">›</span></div><div class="v">-1°C · 晴</div><small>体感 -7°C · 西北风3级</small></a>
-<a class="ov-card ov-link" href="#flights" aria-label="前往交通"><div class="k">🚄 交通<span class="ov-go">›</span></div><div class="v"></div><div class="ov-extra"><div class="ov-chiprow"><span class="ov-lab">去程</span><span class="chips"><span class="chip">G30</span><span class="chip">G7831</span></span></div><div class="ov-chiprow"><span class="ov-lab">返程</span><span class="chips"><span class="chip">包车</span><span class="chip">MU5166</span></span></div></div></a>
-<a class="ov-card ov-link" href="#stay" aria-label="前往住宿"><div class="k">🏠 住宿<span class="ov-go">›</span></div><div class="v">清河中转 + 盛龙公寓</div><small>11/06 金辉商务大酒店
-11/07 盛龙公寓</small></a>
-<a class="ov-card ov-link" href="#resorts" aria-label="前往雪场"><div class="k">🏔️ 雪场<span class="ov-go">›</span></div><div class="v">万龙滑雪场(崇礼)</div><small>日场 08:30–16:30
-夜场 18:30–21:30</small></a>
-<a class="ov-card ov-link" href="#gear" aria-label="前往雪具"><div class="k">🎿 雪具<span class="ov-go">›</span></div><div class="v">邮寄 + 租赁</div><div class="ov-extra"><div class="ov-avrow"><span class="ov-lab">提前邮寄</span><span class="avstack"><img src="images/a/a17432ca0c.jpg" alt=""><img src="images/a/2ac7c642cf.jpg" alt=""><img src="images/a/3545cfca7f.jpg" alt=""></span></div><div class="ov-avrow"><span class="ov-lab">当地租赁</span><span class="avstack"><img src="images/a/593abc6d7a.jpg" alt=""><img src="images/a/1b5af55d3b.jpg" alt=""><img src="images/a/adbb15c823.jpg" alt=""></span></div></div></a>
-<a class="ov-card ov-link" href="#food" aria-label="前往吃喝"><div class="k">🍜 吃喝<span class="ov-go">›</span></div><div class="v">大食堂 + 双龙自助</div><div class="ov-extra"><div class="ov-chiprow"><span class="ov-lab">正餐</span><span class="chips"><span class="chip">食堂</span><span class="chip">自助</span></span></div><div class="ov-chiprow"><span class="ov-lab">补给</span><span class="chips"><span class="chip">士力架·能量棒</span></span></div></div></a>
-<a class="ov-card ov-link ov-span2" href="#costs" aria-label="前往费用"><div class="k">💰 费用<span class="ov-go">›</span></div><div class="v"></div><div class="ov-extra"><div class="ov-pcost"><div class="pc-cell"><span class="pc-avs"><img src="images/a/1b5af55d3b.jpg" alt=""><img src="images/a/593abc6d7a.jpg" alt=""></span><b>¥4871.4</b></div><div class="pc-cell"><span class="pc-avs"><img src="images/a/adbb15c823.jpg" alt=""></span><b>¥1922.3</b></div><div class="pc-cell"><span class="pc-avs"><img src="images/a/2ac7c642cf.jpg" alt=""></span><b>¥2298.1</b></div><div class="pc-cell"><span class="pc-avs"><img src="images/a/a17432ca0c.jpg" alt=""></span><b>¥2516.1</b></div><div class="pc-cell"><span class="pc-avs"><img src="images/a/3545cfca7f.jpg" alt=""></span><b>¥2516.1</b></div></div></div></a></div>
+<a class="ov-card ov-link" href="#transport-go" aria-label="前往去程"><span class="badge b-tbd">部分待定</span><div class="k">🚄 去程</div><div class="v">G30 + D9271</div><small>18:52 去北京<br>次日 06:16/07:45 去雪场</small></a>
+<a class="ov-card ov-link" href="#transport-back" aria-label="前往返程"><span class="badge b-tbd">部分待定</span><div class="k">🛬 返程</div><div class="v">G7836 + MU5166</div><small>17:32/13:53 返回北京<br>21:30 起飞回虹桥</small></a>
+<a class="ov-card ov-link" href="#stay" aria-label="前往住宿"><span class="badge b-tbd">部分待定</span><div class="k">🏠 住宿</div><div class="v">清河中转 + 盛龙公寓</div><small>11/06 三选一待定<br>11/07 万龙(已确认)</small></a>
+<a class="ov-card ov-link" href="#resorts" aria-label="前往雪场"><div class="k">🏔️ 雪场<span class="ov-go">›</span></div><div class="v">万龙滑雪场(崇礼)</div><small>10.23 已开板<br>日场 8:30–16:30</small></a></div>
+</section>
+<section id="days">
+  <div class="sec-head"><div class="sec-ico">🗓️</div><div class="sec-txt"><h2>每日行程</h2><span class="sec-sub">D1 出发中转 · D2/D3 滑雪(时间以最终车票为准)</span></div></div>
+  <div class="day" data-card="days|D1"><div class="d-head" role="button" tabindex="0"><div class="d-num"><b>1</b><span>DAY</span></div><div class="d-title"><b>11/06 周五</b><div class="d-sub">出发 · 中转</div></div><span class="d-arrow" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg></span></div><div class="d-body-wrap"><div class="d-body"><div class="trow"><div class="ttime">18:52</div><div class="tbody"><div class="twhat"><span class="veh">G30</span> 上海虹桥发车 → 北京南(23:21 到)</div><div class="tnote"><img class="mimg" src="images/a/adbb15c823.jpg" alt="Z&amp;L"> 苏州北 19:15 上车,同车次</div></div></div><div class="trow"><div class="ttime">23:21</div><div class="tbody"><div class="twhat"><span class="stop2">抵达</span>北京南 → 换乘<span class="veh">地铁</span></div><div class="tnote">4号线大兴线(末班 23:35)→ 西直门换 13号线 → 清河站</div></div></div><div class="trow"><div class="ttime">深夜</div><div class="tbody"><div class="twhat"><span class="stop2">入住</span>清河站附近酒店</div><div class="tnote">三选一待定,店名可点击跳转(见「住宿」);次日 06:16 的车,尽早休息</div></div><span class="badge b-tbd">待定</span></div></div></div></div>
+<div class="day" data-card="days|D2"><div class="d-head" role="button" tabindex="0"><div class="d-num"><b>2</b><span>DAY</span></div><div class="d-title"><b>11/07 周六</b><div class="d-sub">进山 · 滑雪 Day1</div></div><span class="d-arrow" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg></span></div><div class="d-body-wrap"><div class="d-body"><div class="trow"><div class="ttime">06:16</div><div class="tbody"><div class="twhat">方案一:<span class="veh">D9271</span> 清河站发车 → 太子城(07:29 到)</div><div class="tnote">全程约1小时13分,车上补觉;进山车次二选一(见「交通」)</div></div><span class="badge b-tbd">待定</span></div><div class="trow"><div class="ttime">07:45</div><div class="tbody"><div class="twhat">方案二:<span class="veh">G7831</span> 清河站发车 → 太子城(08:52 到)</div><div class="tnote">全程约1小时7分,不用赶早;选这趟雪票买 6 小时日场票</div></div><span class="badge b-tbd">待定</span></div><div class="trow"><div class="ttime">早上</div><div class="tbody"><div class="twhat">雪场<span class="veh">免费大巴</span> 太子城 → 酒店下车点(约20分钟)</div><div class="tnote">办理入住 → 回房换装备</div></div></div><div class="trow"><div class="ttime">早上</div><div class="tbody"><div class="twhat">租赁 / 取邮寄雪具</div><div class="tnote">租赁组办手续,邮寄组取寄存</div></div></div><div class="trow"><div class="ttime">上午</div><div class="tbody"><div class="twhat">滑雪 🎿</div><div class="tnote">已开放雪道以当日公告为准</div></div></div><div class="trow"><div class="ttime">中午</div><div class="tbody"><div class="twhat">午餐 + 休息</div><div class="tnote">大食堂(雪具大厅上方)</div></div></div><div class="trow"><div class="ttime">下午</div><div class="tbody"><div class="twhat">滑雪 🎿</div></div></div><div class="trow"><div class="ttime">晚上</div><div class="tbody"><div class="twhat">夜滑(18:30–21:30)或自由活动</div><div class="tnote">根据体力动态调整</div></div><span class="badge b-tbd">待定</span></div></div></div></div>
+<div class="day" data-card="days|D3"><div class="d-head" role="button" tabindex="0"><div class="d-num"><b>3</b><span>DAY</span></div><div class="d-title"><b>11/08 周日</b><div class="d-sub">滑雪 Day2 · 返程</div></div><span class="d-arrow" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg></span></div><div class="d-body-wrap"><div class="d-body"><div class="trow"><div class="ttime">上午</div><div class="tbody"><div class="twhat">滑雪 🎿</div><div class="tnote">赶早,日场 8:30 开滑</div></div></div><div class="trow"><div class="ttime">中午</div><div class="tbody"><div class="twhat">午餐 + 休息</div><div class="tnote">中午前后办退房,行李寄存前台</div></div><span class="badge b-todo">待办</span></div><div class="trow"><div class="ttime">下午</div><div class="tbody"><div class="twhat">滑雪 · 收板</div><div class="tnote">方案一约15:30 / 方案二约12:00 / 方案三约15:00 收板,留 1 小时换衣服、收拾行李</div></div><span class="badge b-tbd">待定</span></div><div class="trow"><div class="ttime">13:00</div><div class="tbody"><div class="twhat">方案二:大巴 → <span class="veh">G7834</span> 出山</div><div class="tnote">雪场大巴约13:00 发车(以现场为准);G7834 太子城 13:53 → 清河 15:03;进机场交通待定</div></div><span class="badge b-tbd">待定</span></div><div class="trow"><div class="ttime">16:00</div><div class="tbody"><div class="twhat">方案三:<span class="veh">包车</span>(七座商务车)直达首都机场T2</div><div class="tnote">全程约3小时,人均约¥150(另两案约¥110)</div></div><span class="badge b-tbd">待定</span></div><div class="trow"><div class="ttime">17:00</div><div class="tbody"><div class="twhat">方案一:大巴 → <span class="veh">G7836</span> → <span class="veh">地铁</span>进机场</div><div class="tnote">雪场大巴约17:00 发车(以现场为准);G7836 太子城 17:32 → 清河 18:34;地铁至首都机场T2 约1小时16分</div></div><span class="badge b-tbd">待定</span></div><div class="trow"><div class="ttime">21:30</div><div class="tbody"><div class="twhat"><span class="veh">MU5166</span> 起飞 → 上海虹桥</div><div class="tnote">预留值机托运时间</div></div></div><div class="trow"><div class="ttime">深夜</div><div class="tbody"><div class="twhat"><span class="stop2">抵达</span>虹桥 · 就地解散</div><div class="tnote">本次行程结束 🎉</div></div><span class="badge b-ref">参考</span></div></div></div></div>
+  
+</section>
+<section id="flights">
+  <div class="sec-head"><div class="sec-ico">🎫</div><div class="sec-txt"><h2>高铁 · 航班</h2><span class="sec-sub">G30 去程 · MU5166 返程 · 京张段见「交通」</span></div></div>
+  <div class="fcard"><span class="fdir">去程</span><div class="fhead"><div class="fhead2"><span class="fno">G30</span><span class="fairline">复兴号</span><span class="fairline">CR400BF-BS</span></div><span class="fdate">11/06 周五</span></div><div class="froute"><div class="fport"><div class="ftime">18:52</div><div class="fair">上海虹桥站</div><div class="fcode"></div></div><div class="fmid"><span class="fplane">🚄</span><div class="fdur">4 小时 29 分</div><div class="fstop"><div class="fstop-t">苏州北 19:15</div><em><img class="mimg" src="images/a/adbb15c823.jpg" alt="Z&amp;L"> 上车</em></div></div><div class="fport"><div class="ftime">23:21</div><div class="fair">北京南站</div><div class="fcode"></div></div></div><div class="fexp" data-day="D1"><div class="fexp-wrap"><div class="fexp-body"><div class="trow2"><div class="tico">🚄</div><div class="tmain"><div class="tname"><span class="vsub">G30</span> <span class="veh">高铁</span></div><div class="tstops"><div class="tstop"><b>上海虹桥</b><i>18:52</i></div><span class="tsarrow">→</span><div class="tstop"><b>北京南</b><i>23:21</i></div></div><div class="tnote">全程约4小时29分
+<img class="mimg" src="images/a/adbb15c823.jpg" alt="Z&amp;L"> 苏州北 19:15 上车,同车次</div></div></div><div class="trow2"><div class="tico">🚇</div><div class="tmain"><div class="tname"><span class="veh">地铁</span></div><div class="tstops"><div class="tstop"><b>北京南</b><i></i></div><span class="tsarrow">→</span><div class="tstop"><b>清河站</b><i>约1小时</i></div></div><div class="tnote">4号线大兴线(末班 23:35)→ 西直门换 13号线</div><div class="tpc"><div class="tpc-col"><span class="tpro">✓ 23:21 下车即走,赶得上末班</span></div><div class="tpc-col"><span class="tcon">✗ 深夜换乘要掐点,别逗留</span></div></div></div></div><div class="trow2 no-ico"><div class="tmain"><div class="tname">备选 <span class="veh">打车</span><span class="tnote-inline">没赶上末班地铁时的备选</span></div><div class="tstops"><div class="tstop"><b>北京南</b><i></i></div><span class="tsarrow">→</span><div class="tstop"><b>清河站</b><i></i></div></div></div></div><div class="trow2 tnight"><div class="tico">😴</div><div class="tmain"><div class="tname"><span class="veh">睡觉</span><span class="tdur">清河站酒店过夜</span></div><div class="tnote">中转酒店三选一见「住宿」</div></div></div><div class="trow2"><div class="tico">🚄</div><div class="tmain"><div class="tname"><span class="vsub">D9271</span><span class="tnote-inline">全程约1小时13分,车上补觉</span></div><div class="tstops"><div class="tstop"><b>清河</b><i>06:16</i></div><span class="tsarrow">→</span><div class="tstop"><b>太子城</b><i>07:29</i></div></div></div></div><div class="topt opt-backup"><div class="trow2 thead2"><div class="tmain"><div class="tname">方案二</div><div class="tpc"><div class="tpc-col"><span class="tpro">✓ 不用赶早</span><span class="tpro">✓ 选这趟的话,雪票买6小时日场票正好</span></div><div class="tpc-col"><span class="tcon">✗ 上雪时间比方案一晚约1.5小时</span></div></div></div><span class="badge b-tbd">备</span></div><div class="trow2"><div class="tico">🚄</div><div class="tmain"><div class="tname"><span class="vsub">G7831</span><span class="tnote-inline">全程约1小时7分</span></div><div class="tstops"><div class="tstop"><b>清河</b><i>07:45</i></div><span class="tsarrow">→</span><div class="tstop"><b>太子城</b><i>08:52</i></div></div></div></div></div><div class="trow2 tshared"><div class="tico">🚌</div><div class="tmain"><div class="tname"><span class="veh">雪场免费大巴</span><span class="tnote-inline">下车即到酒店,办理入住换装备;两个方案共用</span></div><div class="tstops"><div class="tstop"><b>太子城站</b><i></i></div><span class="tsarrow">→</span><div class="tstop"><b>酒店下车点</b><i>约20分钟</i></div></div></div></div></div></div><button class="fexp-btn fx-label" type="button">交通方案<svg viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg></button></div></div>
+<div class="fcard fexp" data-day="D4"><span class="fdir">返程</span><div class="fexp-wrap"><div class="fexp-body"><div class="topt opt-backup"><div class="trow2 thead2"><div class="tmain"><div class="tname">方案一</div><div class="tpc"><div class="tpc-col"><span class="tpro">✓ 下午还能再滑两小时,当天滑得更久</span></div><div class="tpc-col"><span class="tcon">✗ 时间紧凑,要衔接好各段时间</span></div></div></div><span class="badge b-tbd">备</span></div><div class="trow2"><div class="tico">🚌</div><div class="tmain"><div class="tname"><span class="veh">雪场免费大巴</span><span class="tnote-inline">发车时间以雪场当日公告为准</span></div><div class="tstops"><div class="tstop"><b>发车</b><i>约17:00</i></div><span class="tsarrow">→</span><div class="tstop"><b>太子城站</b><i>约20分钟</i></div></div></div></div><div class="trow2"><div class="tico">🚄</div><div class="tmain"><div class="tname"><span class="vsub">G7836</span><span class="tnote-inline">全程约1小时2分</span></div><div class="tstops"><div class="tstop"><b>太子城</b><i>17:32</i></div><span class="tsarrow">→</span><div class="tstop"><b>清河</b><i>18:34</i></div></div></div></div><div class="trow2"><div class="tico">🚇</div><div class="tmain"><div class="tname"><span class="veh">地铁</span><span class="tnote-inline">13号线 → 知春路换10号线(内环)→ 三元桥换首都机场线 → 2号航站楼</span></div><div class="tstops"><div class="tstop"><b>清河</b><i></i></div><span class="tsarrow">→</span><div class="tstop"><b>首都机场T2</b><i>约1小时16分</i></div></div></div></div></div><div class="topt opt-backup"><div class="trow2 thead2"><div class="tmain"><div class="tname">方案二</div><div class="tpc"><div class="tpc-col"><span class="tpro">✓ 时间充裕,不存在错过航班的情况</span><span class="tpro">✓ 还可以在市内一起吃顿饭</span></div><div class="tpc-col"><span class="tcon">✗ 下午不能滑雪,收板时间提前</span></div></div></div><span class="badge b-tbd">备</span></div><div class="trow2"><div class="tico">🚌</div><div class="tmain"><div class="tname"><span class="veh">雪场免费大巴</span><span class="tnote-inline">发车时间以雪场当日公告为准</span></div><div class="tstops"><div class="tstop"><b>发车</b><i>约13:00</i></div><span class="tsarrow">→</span><div class="tstop"><b>太子城站</b><i>约20分钟</i></div></div></div></div><div class="trow2"><div class="tico">🚄</div><div class="tmain"><div class="tname"><span class="vsub">G7834</span><span class="tnote-inline">全程约1小时10分</span></div><div class="tstops"><div class="tstop"><b>太子城</b><i>13:53</i></div><span class="tsarrow">→</span><div class="tstop"><b>清河</b><i>15:03</i></div></div></div></div><div class="trow2"><div class="tico">❓</div><div class="tmain"><div class="tname"><span class="veh">待定</span></div></div></div></div><div class="trow2"><div class="tico">🚐</div><div class="tmain"><div class="tname">包车(七座商务车)<span class="tnote-inline">16:00 出发,直达首都机场T2</span></div><div class="tstops"><div class="tstop"><b>万龙</b><i></i></div><span class="tsarrow">→</span><div class="tstop"><b>首都机场T2</b><i>约3小时</i></div></div></div></div><div class="trow2"><div class="tico">🚶</div><div class="tmain"><div class="tname">机场走来</div></div></div><div class="trow2"><div class="tico">🚶</div><div class="tmain"><div class="tname">机场走去</div></div></div><div class="trow2 tshared"><div class="tico">✈️</div><div class="tmain"><div class="tname"><span class="vsub">MU5166</span><span class="tnote-inline">到达约23:55(推算),虹桥就地解散;两个方案共用</span></div><div class="tstops"><div class="tstop"><b>首都T2</b><i>21:30</i></div><span class="tsarrow">→</span><div class="tstop"><b>上海虹桥</b><i></i></div></div></div></div></div></div><div class="fhead"><div class="fhead2"><span class="fno">MU5166</span><span class="fairline">中国东方航空</span><span class="fairline">B777</span></div><span class="fdate">11/08 周日</span></div><div class="froute"><div class="fport"><div class="ftime">21:30</div><div class="fair">北京首都 T2</div><div class="fcode">PEK</div></div><div class="fmid"><span class="fplane">✈</span><div class="fdur">2 小时 25 分</div></div><div class="fport"><div class="ftime">23:55</div><div class="fair">上海虹桥</div><div class="fcode">SHA</div></div></div><button class="fexp-btn fx-label" type="button">交通方案<svg viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg></button></div>
 </section>
 <section id="members">
-  <div class="sec-head"><div class="sec-ico">👥</div><div class="sec-txt"><h2>人员</h2><span class="sec-sub">6人</span></div></div>
+  <div class="sec-head"><div class="sec-ico">👥</div><div class="sec-txt"><h2>同行人员</h2><span class="sec-sub">6人 · 名单已确认</span></div></div>
   <div class="mgrid">
     <div class="mcard" data-card="members|阿蒙"><div class="mava"><img src="images/a/2ac7c642cf.jpg" alt=""></div><div class="m-body"><div class="mname">阿蒙</div></div></div>
 <div class="mcard" data-card="members|范达尔"><div class="mava"><img src="images/a/a17432ca0c.jpg" alt=""></div><div class="m-body"><div class="mname">范达尔</div></div></div>
@@ -1517,55 +1627,164 @@ li.fld .li-lab,li.lab .li-lab{font-size:12px;font-weight:700;color:var(--muted);
 <div class="mcard" data-card="members|Z&amp;L"><div class="mava"><img src="images/a/adbb15c823.jpg" alt=""></div><div class="m-body"><div class="mname">Z&amp;L</div></div></div>
   </div>
 </section>
-<section id="days">
-  <div class="sec-head"><div class="sec-ico">🗓️</div><div class="sec-txt"><h2>行程</h2><span class="sec-sub">D1 出发中转 · D2/D3 滑雪(时间以最终车票为准)</span></div></div>
-  <div class="day" data-card="days|D1"><div class="d-head" role="button" tabindex="0"><div class="d-num"><b>1</b><span>DAY</span></div><div class="d-title"><b>11/06 周五</b><div class="d-sub">出发 · 中转</div></div><span class="d-arrow" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg></span></div><div class="d-body-wrap"><div class="d-body"><div class="trow"><div class="ttime">18:52</div><div class="tbody"><div class="twhat"><span class="veh">G30</span> 上海虹桥 → 北京南</div><div class="tnote"><img class="mimg" src="images/a/3545cfca7f.jpg" alt="幽助"> <img class="mimg" src="images/a/a17432ca0c.jpg" alt="范达尔"> <img class="mimg" src="images/a/2ac7c642cf.jpg" alt="阿蒙"> <img class="mimg" src="images/a/593abc6d7a.jpg" alt="辣椒面"> <img class="mimg" src="images/a/1b5af55d3b.jpg" alt="小郭"> 上车</div></div></div><div class="trow"><div class="ttime">19:15</div><div class="tbody"><div class="twhat"><span class="veh">G30</span> 苏州北 → 北京南</div><div class="tnote"><img class="mimg" src="images/a/adbb15c823.jpg" alt="Z&amp;L"> 上车,同车次</div></div></div><div class="trow"><div class="ttime">23:23</div><div class="tbody"><div class="twhat"><span class="veh">地铁</span> 北京南站 → 清河站</div><div class="tnote">约57分钟</div></div></div><div class="trow"><div class="ttime">次日
-00:20</div><div class="tbody"><div class="twhat"><span class="veh">步行</span> 清河站 → 金辉商务大酒店</div><div class="tnote">步行约10分钟，600米</div></div></div><div class="trow"><div class="ttime">深夜</div><div class="tbody"><div class="twhat">入住金辉商务大酒店</div><div class="tnote">6小时充足睡眠</div></div></div></div></div></div>
-<div class="day" data-card="days|D2"><div class="d-head" role="button" tabindex="0"><div class="d-num"><b>2</b><span>DAY</span></div><div class="d-title"><b>11/07 周六</b><div class="d-sub">去崇礼 · 滑雪 Day1</div></div><span class="d-arrow" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg></span></div><div class="d-body-wrap"><div class="d-body"><div class="trow"><div class="ttime">07:45</div><div class="tbody"><div class="twhat"><span class="veh">G7831</span> 清河站 → 太子城站</div><div class="tnote">1小时7分</div></div></div><div class="trow"><div class="ttime">09:00</div><div class="tbody"><div class="twhat"><span class="veh">免费大巴</span> 太子城站 → 盛龙公寓</div><div class="tnote">约20分钟</div></div></div><div class="trow"><div class="ttime">09:15</div><div class="tbody"><div class="twhat">取邮寄雪具 / 穿戴装备</div></div></div><div class="trow"><div class="ttime">10:00</div><div class="tbody"><div class="twhat">滑雪 🎿</div></div></div><div class="trow"><div class="ttime">中午</div><div class="tbody"><div class="twhat">午餐 + 休息</div></div></div><div class="trow"><div class="ttime">下午</div><div class="tbody"><div class="twhat">滑雪 🎿</div></div></div><div class="trow"><div class="ttime">16:30</div><div class="tbody"><div class="twhat">晚餐 + 休息</div></div></div><div class="trow"><div class="ttime">18:30</div><div class="tbody"><div class="twhat">夜滑(18:30–21:30)</div></div></div></div></div></div>
-<div class="day" data-card="days|D3"><div class="d-head" role="button" tabindex="0"><div class="d-num"><b>3</b><span>DAY</span></div><div class="d-title"><b>11/08 周日</b><div class="d-sub">滑雪 Day2 · 返程</div></div><span class="d-arrow" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg></span></div><div class="d-body-wrap"><div class="d-body"><div class="trow"><div class="ttime">8:30</div><div class="tbody"><div class="twhat">滑雪 🎿</div></div></div><div class="trow"><div class="ttime">中午</div><div class="tbody"><div class="twhat">午餐 + 休息</div><div class="tnote">中午前后办退房,行李寄存前台</div></div><span class="badge b-todo">待办</span></div><div class="trow"><div class="ttime">下午</div><div class="tbody"><div class="twhat">滑雪 🎿</div></div></div><div class="trow"><div class="ttime">15:00前</div><div class="tbody"><div class="twhat">收板</div><div class="tnote">留 1 小时换衣服、收拾行李</div></div></div><div class="trow"><div class="ttime">16:00</div><div class="tbody"><div class="twhat"><span class="veh">包车</span> 盛龙公寓 → 北京首都T2</div><div class="tnote">约3小时</div></div></div><div class="trow"><div class="ttime">21:30</div><div class="tbody"><div class="twhat"><span class="veh">MU5166</span> 北京首都T2 → 上海虹桥</div><div class="tnote">2小时25分</div></div></div><div class="trow"><div class="ttime">深夜</div><div class="tbody"><div class="twhat">抵达虹桥 · 就地解散</div><div class="tnote">本次行程结束 🎉</div></div></div></div></div></div>
-  
+<section id="stay">
+  <div class="sec-head"><div class="sec-ico">🏠</div><div class="sec-txt"><h2>住宿方案</h2><span class="sec-sub">11/06 清河站中转·三选一待定 · 11/07 万龙盛龙公寓·已确认</span></div></div>
+  <div class="grid g2"><div class="hcard" data-card="stay|🏠 清河站中转酒店"><h3>🏠 清河站中转酒店</h3><div class="h-sub">11/06 · 中转一晚</div><ul class="dots"><li class="subwrap subwrap-bak"><div class="card rcard" data-card="stay|如家商旅酒店"><a class="r-jump" href="https://m.ctrip.com/webapp/hotels/detail?hotelid=4722022&amp;atime=20261106&amp;days=1&amp;rankid=100200148882&amp;shareId=NDcyMjAyMnxob3RlbF9pbmxhbmVfZGV0YWlsfDEyOHwyMDI2MTAyM1QwMjE2NDg=&amp;uid=AD5121B9B7378FCCA70BEBA0F10D395B1F1B46AC7A77FC220EBEE200345139B1&amp;intographicshow=1&amp;sharersid=17&amp;sharerpvid=808&amp;sharercid=32001033790602847142&amp;sharerdate=20261023" target="_blank" rel="noopener" aria-label="打开 如家商旅酒店 详情"></a><span class="badge b-tbd">备</span><div class="r-t"><span class="r-link">如家商旅酒店</span></div><div class="tpc"><div class="tpc-col"><span class="tpro">✓ 老牌连锁</span><span class="tpro">✓ 携程 4.8 分</span></div><div class="tpc-col"><span class="tcon">✗ 步行约560米,中等</span><span class="tcon">✗ ¥350/晚,中等</span></div></div><span class="r-go">›</span></div></li><li class="subwrap"><div class="card rcard" data-card="stay|金辉商务大酒店"><a class="r-jump" href="https://m.ctrip.com/webapp/hotels/detail?hotelid=129462492&amp;atime=20261106&amp;days=1&amp;rankid=100200148882&amp;shareId=MTI5NDYyNDkyfGhvdGVsX2lubGFuZV9kZXRhaWx8MTI4fDIwMjYxMDIzVDAyMTYzMQ==&amp;uid=AD5121B9B7378FCCA70BEBA0F10D395B1F1B46AC7A77FC220EBEE200345139B1&amp;intographicshow=1&amp;sharersid=17&amp;sharerpvid=804&amp;sharercid=32001033790602847142&amp;sharerdate=20261023" target="_blank" rel="noopener" aria-label="打开 金辉商务大酒店 详情"></a><div class="r-t"><span class="r-link">金辉商务大酒店</span></div><div class="tpc"><div class="tpc-col"><span class="tpro">✓ ¥250/晚,最便宜</span><span class="tpro">✓ 之前住过,比较熟悉</span></div><div class="tpc-col"><span class="tcon">✗ 步行约690米,最远</span><span class="tcon">✗ 携程 4.5 分,最低</span></div></div><span class="r-go">›</span></div></li><li class="subwrap subwrap-bak"><div class="card rcard" data-card="stay|亚朵S酒店"><a class="r-jump" href="https://m.ctrip.com/webapp/hotels/detail?hotelid=70958199&amp;atime=20261106&amp;days=1&amp;rankid=&amp;shareId=NzA5NTgxOTl8aG90ZWxfaW5sYW5lZV9kZXRhaWx8MTI4fDIwMjYxMDIzVDAyMTYwOQ&amp;uid=AD5121B9B7378FCCA70BEBA0F10D395B1F1B46AC7A77FC220EBEE200345139B1&amp;intographicshow=1&amp;sharersid=17&amp;sharerpvid=800&amp;sharercid=32001033790602847142&amp;sharerdate=20261023" target="_blank" rel="noopener" aria-label="打开 亚朵S酒店 详情"></a><span class="badge b-tbd">备</span><div class="r-t"><span class="r-link">亚朵S酒店</span></div><div class="tpc"><div class="tpc-col"><span class="tpro">✓ 步行约390米,最近</span><span class="tpro">✓ 高档型 · 携程 4.8 分</span></div><div class="tpc-col"><span class="tcon">✗ ¥700/晚,最贵</span></div></div><span class="r-go">›</span></div></li></ul></div>
+<div class="hcard" data-card="stay|🏠 万龙 · 盛龙公寓"><h3>🏠 万龙 · 盛龙公寓</h3><div class="h-sub">11/07 · 入住一晚</div><ul class="dots"><li class="lab"><span class="li-lab">地址</span><span class="li-main"><button class="li-cp" type="button" aria-label="复制" data-copy="河北省张家口市崇礼区万龙滑雪场(盛龙公寓)"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h10"/></svg></button>河北省张家口市崇礼区万龙滑雪场(盛龙公寓)</span></li><li class="subwrap half"><div class="card rcard" data-card="stay|景观四人间 ×1"><div class="r-t">景观四人间 ×1</div><div class="r-avas"><span class="avrow"><img class="mimg" src="images/a/2ac7c642cf.jpg" alt="阿蒙"><img class="mimg" src="images/a/593abc6d7a.jpg" alt="辣椒面"></span><span class="r-avsep">/</span><span class="avrow"><img class="mimg" src="images/a/a17432ca0c.jpg" alt="范达尔"><img class="mimg" src="images/a/3545cfca7f.jpg" alt="幽助"></span></div><span class="r-go">›</span></div></li><li class="subwrap half"><div class="card rcard" data-card="stay|景观标间 ×1"><div class="r-t">景观标间 ×1</div><div class="r-avas"><span class="avrow"><img class="mimg" src="images/a/1b5af55d3b.jpg" alt="小郭"><img class="mimg" src="images/a/adbb15c823.jpg" alt="Z&amp;L"></span></div><span class="r-go">›</span></div></li></ul></div></div>
 </section>
 <section id="weather">
-  <div class="sec-head"><div class="sec-ico">❄️</div><div class="sec-txt"><h2>天气</h2><span class="sec-sub">崇礼 11月上旬 · 出发前一周再核实</span></div></div>
-  <div id="wxBox"><div class="wx-card"><div class="wx-main"><div class="wx-left"><div class="wx-num">-1<span>°C</span></div><div class="wx-desc">晴 · 体感 -7°C</div></div><div class="wx-right"><div class="wx-ico">☀️</div><button class="wx-more" id="wxMore" type="button">未来7天</button></div></div><div class="wx-grid"><div class="wx-item"><span class="wx-ic">💨</span><div><em>风力风量</em><b>西北风 3级</b></div></div><div class="wx-item"><span class="wx-ic">🔆</span><div><em>紫外线强度</em><b>弱</b></div></div><div class="wx-item"><span class="wx-ic">💧</span><div><em>相对湿度</em><b>45%</b></div></div><div class="wx-item"><span class="wx-ic">🧥</span><div><em>穿衣指数</em><b>冷</b></div></div></div><div class="wx-sun" id="wxSun" hidden><div class="wx-sun-heads"><span class="wx-sun-h"><span class="wx-sic"><svg viewBox="0 0 22 22" aria-hidden="true"><circle cx="11" cy="13.6" r="4.2" fill="currentColor"/><path d="M3.6 13.6h2.2M16.2 13.6h2.2" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" fill="none"/><path d="M11 8V2M8.6 4.4L11 2l2.4 2.4" stroke="currentColor" stroke-width="1.8" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></span><i>日出</i></span><span class="wx-sun-h"><span class="wx-sic"><svg viewBox="0 0 22 22" aria-hidden="true"><circle cx="11" cy="13.6" r="4.2" fill="currentColor"/><path d="M3.6 13.6h2.2M16.2 13.6h2.2" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" fill="none"/><path d="M11 2v6M8.6 5.6L11 8l2.4-2.4" stroke="currentColor" stroke-width="1.8" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></span><i>日落</i></span></div><div class="wx-sun-track"><span class="wx-sun-fill" id="wxSunFill"></span><span class="wx-sun-moon" id="wxSunMoon">🌙</span></div><div class="wx-sun-times"><b id="wxRiseTime">--:--</b><b id="wxSetTime">--:--</b></div></div><div class="wx-src"><span class="wx-src-l">数据来源·<a href="https://www.qweather.com/" target="_blank" rel="noopener">Qweather 和风天气</a></span><span class="wx-time">11-09 18:55</span><button class="wx-refresh" id="wxRefresh" type="button" aria-label="刷新数据">⟳</button></div></div></div>
-</section>
-<section id="flights">
-  <div class="sec-head"><div class="sec-ico">🎫</div><div class="sec-txt"><h2>交通</h2><span class="sec-sub">G30 去程 · MU5166 返程 · 京张段见「交通」</span></div></div>
-  <div class="fcard city-card" data-card="航班|市内交通"><span class="fdir">市内</span><div class="fhead"><div class="fhead2"><span class="fno">地铁二号线</span><span class="fdate">约 30~45 分钟</span></div><span class="cgh-btns"><button class="cg-toggle" type="button" aria-label="展开或收起路线图"><svg viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg></button></span></div><div class="cg-body"><div class="cg-inner"><div class="city-grid"><span class="cg-cell" style="grid-area:1/1"><span class="cg-start">出发</span><span class="cg-node"><span class="cg-nm">金虹桥国际中心</span><span class="vsub cg-vsub">公司</span></span></span><span class="cg-node" style="grid-area:1/2"><span class="cg-nm">娄山关路站</span><span class="vsub cg-vsub">2号线</span></span><span class="cg-node" style="grid-area:2/2"><span class="cg-nm">虹桥2号航站楼站</span><span class="vsub cg-vsub">2号线</span></span><span class="cg-node" style="grid-area:2/1"><span class="cg-nm">检票口1A1B</span><span class="vsub cg-vsub">铁路</span></span><div class="cg-arr cg-h cg-r" data-from="0" data-to="1"><i>7~10分</i><svg viewBox="0 0 62 8" aria-hidden="true"><path class="eln" d="M1 4 H55"/><path class="ah" d="M54 1 L61 4 L54 7 Z"/></svg></div><div class="cg-arr cg-v" data-from="1" data-to="2"><i>16~20分</i><svg viewBox="0 0 8 36" aria-hidden="true"><path class="eln" d="M4 1 V29"/><path class="ah" d="M1 28 L4 35 L7 28 Z"/></svg></div><div class="cg-arr cg-h cg-l" data-from="2" data-to="3"><i>7~15分</i><svg viewBox="0 0 62 8" aria-hidden="true"><path class="eln" d="M1 4 H55"/><path class="ah" d="M54 1 L61 4 L54 7 Z"/></svg></div></div></div></div></div>
-<div class="fcard" data-card="flights|G30"><span class="fdir">去程</span><div class="fhead"><div class="fhead2"><span class="fno">G30</span><span class="fairline">复兴号</span><span class="fairline">CR400BF-BS</span></div><span class="fdate">11/06 周五</span></div><div class="froute"><div class="fport"><div class="ftime">18:52</div><div class="fair">上海虹桥站</div><div class="fcode"></div><div class="fstack"><img class="mimg" src="images/a/2ac7c642cf.jpg" alt="阿蒙"><img class="mimg" src="images/a/a17432ca0c.jpg" alt="范达尔"><img class="mimg" src="images/a/593abc6d7a.jpg" alt="辣椒面"><img class="mimg" src="images/a/1b5af55d3b.jpg" alt="小郭"><img class="mimg" src="images/a/3545cfca7f.jpg" alt="幽助"></div></div><div class="fmid"><span class="fplane">🚄</span><div class="fdur">4 小时 29 分</div><div class="fstop"><div class="fstop-t">苏州北 19:15</div><em><img class="mimg" src="images/a/adbb15c823.jpg" alt="Z&amp;L"> 上车</em></div></div><div class="fport"><div class="ftime">23:21</div><div class="fair">北京南站</div><div class="fcode"></div></div></div><div class="fexp"><div class="fexp-wrap"><div class="fexp-body"><div class="trow2"><div class="tico">🚄</div><div class="tmain"><div class="tname"><span class="veh">高铁</span> <span class="vsub">G30</span><span class="tnote-inline">4小时29分</span></div><div class="tstops"><div class="tstop"><b>上海虹桥</b><i>18:52</i></div><span class="tsarrow">→</span><div class="tstop"><b>苏州北</b><i>19:15</i></div><span class="tsarrow">→</span><div class="tstop"><b>北京南</b><i>23:21</i></div></div></div></div><div class="trow2"><div class="tico">🚇</div><div class="tmain"><div class="tname"><span class="veh">地铁</span> <span class="vsub">4号线</span> →<span class="vsub">13号线</span><span class="tnote-inline">52分</span></div><div class="tstops"><div class="tstop"><b>北京南站</b><em>4号线大兴线</em><i>23:23</i></div><span class="tsarrow">→</span><div class="tstop"><b>西直门站</b><em>4/13号线</em><i>23:54</i></div><span class="tsarrow">→</span><div class="tstop"><b>清河站</b><em>13号线</em><i>00:15</i></div></div></div></div><div class="trow2 tnight"><div class="tico">😴</div><div class="tmain"><div class="tname"><span class="veh">睡觉</span></div><div class="tnote">清河站酒店过夜</div></div></div><div class="trow2"><div class="tico">🚄</div><div class="tmain"><div class="tname"><span class="veh">高铁</span> <span class="vsub">G7831</span><span class="tnote-inline">1小时7分</span></div><div class="tstops"><div class="tstop"><b>清河站</b><i>07:45</i></div><span class="tsarrow">→</span><div class="tstop"><b>太子城站</b><i>08:52</i></div></div></div></div><div class="trow2"><div class="tico">🚌</div><div class="tmain"><div class="tname"><span class="veh">雪场免费大巴</span><span class="tnote-inline">20分钟</span></div><div class="tstops"><div class="tstop"><b>太子城站</b><i>09:02</i></div><span class="tsarrow">→</span><div class="tstop"><b>盛龙公寓</b><i>09:21</i></div></div></div></div><div class="topt opt-backup"><div class="trow2 thead2"><div class="tmain"><div class="tname">备选车次</div><div class="tpc"><div class="tpc-col"><span class="tpro">✓ 上雪最早,8:30 开板即在场</span><span class="tpro">✓ 适配早场雪票</span></div><div class="tpc-col"><span class="tcon">✗ 06:16 发车,约 5:30 起床赶车</span><span class="tcon">✗ 睡眠不足,滑雪状态打折扣</span></div></div></div><span class="badge b-tbd">备</span></div><div class="trow2"><div class="tico">🚄</div><div class="tmain"><div class="tname"><span class="vsub">D9271</span><span class="tnote-inline">1小时13分</span></div><div class="tstops"><div class="tstop"><b>清河</b><i>06:16</i></div><span class="tsarrow">→</span><div class="tstop"><b>太子城</b><i>07:29</i></div></div></div></div></div><div class="topt opt-backup"><div class="trow2 thead2"><div class="tmain"><div class="tname">备选打车<span class="tnote-inline">没赶上末班地铁时的备选</span></div></div><span class="badge b-tbd">备</span></div><div class="trow2"><div class="tico">🚕</div><div class="tmain"><div class="tname"><span class="veh">打车</span></div><div class="tstops"><div class="tstop"><b>北京南</b><i></i></div><span class="tsarrow">→</span><div class="tstop"><b>清河站</b><i></i></div></div></div></div></div></div></div><button class="fexp-btn" type="button" aria-label="分段路线"><svg viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg></button></div></div>
-<div class="fcard" data-card="flights|MU5166"><span class="fdir">返程</span><div class="fhead"><div class="fhead2"><span class="fno">MU5166</span><span class="fairline">中国东方航空</span><span class="fairline">B777</span></div><span class="fdate">11/08 周日</span></div><div class="froute"><div class="fport"><div class="ftime">21:30</div><div class="fair">北京首都 T2</div><div class="fcode">PEK</div></div><div class="fmid"><span class="fplane">✈</span><div class="fdur">2 小时 25 分</div></div><div class="fport"><div class="ftime">23:55</div><div class="fair">上海虹桥</div><div class="fcode">SHA</div></div></div><div class="fexp"><div class="fexp-wrap"><div class="fexp-body"><div class="topt opt-backup"><div class="trow2 thead2"><div class="tmain"><div class="tname">方案一</div><div class="tpc"><div class="tpc-col"><span class="tpro">✓ 下午还能再滑两小时,当天滑得更久</span></div><div class="tpc-col"><span class="tcon">✗ 时间紧凑,要衔接好各段时间</span></div></div></div><span class="badge b-tbd">备</span></div><div class="trow2"><div class="tico">🚌</div><div class="tmain"><div class="tname"><span class="veh">雪场免费大巴</span><span class="tnote-inline">发车时间以雪场当日公告为准</span></div><div class="tstops"><div class="tstop"><b>发车</b><i>约17:00</i></div><span class="tsarrow">→</span><div class="tstop"><b>太子城站</b><i>约20分钟</i></div></div></div></div><div class="trow2"><div class="tico">🚄</div><div class="tmain"><div class="tname"><span class="vsub">G7836</span><span class="tnote-inline">1小时2分</span></div><div class="tstops"><div class="tstop"><b>太子城</b><i>17:32</i></div><span class="tsarrow">→</span><div class="tstop"><b>清河</b><i>18:34</i></div></div></div></div><div class="trow2"><div class="tico">🚇</div><div class="tmain"><div class="tname"><span class="veh">地铁</span><span class="tnote-inline">13号线 → 知春路换10号线(内环)→ 三元桥换首都机场线 → 2号航站楼</span></div><div class="tstops"><div class="tstop"><b>清河</b><i></i></div><span class="tsarrow">→</span><div class="tstop"><b>首都机场T2</b><i>约1小时16分</i></div></div></div></div></div><div class="topt opt-backup"><div class="trow2 thead2"><div class="tmain"><div class="tname">方案二</div><div class="tpc"><div class="tpc-col"><span class="tpro">✓ 时间充裕,不存在错过航班的情况</span><span class="tpro">✓ 还可以在市内一起吃顿饭</span></div><div class="tpc-col"><span class="tcon">✗ 下午不能滑雪,收板时间提前</span></div></div></div><span class="badge b-tbd">备</span></div><div class="trow2"><div class="tico">🚌</div><div class="tmain"><div class="tname"><span class="veh">雪场免费大巴</span><span class="tnote-inline">发车时间以雪场当日公告为准</span></div><div class="tstops"><div class="tstop"><b>发车</b><i>约13:00</i></div><span class="tsarrow">→</span><div class="tstop"><b>太子城站</b><i>约20分钟</i></div></div></div></div><div class="trow2"><div class="tico">🚄</div><div class="tmain"><div class="tname"><span class="vsub">G7834</span><span class="tnote-inline">1小时10分</span></div><div class="tstops"><div class="tstop"><b>太子城</b><i>13:53</i></div><span class="tsarrow">→</span><div class="tstop"><b>清河</b><i>15:03</i></div></div></div></div><div class="trow2"><div class="tico">❓</div><div class="tmain"><div class="tname"><span class="veh">待定</span></div></div></div></div><div class="trow2"><div class="tico">🚐</div><div class="tmain"><div class="tname"><span class="veh">包车</span> <span class="vsub">GL8</span><span class="tnote-inline">3小时</span></div><div class="tstops"><div class="tstop"><b>盛龙公寓</b><i>16:00</i></div><span class="tsarrow">→</span><div class="tstop"><b>北京首都T2</b><i>19:00</i></div></div></div></div><div class="trow2"><div class="tico">✈️</div><div class="tmain"><div class="tname"><span class="veh">飞机</span> <span class="vsub">MU5166</span><span class="tnote-inline">2小时25分</span></div><div class="tstops"><div class="tstop"><b>北京首都T2</b><i>21:30</i></div><span class="tsarrow">→</span><div class="tstop"><b>上海虹桥</b><i>23:55</i></div></div></div></div></div></div><button class="fexp-btn" type="button" aria-label="分段路线"><svg viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg></button></div></div>
-</section>
-<section id="stay">
-  <div class="sec-head"><div class="sec-ico">🏠</div><div class="sec-txt"><h2>住宿</h2><span class="sec-sub">11/06 清河站中转·三选一待定 · 11/07 万龙盛龙公寓·已确认</span></div></div>
-  <div class="grid g2"><div class="hcard" data-card="stay|🏠 中转酒店"><h3>🏠 中转酒店</h3><div class="h-sub">11/06 · 中转一晚</div><ul class="dots"><li class="subwrap subwrap-bak"><div class="card rcard" data-card="stay|如家商旅酒店"><a class="r-jump" href="https://m.ctrip.com/webapp/hotels/detail?hotelid=4722022&amp;atime=20261106&amp;days=1&amp;rankid=100200148882&amp;shareId=NDcyMjAyMnxob3RlbF9pbmxhbmVfZGV0YWlsfDEyOHwyMDI2MTAyM1QwMjE2NDg=&amp;uid=AD5121B9B7378FCCA70BEBA0F10D395B1F1B46AC7A77FC220EBEE200345139B1&amp;intographicshow=1&amp;sharersid=17&amp;sharerpvid=808&amp;sharercid=32001033790602847142&amp;sharerdate=20261023" target="_blank" rel="noopener" aria-label="打开 如家商旅酒店 详情"></a><span class="badge b-tbd">备</span><div class="r-t"><span class="r-link">如家商旅酒店</span></div><div class="tpc"><div class="tpc-col"><span class="tpro">✓ 老牌连锁</span><span class="tpro">✓ 携程 4.8 分</span></div><div class="tpc-col"><span class="tcon">✗ 步行约560米,中等</span><span class="tcon">✗ ¥350/晚,中等</span></div></div><span class="r-go">›</span></div></li><li class="subwrap"><div class="card rcard" data-card="stay|金辉商务大酒店(清河站店)"><a class="r-jump" href="https://m.ctrip.com/webapp/hotels/detail?hotelid=129462492&amp;atime=20261106&amp;days=1&amp;rankid=100200148882&amp;shareId=MTI5NDYyNDkyfGhvdGVsX2lubGFuZV9kZXRhaWx8MTI4fDIwMjYxMDIzVDAyMTYzMQ==&amp;uid=AD5121B9B7378FCCA70BEBA0F10D395B1F1B46AC7A77FC220EBEE200345139B1&amp;intographicshow=1&amp;sharersid=17&amp;sharerpvid=804&amp;sharercid=32001033790602847142&amp;sharerdate=20261023" target="_blank" rel="noopener" aria-label="打开 金辉商务大酒店(清河站店) 详情"></a><div class="r-t"><span class="r-link">金辉商务大酒店(清河站店)</span></div><div class="tpc"><div class="tpc-col"><span class="tpro">✓ ¥250/晚,最便宜</span><span class="tpro">✓ 之前住过,比较熟悉</span></div><div class="tpc-col"><span class="tcon">✗ 步行约690米,最远</span><span class="tcon">✗ 携程 4.5 分,最低</span></div></div><span class="r-go">›</span></div></li><li class="subwrap subwrap-bak"><div class="card rcard" data-card="stay|亚朵S酒店"><a class="r-jump" href="https://m.ctrip.com/webapp/hotels/detail?hotelid=70958199&amp;atime=20261106&amp;days=1&amp;rankid=&amp;shareId=NzA5NTgxOTl8aG90ZWxfaW5sYW5lZV9kZXRhaWx8MTI4fDIwMjYxMDIzVDAyMTYwOQ&amp;uid=AD5121B9B7378FCCA70BEBA0F10D395B1F1B46AC7A77FC220EBEE200345139B1&amp;intographicshow=1&amp;sharersid=17&amp;sharerpvid=800&amp;sharercid=32001033790602847142&amp;sharerdate=20261023" target="_blank" rel="noopener" aria-label="打开 亚朵S酒店 详情"></a><span class="badge b-tbd">备</span><div class="r-t"><span class="r-link">亚朵S酒店</span></div><div class="tpc"><div class="tpc-col"><span class="tpro">✓ 步行约390米,最近</span><span class="tpro">✓ 高档型 · 携程 4.8 分</span></div><div class="tpc-col"><span class="tcon">✗ ¥700/晚,最贵</span></div></div><span class="r-go">›</span></div></li></ul></div>
-<div class="hcard" data-card="stay|🏠 万龙 · 盛龙公寓"><h3>🏠 万龙 · 盛龙公寓</h3><div class="h-sub">11/07 · 入住一晚</div><ul class="dots"><li class="lab"><span class="li-lab">地址</span><span class="li-main"><button class="li-cp" type="button" aria-label="复制" data-copy="河北省张家口市崇礼区万龙滑雪场(盛龙公寓)"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h10"/></svg></button>河北省张家口市崇礼区万龙滑雪场(盛龙公寓)</span></li><li class="lab"><span class="li-lab">入住办理</span><span class="li-main"><button class="li-cp" type="button" aria-label="复制" data-copy="盛龙公寓P12停车场B3层"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h10"/></svg></button>盛龙公寓P12停车场B3层</span></li><li class="subwrap half"><div class="card rcard" data-card="stay|景观四人间 ×1"><div class="r-t">景观四人间 ×1</div><div class="r-avas"><span class="avrow"><img class="mimg" src="images/a/2ac7c642cf.jpg" alt="阿蒙"><img class="mimg" src="images/a/593abc6d7a.jpg" alt="辣椒面"></span><span class="r-avsep">/</span><span class="avrow"><img class="mimg" src="images/a/a17432ca0c.jpg" alt="范达尔"><img class="mimg" src="images/a/3545cfca7f.jpg" alt="幽助"></span></div><span class="r-go">›</span></div></li><li class="subwrap half"><div class="card rcard" data-card="stay|景观标间 ×1"><div class="r-t">景观标间 ×1</div><div class="r-avas"><span class="avrow"><img class="mimg" src="images/a/1b5af55d3b.jpg" alt="小郭"><img class="mimg" src="images/a/adbb15c823.jpg" alt="Z&amp;L"></span></div><span class="r-go">›</span></div></li></ul></div></div>
+  <div class="sec-head"><div class="sec-ico">❄️</div><div class="sec-txt"><h2>天气与穿着</h2><span class="sec-sub">崇礼 11月上旬 · 出发前一周再核实</span></div></div>
+  <div id="wxBox"><div class="wx-card"><div class="wx-main"><div class="wx-left"><div class="wx-num">-1<span>°C</span></div><div class="wx-desc">晴 · 体感 -7°C</div></div><div class="wx-right"><div class="wx-ico">☀️</div><button class="wx-more" id="wxMore" type="button">未来30天</button></div></div><div class="wx-grid"><div class="wx-item"><span class="wx-ic">🌡️</span><div><em>体感温度</em><b>-7°C</b></div></div><div class="wx-item"><span class="wx-ic">💨</span><div><em>风力风量</em><b>西北风 3级</b></div></div><div class="wx-item"><span class="wx-ic">🔆</span><div><em>紫外线强度</em><b>弱</b></div></div><div class="wx-item"><span class="wx-ic">💧</span><div><em>相对湿度</em><b>45%</b></div></div><div class="wx-item"><span class="wx-ic">🧥</span><div><em>穿衣指数</em><b>冷</b></div></div></div><div class="wx-sun" id="wxSun" hidden><div class="wx-sun-heads"><span class="wx-sun-h"><span class="wx-sic"><svg viewBox="0 0 22 22" aria-hidden="true"><circle cx="11" cy="13.6" r="4.2" fill="currentColor"/><path d="M3.6 13.6h2.2M16.2 13.6h2.2" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" fill="none"/><path d="M11 8V2M8.6 4.4L11 2l2.4 2.4" stroke="currentColor" stroke-width="1.8" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></span><i>日出</i></span><span class="wx-sun-h"><span class="wx-sic"><svg viewBox="0 0 22 22" aria-hidden="true"><circle cx="11" cy="13.6" r="4.2" fill="currentColor"/><path d="M3.6 13.6h2.2M16.2 13.6h2.2" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" fill="none"/><path d="M11 2v6M8.6 5.6L11 8l2.4-2.4" stroke="currentColor" stroke-width="1.8" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></span><i>日落</i></span></div><div class="wx-sun-track"><span class="wx-sun-fill" id="wxSunFill"></span><span class="wx-sun-moon" id="wxSunMoon">🌙</span></div><div class="wx-sun-times"><b id="wxRiseTime">--:--</b><b id="wxSetTime">--:--</b></div></div><div class="wx-src"><span class="wx-src-l">数据来源·<a href="https://www.qweather.com/" target="_blank" rel="noopener">Qweather 和风天气</a></span><span class="wx-time">11-17 11:14</span><button class="wx-refresh" id="wxRefresh" type="button" aria-label="刷新数据">⟳</button></div></div></div>
 </section>
 <section id="resorts">
-  <div class="sec-head"><div class="sec-ico">🏔️</div><div class="sec-txt"><h2>雪场</h2><span class="sec-sub">10.23 已开板 · 日场 08:30–16:30 / 夜场 18:30–21:30</span></div></div>
-  <div class="grid g2"><div class="hcard" data-card="resorts|🏔️ 万龙滑雪场(张家口·崇礼)"><h3>🏔️ 万龙滑雪场(张家口·崇礼)</h3><ul class="dots"><li class="fld"><span class="fld-lab">位置</span><span class="fld-val">河北省张家口市崇礼区</span></li><li class="fld"><span class="fld-lab">开放雪道</span><div class="time-stack"><div class="chip-row"><span class="chip chip-lv1">卧龙</span><span class="chip chip-lv1">娇龙·上段</span></div><div class="chip-row"><span class="chip chip-lv2">银龙</span><span class="chip chip-lv2">小龙</span><span class="chip chip-lv2">玉龙·下段</span></div><div class="chip-row"><span class="chip chip-lv3">金龙</span><span class="chip chip-lv3">威龙</span><span class="chip chip-lv3">雨龙·下段</span><span class="chip chip-lv3">腾龙·上段</span></div></div></li><li class="fld"><span class="fld-lab">开放索道</span><div class="time-stack"><div class="chip-row"><span class="chip">1号吊厢</span><span class="chip">2号吊椅</span><span class="chip">卧龙道魔毯</span></div></div></li><li class="fld"><span class="fld-lab">开放时间</span><div class="time-stack"><div class="chip-row"><span class="chip chip-off">早场:尚未开放</span></div><div class="chip-row"><span class="chip">日场:08:30–16:30</span><span class="chip">夜场:18:30–21:30</span></div></div></li><li class="fld"><span class="fld-lab">雪票价格</span><div class="time-stack"><div class="tk-grid"><div class="tk"><span>日场 1.5 天</span><b>¥799</b></div><div class="tk"><span>夜场 3小时</span><b>¥218</b></div></div><div class="fld-note">自带板</div></div></li></ul></div></div>
+  <div class="sec-head"><div class="sec-ico">🏔️</div><div class="sec-txt"><h2>雪场信息</h2><span class="sec-sub">10.23 已开板 · 日场 8:30–16:30 / 夜场 18:30–21:30</span></div></div>
+  <div class="grid g2"><div class="hcard" data-card="resorts|🏔️ 万龙滑雪场(张家口·崇礼)"><h3>🏔️ 万龙滑雪场(张家口·崇礼)</h3><ul class="dots"><li class="fld"><span class="fld-lab">位置</span><span class="fld-val">河北省张家口市崇礼区</span></li><li class="fld"><span class="fld-lab">开板时间</span><div class="time-stack"><div class="fld-val">10.23 已开板</div></div></li><li class="fld"><span class="fld-lab">开放雪道</span><div class="time-stack"><div class="chip-row"><span class="chip chip-lv3">威龙道(高级)</span></div><div class="chip-row"><span class="chip">娇龙道上段</span></div><div class="chip-row"><span class="chip">雨龙道上段</span></div><div class="fld-note">其余开放雪道持续补充中</div></div></li><li class="fld"><span class="fld-lab">开放索道</span><div class="time-stack"><div class="chip-row"><span class="chip">4号吊椅(慢速索道)</span></div></div></li><li class="fld"><span class="fld-lab">开放时间</span><div class="time-stack"><div class="chip-row"><span class="chip chip-off">早场:尚未开放</span></div><div class="chip-row"><span class="chip">日场:8:30–16:30</span><span class="chip">夜场:18:30–21:30</span></div></div></li><li class="fld"><span class="fld-lab">雪票</span><div class="time-stack"><div class="tk-grid"><div class="tk"><span>日场 4小时</span><b>¥239</b></div><div class="tk"><span>日场 6小时</span><b>¥289</b></div><div class="tk"><span>日场 1天</span><b>¥349</b></div><div class="tk"><span>夜场</span><b>¥168</b></div></div><div class="fld-note">自带板·开板试滑价,仅供参考</div></div></li></ul></div></div>
   
 </section>
 <section id="gear">
-  <div class="sec-head"><div class="sec-ico">🎿</div><div class="sec-txt"><h2>雪具</h2><span class="sec-sub">邮寄(3人) vs 当地租赁(3人)</span></div></div>
-  <div class="grid g2"><div class="hcard no-dots" data-card="gear|📦 提前邮寄"><h3>📦 提前邮寄<span class="h-avas"><span class="avrow"><img class="mimg" src="images/a/2ac7c642cf.jpg" alt="阿蒙"><img class="mimg" src="images/a/a17432ca0c.jpg" alt="范达尔"><img class="mimg" src="images/a/3545cfca7f.jpg" alt="幽助"></span></span></h3><ul class="dots"><li class="subwrap subwrap-bak"><div class="card rcard" data-card="gear|方案一 · 寄到中转酒店"><span class="badge b-tbd">备</span><div class="r-t">方案一 · 寄到中转酒店</div><span class="r-go">›</span></div></li><li class="subwrap"><div class="card rcard" data-card="gear|寄到盛龙公寓|推荐"><div class="r-t">寄到盛龙公寓<em class="r-tag">推荐</em></div><div class="r-fields"><div class="r-field"><span class="rf-lab">地址</span><span class="rf-gap"></span><button class="li-cp" type="button" aria-label="复制地址" data-copy="河北省张家口市崇礼区万龙滑雪场(盛龙公寓)"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h10"/></svg></button><span class="rf-val rf-adj">河北省张家口市崇礼区<br>万龙滑雪场(盛龙公寓)</span></div><div class="r-field"><span class="rf-lab">姓名、电话</span><span class="rf-val">填自己的就行</span></div></div><span class="r-go">›</span></div></li></ul></div>
-<div class="hcard no-dots" data-card="gear|🎿 当地租赁"><h3>🎿 当地租赁<span class="h-avas"><span class="avrow"><img class="mimg" src="images/a/593abc6d7a.jpg" alt="辣椒面"><img class="mimg" src="images/a/1b5af55d3b.jpg" alt="小郭"><img class="mimg" src="images/a/adbb15c823.jpg" alt="Z&amp;L"></span></span></h3><ul class="dots"><li class="fld"><span class="fld-lab">雪场</span><div class="time-stack"><div class="chip-row"><span class="chip">到场即租</span><span class="chip">雪票自带</span></div><div class="fld-note">约¥200/天 · 押金 ¥2000</div></div></li><li class="fld"><span class="fld-lab">雪具店</span><div class="time-stack"><div class="chip-row"></div><div class="fld-note">约¥80–150/天 · 押金 ¥1000</div></div></li><li class="fld sub sub2"><span class="fld-lab">高铁站<span class="lab-note">(太子城站)</span></span><div class="time-stack"><div class="chip-row"><span class="chip">到店取货</span><span class="chip">邮寄酒店</span></div></div></li><li class="fld sub sub2"><span class="fld-lab">城区/镇<span class="lab-note">(崇礼城区/西湾子镇)</span></span><div class="time-stack"><div class="chip-row"><span class="chip">邮寄酒店</span></div></div></li></ul></div></div>
+  <style>
+  #gear .hcard > h3{display:none}   /* 板块标题已是「雪具租赁」,卡内不再重复一行标题(弹层里备选卡标题不受影响) */
+  li.gshop{display:block;padding:0}
+  .gshop .gcard{padding:12px 14px}
+  .gshop .g-top{display:flex;justify-content:space-between;align-items:center;gap:8px}
+  .gshop .g-top b{font-size:14px;font-weight:800;color:var(--ink);letter-spacing:.2px}
+  .gshop .g-tag{flex:none;font-size:10.5px;font-weight:700;color:var(--accent-deep);
+    background:var(--accent-weak);border-radius:999px;padding:3px 10px}
+  .gshop .g-info{display:flex;justify-content:space-between;align-items:baseline;gap:10px;margin-top:7px}
+  .gshop .g-price{font-size:15.5px;font-weight:800;color:var(--accent-deep);
+    font-variant-numeric:tabular-nums;letter-spacing:.2px}
+  .gshop .g-dist{font-size:11.5px;font-weight:600;color:var(--muted)}
+  .dark .gshop .gcard{background:#1b2333}
+  .dark .gshop .g-top b{color:#e7ecf4}
+  </style>
+  <div class="sec-head"><div class="sec-ico">🎿</div><div class="sec-txt"><h2>雪具方案</h2><span class="sec-sub">邮寄(3人) vs 现场租赁(3人)</span></div></div>
+  <div class="grid g2"><div class="hcard no-dots" data-card="gear|📦 雪具邮寄"><h3>📦 雪具邮寄<span class="h-avas"><span class="avrow"><img class="mimg" src="images/a/2ac7c642cf.jpg" alt="阿蒙"><img class="mimg" src="images/a/a17432ca0c.jpg" alt="范达尔"><img class="mimg" src="images/a/3545cfca7f.jpg" alt="幽助"></span></span></h3><ul class="dots"><li class="subwrap gshop"><div class="card rcard gcard"><div class="g-top"><b>方案一 · 寄到中转酒店</b></div><div class="g-info"><span class="g-price"></span><span class="g-dist"></span></div></div></li><li class="subwrap gshop"><div class="card rcard gcard"><div class="g-top"><b>寄到盛龙公寓|推荐</b></div><div class="g-info"><span class="g-price"></span><span class="g-dist"></span></div></div></li></ul></div>
+<div class="hcard no-dots" data-card="gear|🎿 现场租赁"><h3>🎿 现场租赁<span class="h-avas"><span class="avrow"><img class="mimg" src="images/a/593abc6d7a.jpg" alt="辣椒面"><img class="mimg" src="images/a/1b5af55d3b.jpg" alt="小郭"><img class="mimg" src="images/a/adbb15c823.jpg" alt="Z&amp;L"></span></span></h3><ul class="dots"><li class="item"><span class="li-main">雪板 / 雪鞋 / 头盔等全套</span><span class="badge b-todo">待查</span><span class="li-note">需确认雪票是否包含租赁</span></li><li class="item"><span class="li-main">雪服可能需要另外租</span><span class="badge b-todo">待查</span><span class="li-note">价格待核实</span></li></ul></div></div>
 </section>
 <section id="food">
-  <div class="sec-head"><div class="sec-ico">🍜</div><div class="sec-txt"><h2>吃喝</h2><span class="sec-sub">雪场大食堂 / 双龙自助 + 能量补给</span></div></div>
-  <div class="grid g2"><div class="hcard no-dots" data-card="food|正餐"><h3>正餐</h3><ul class="dots"><li class="fld food-row"><div class="food-left"><span class="fld-lab">大食堂</span><div class="food-sub">雪具大厅上方 · 雪场自营</div></div><div class="food-right"><div class="chip-row"><span class="chip">小份菜</span><span class="chip">手抓饭</span><span class="chip">烤串</span></div><div class="fld-note">人均约 ¥50–100</div></div></li><li class="fld food-row"><div class="food-left"><span class="fld-lab">双龙自助</span><div class="food-sub">双龙酒店二楼 · 约17:00开放</div></div><div class="food-right"><div class="chip-row"><span class="chip">海鲜</span><span class="chip">烤肉</span><span class="chip">点心</span></div><div class="fld-note">人均约 ¥200</div></div></li></ul></div>
-<div class="hcard no-dots" data-card="food|补给"><h3>补给</h3><ul class="dots"><li class="fld"><span class="fld-lab">随时恢复体力</span><div class="time-stack"><div class="chip-row"><span class="chip">士力架</span><span class="chip">能量棒</span><span class="chip">小零食</span></div></div></li></ul></div></div>
+  <div class="sec-head"><div class="sec-ico">🍜</div><div class="sec-txt"><h2>吃喝补给</h2><span class="sec-sub">雪场大食堂 / 双龙自助 + 能量补给</span></div></div>
+  <div class="grid g2"><div class="hcard no-dots" data-card="food|🍜 雪场就餐"><h3>🍜 雪场就餐</h3><ul class="dots"><li class="item"><span class="li-main">大食堂(雪具大厅上方 · 雪场自营)</span><span class="badge b-ref">参考</span><span class="li-note">各种食物都有,人均约 ¥50–100</span></li><li class="item"><span class="li-main">双龙酒店自助餐</span><span class="badge b-todo">待查</span><span class="li-note">约17:00开放(时间待核实),人均 ¥200+(待核实)</span></li></ul></div>
+<div class="hcard no-dots" data-card="food|🛒 补给"><h3>🛒 补给</h3><ul class="dots"><li class="item"><span class="li-main">士力架 / 能量棒等小零食</span><span class="li-note">滑雪日随身补充能量,提前备好</span></li></ul></div></div>
 </section>
-<section id="costs">
-  <div class="sec-head"><div class="sec-ico">💰</div><div class="sec-txt"><h2>费用</h2><span class="sec-sub">车票 / 住宿 / 雪票 · 人均摊(金额待填)</span></div></div>
-  <div class="grid g2"><div class="hcard" data-card="costs|费用均摊"><table class="cost-table cost-outer"><tr><th></th><th>车票</th><th>住宿</th><th>雪票</th><th>吃饭</th><th>合计</th></tr><tr><td><div class="cost-who"><img class="mimg" src="images/a/1b5af55d3b.jpg" alt="小郭"><span>小郭</span></div></td><td>903.9</td><td>437.4</td><td>798.8</td><td>215.0</td><td>¥2355.3</td></tr><tr><td><div class="cost-who"><img class="mimg" src="images/a/adbb15c823.jpg" alt="Z&amp;L"><span>Z&amp;L</span></div></td><td>243.0</td><td>437.4</td><td>1026.8</td><td>215.0</td><td>¥1922.3</td></tr><tr><td><div class="cost-who"><img class="mimg" src="images/a/593abc6d7a.jpg" alt="辣椒面"><span>辣椒面</span></div></td><td>903.9</td><td>380.2</td><td>1016.8</td><td>215.0</td><td>¥2516.0</td></tr><tr><td><div class="cost-who"><img class="mimg" src="images/a/2ac7c642cf.jpg" alt="阿蒙"><span>阿蒙</span></div></td><td>903.9</td><td>380.2</td><td>798.8</td><td>215.0</td><td>¥2298.0</td></tr><tr><td><div class="cost-who"><img class="mimg" src="images/a/a17432ca0c.jpg" alt="范达尔"><span>范达尔</span></div></td><td>903.9</td><td>380.2</td><td>1016.8</td><td>215.0</td><td>¥2516.0</td></tr><tr><td><div class="cost-who"><img class="mimg" src="images/a/3545cfca7f.jpg" alt="幽助"><span>幽助</span></div></td><td>903.9</td><td>380.2</td><td>1016.8</td><td>215.0</td><td>¥2516.0</td></tr></table></div></div>
+<section id="shopping">
+  <style>
+  /* 购物路线图:grid 两行共用列宽。主行=步行实线,耗时在连线上方;
+     分支=JS画的一条整SVG虚线路径(从两原节点正下引下,圆角拐弯汇到 狸小路四丁目),虚线相位连续无拼接缺口;
+     两端隐藏占位与主线同文同宽→竖线精确对准节点中心 */
+  .spgrid{display:grid;grid-template-columns:auto 1fr auto 1fr auto 1fr auto;
+    width:94%;margin:4px auto 12px;padding:14px 2px 0;overflow-x:auto;scrollbar-width:none}
+  .spgrid::-webkit-scrollbar{display:none}
+  .spgrid .dp-n{display:flex;flex-direction:column;align-items:center;gap:5px}
+  .spgrid .dp-n i{width:9px;height:9px;border-radius:50%;background:var(--accent);
+    box-shadow:0 0 0 3px var(--accent-weak)}
+  .spgrid .dp-n span{font-size:10.5px;font-weight:600;color:var(--muted);white-space:nowrap}
+  .spgrid > .dp-l{position:relative;height:9px}
+  .spgrid > .dp-l.walk{min-width:12px}
+  .spgrid > .dp-l::before{content:"";position:absolute;left:0;right:0;top:3.5px;height:2px;
+    border-radius:2px;background:var(--accent);opacity:.3}
+  .spgrid > .dp-l.walk b{position:absolute;left:50%;top:-13px;transform:translateX(-50%);
+    font-size:9.5px;font-weight:700;color:var(--muted);white-space:nowrap;letter-spacing:.2px}
+  .sp-branch{grid-column:3/8;grid-row:2;position:relative;display:flex;align-items:flex-start}
+  .sp-branch > .dp-n{margin-top:20px}   /* 狸小路节点圆点压在横虚线上 */
+  .sp-bpad{flex:none;display:block;height:13px}
+  .sp-bpad i{visibility:hidden;display:block;font-style:normal;font-size:10.5px;
+    font-weight:600;white-space:nowrap;line-height:1.2}
+  .sp-branch .sp-lines{position:absolute;left:0;top:0;pointer-events:none;overflow:visible}
+  .sp-branch .sp-lines path{fill:none;stroke:var(--accent);stroke-width:2;
+    stroke-dasharray:5 6;opacity:.5}
+  .sp-bseg{flex:1;position:relative;min-width:14px}
+  .sp-bseg b{position:absolute;left:50%;top:4px;transform:translateX(-50%);
+    font-size:9.5px;font-weight:700;color:var(--muted);white-space:nowrap;letter-spacing:.2px}
+  .sp-bseg.bl b{left:calc(50% - 12px)}   /* 耗时向狸小路外侧偏移,离节点文字远一点 */
+  .sp-bseg.br b{left:calc(50% + 12px)}
+  </style>
+  <div class="sec-head"><div class="sec-ico">🛍️</div><div><h2>购物</h2></div></div>
+  <div class="grid g2"></div>
 </section>
-
-<!-- ================= 清单 / 推荐应用 / 实用信息 已按需求移除 ================= -->
+<section id="fx">
+  <style>
+  .fx-card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);
+    box-shadow:var(--shadow);padding:14px 16px 15px}
+  .fx-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:11px}
+  .fx-meta{flex:none;font-size:10.5px;font-weight:700;color:var(--muted);background:#f1f4f9;
+    border-radius:999px;padding:3px 10px;display:inline-flex;align-items:center;gap:5px}
+  .fx-meta::before{content:"";width:6px;height:6px;border-radius:50%;background:#b6c0cf}
+  .fx-card.fx-live .fx-meta{color:#1e7f4f;background:#e8f6ee}
+  .fx-card.fx-live .fx-meta::before{background:#2fae6e}
+  .fx-field{display:flex;align-items:center;gap:10px;background:#f7f9fc;border:1px solid var(--line);
+    border-radius:12px;padding:11px 14px}
+  .fx-field:focus-within{border-color:var(--accent);background:#fbfcff}
+  .fx-cur{flex:none;width:64px;font-size:12.5px;font-weight:800;color:var(--ink);line-height:1.25}
+  .fx-cur i{display:block;font-style:normal;font-size:10px;font-weight:600;color:var(--muted);letter-spacing:.5px}
+  .fx-field input{flex:1;min-width:0;border:none;background:none;padding:0;font-family:inherit;
+    font-size:21px;font-weight:800;color:var(--ink);text-align:right;font-variant-numeric:tabular-nums}
+  .fx-field input::placeholder{font-size:13px;font-weight:600;color:#b3bcc9}
+  .fx-field input:focus{outline:none}
+  .fx-mid{display:flex;align-items:center;gap:8px;margin:7px 0;color:var(--muted)}
+  .fx-mid::before,.fx-mid::after{content:"";flex:1;height:1px;background:var(--line)}
+  #fxRate{flex:none;font-size:11.5px;font-weight:700;color:var(--accent-deep);
+    font-variant-numeric:tabular-nums;letter-spacing:.3px}
+  .fx-quick{display:flex;gap:8px;margin-top:11px}
+  .fx-quick button{flex:1;padding:6px 0;border:none;background:#f1f4f9;border-radius:999px;
+    font-size:12px;font-weight:700;color:var(--muted);cursor:pointer;font-family:inherit;
+    -webkit-tap-highlight-color:transparent;transition:background .15s ease,color .15s ease}
+  .fx-quick button:active{background:var(--accent-weak);color:var(--accent-deep)}
+  .fx-tax{display:flex;align-items:center;gap:8px;font-size:11.5px;color:var(--muted)}
+  .fx-tax-lab{font-weight:700}
+  .fx-tax-in{display:inline-flex;align-items:center;gap:3px;background:#f7f9fc;border:1px solid var(--line);
+    border-radius:9px;padding:3px 8px;transition:border-color .15s ease}
+  .fx-tax-in:focus-within{border-color:var(--accent)}
+  .fx-tax-in input{width:36px;border:none;background:none;padding:0;font-family:inherit;
+    font-size:13px;font-weight:800;color:var(--ink);text-align:center}
+  .fx-tax-in input:focus{outline:none}
+  .fx-tax-in i{font-style:normal;font-size:10.5px;font-weight:700;color:var(--muted)}
+  .dark .fx-tax-in{background:#141b28;border-color:#25304460}
+  .dark .fx-tax-in input{color:#e7ecf4}
+  .dark .fx-card{background:#161e2c}
+  .dark .fx-field{background:#141b28;border-color:#25304460}
+  .dark .fx-field:focus-within{background:#182238}
+  .dark .fx-field input{color:#e7ecf4}
+  .dark .fx-meta{background:#232d3f}
+  .dark .fx-quick button{background:#232d3f}
+  .dark .fx-mid::before,.dark .fx-mid::after{background:#2b3650}
+  </style>
+  <div class="sec-head"><div class="sec-ico">💱</div><div><h2>汇率</h2></div></div>
+  <div class="fx-card" id="fxCard" data-rate="0.0418" data-src="实时" data-time="11-17 11:14">
+    <div class="fx-top">
+      <div class="fx-tax">
+        <span class="fx-tax-lab">退税税率</span>
+        <span class="fx-tax-in"><input id="fxTax" type="text" inputmode="decimal" value="5" autocomplete="off" aria-label="退税税率"><i>%</i></span>
+      </div>
+      <span class="fx-meta" id="fxMeta">--</span>
+    </div>
+    <div class="fx-field">
+      <span class="fx-cur">日元<i>JPY</i></span>
+      <input id="fxJpy" type="text" inputmode="decimal" placeholder="输入金额" autocomplete="off">
+    </div>
+    <div class="fx-mid"><span id="fxRate">--</span></div>
+    <div class="fx-field">
+      <span class="fx-cur">人民币<i>CNY</i></span>
+      <input id="fxCny" type="text" inputmode="decimal" placeholder="自动换算" autocomplete="off">
+    </div>
+    <div class="fx-quick" id="fxQuick">
+      <button type="button">1,000</button><button type="button">5,000</button>
+      <button type="button">10,000</button><button type="button">50,000</button>
+    </div>
+  </div>
+</section>
+<section id="checklist">
+  <div class="sec-head"><div class="sec-ico">🧳</div><div><h2>清单</h2></div></div>
+  
+</section>
+<section id="apps">
+  <div class="sec-head"><div class="sec-ico">📲</div><div><h2>推荐应用</h2></div></div>
+  <div class="agrid"></div>
+</section>
 
 </div><!-- /wrap -->
 
 <footer>
-  <div>❄️ <b>万龙,启动!</b> · v0.1356 分享版</div>
+  <div>❄️ <b>YOTTA GAMES 外滑小分队</b> · v0.1362 分享版</div>
   
 </footer>
 
@@ -1590,7 +1809,7 @@ li.fld .li-lab,li.lab .li-lab{font-size:12px;font-weight:700;color:var(--muted);
     <div class="pop-body" id="popBody"></div>
   </div>
 </div>
-<script id="carddata" type="application/json">{"costs|费用均摊": {"tabs": [{"name": "费用明细", "blocks": [{"t": "HTML", "c": "<div class=\"tbl-scroll\"><table class=\"cost-table cost-detail\"><tr><th class=\"cost-item-h\"></th><th class=\"cost-people\"><div class=\"cost-th-who\"><img class=\"mimg\" src=\"images/a/1b5af55d3b.jpg\" alt=\"小郭\"><span>小郭</span></div></th><th class=\"cost-people\"><div class=\"cost-th-who\"><img class=\"mimg\" src=\"images/a/adbb15c823.jpg\" alt=\"Z&amp;L\"><span>Z&amp;L</span></div></th><th class=\"cost-people\"><div class=\"cost-th-who\"><img class=\"mimg\" src=\"images/a/593abc6d7a.jpg\" alt=\"辣椒面\"><span>辣椒面</span></div></th><th class=\"cost-people\"><div class=\"cost-th-who\"><img class=\"mimg\" src=\"images/a/2ac7c642cf.jpg\" alt=\"阿蒙\"><span>阿蒙</span></div></th><th class=\"cost-people\"><div class=\"cost-th-who\"><img class=\"mimg\" src=\"images/a/a17432ca0c.jpg\" alt=\"范达尔\"><span>范达尔</span></div></th><th class=\"cost-people\"><div class=\"cost-th-who\"><img class=\"mimg\" src=\"images/a/3545cfca7f.jpg\" alt=\"幽助\"><span>幽助</span></div></th><th class=\"cost-sum-h\">合计</th></tr><tr><th class=\"cost-item\">车票<br>上海 - 北京</th><td>660.9</td><td>0.0</td><td>660.9</td><td>660.9</td><td>660.9</td><td>660.9</td><td class=\"cost-sum-td\">3304.9</td></tr><tr><th class=\"cost-item\">车票<br>北京 - 崇礼</th><td>93.0</td><td>93.0</td><td>93.0</td><td>93.0</td><td>93.0</td><td>93.0</td><td class=\"cost-sum-td\">558.0</td></tr><tr><th class=\"cost-item\">包车<br>万龙-首都T2</th><td>150.0</td><td>150.0</td><td>150.0</td><td>150.0</td><td>150.0</td><td>150.0</td><td class=\"cost-sum-td\">900.0</td></tr><tr><th class=\"cost-item\">住宿<br>Day 1</th><td>123.0</td><td>123.0</td><td>123.0</td><td>123.0</td><td>123.0</td><td>123.0</td><td class=\"cost-sum-td\">738.0</td></tr><tr><th class=\"cost-item\">住宿<br>Day 2</th><td>314.4</td><td>314.4</td><td>257.2</td><td>257.2</td><td>257.2</td><td>257.2</td><td class=\"cost-sum-td\">1657.7</td></tr><tr><th class=\"cost-item\">雪票<br>日场 1.5天</th><td>798.8</td><td>808.8</td><td>798.8</td><td>798.8</td><td>798.8</td><td>798.8</td><td class=\"cost-sum-td\">4803.2</td></tr><tr><th class=\"cost-item\">雪票<br>夜场 3小时</th><td>0.0</td><td>218.0</td><td>218.0</td><td>0.0</td><td>218.0</td><td>218.0</td><td class=\"cost-sum-td\">872.0</td></tr><tr><th class=\"cost-item\">双龙自助</th><td>215.0</td><td>215.0</td><td>215.0</td><td>215.0</td><td>215.0</td><td>215.0</td><td class=\"cost-sum-td\">1290.0</td></tr><tr class=\"cost-total-row\"><th class=\"cost-item\">合计</th><td>2355.3</td><td>1922.3</td><td>2516.0</td><td>2298.0</td><td>2516.0</td><td>2516.0</td><td class=\"cost-sum-td\">14124.0</td></tr></table></div>"}]}, {"name": "订单截图", "blocks": [{"t": "提示", "c": "🔒 此内容涉及敏感信息,仅在完整版攻略中提供", "n": ""}]}, {"name": "付款截图", "blocks": [{"t": "提示", "c": "🔒 此内容涉及敏感信息,仅在完整版攻略中提供", "n": ""}]}]}, "stay|景观四人间 ×1": {"tabs": [{"name": "房型照片", "blocks": [{"t": "图片", "c": "images/a/13701ebb9e.jpg", "n": ""}], "subs": [], "cols": 0}, {"name": "订单信息", "blocks": [{"t": "提示", "c": "🔒 此内容涉及敏感信息,仅在完整版攻略中提供", "n": ""}], "subs": [], "cols": 0}]}, "stay|景观标间 ×1": {"tabs": [{"name": "房型照片", "blocks": [{"t": "图片", "c": "images/a/9643d0a223.jpg", "n": ""}], "subs": [], "cols": 0}, {"name": "订单信息", "blocks": [{"t": "提示", "c": "🔒 此内容涉及敏感信息,仅在完整版攻略中提供", "n": ""}], "subs": [], "cols": 0}]}, "resorts|🏔️ 万龙滑雪场(张家口·崇礼)": {"tabs": [{"name": "雪道图", "blocks": [{"t": "图片", "c": "images/a/89bab47938.jpg", "n": ""}, {"t": "提示", "c": "雪道全景图", "n": ""}, {"t": "图片", "c": "images/a/3e26891500.jpg", "n": ""}, {"t": "提示", "c": "已开放雪道", "n": ""}], "subs": [], "cols": 0}, {"name": "雪票信息", "blocks": [{"t": "提示", "c": "📷 订单等信息待补充", "n": ""}], "subs": [], "cols": 0}]}, "members|Z&L": {"tabs": [{"name": "车票", "blocks": [], "subs": [{"name": "苏州到北京", "blocks": [{"t": "提示", "c": "✅ 已自行购票", "n": "显著", "strong": 1}], "subs": []}, {"name": "北京到崇礼", "blocks": [{"t": "提示", "c": "🔒 此内容涉及敏感信息,仅在完整版攻略中提供", "n": ""}], "subs": []}], "cols": 0}, {"name": "酒店", "blocks": [], "subs": [{"name": "Day 1 · 11·06", "blocks": [{"t": "提示", "c": "🔒 此内容涉及敏感信息,仅在完整版攻略中提供", "n": ""}], "subs": []}, {"name": "Day 2 · 11·07", "blocks": [{"t": "提示", "c": "🔒 此内容涉及敏感信息,仅在完整版攻略中提供", "n": ""}], "subs": []}], "cols": 2}, {"name": "雪票", "blocks": [], "subs": [{"name": "日场 1.5 天", "blocks": [{"t": "提示", "c": "🔒 此内容涉及敏感信息,仅在完整版攻略中提供", "n": ""}], "subs": []}, {"name": "夜场 3 小时", "blocks": [{"t": "提示", "c": "🔒 此内容涉及敏感信息,仅在完整版攻略中提供", "n": ""}], "subs": []}], "cols": 2}]}, "stay|🏠 清河站中转酒店": {"tabs": [{"name": "房型照片", "blocks": [{"t": "图片", "c": "images/a/24396cf4cc.jpg", "n": ""}, {"t": "图片", "c": "images/a/e2e24c959b.jpg", "n": ""}, {"t": "图片", "c": "images/a/90c2b50f61.jpg", "n": ""}], "subs": [], "cols": 0}, {"name": "订单信息", "blocks": [{"t": "提示", "c": "🔒 此内容涉及敏感信息,仅在完整版攻略中提供", "n": ""}], "subs": [], "cols": 0}]}, "food|正餐": {"tabs": [{"name": "大食堂", "blocks": [{"t": "图片", "c": "images/a/585ac9f7ad.jpg", "n": ""}, {"t": "图片", "c": "images/a/39b650c3fc.jpg", "n": ""}, {"t": "图片", "c": "images/a/1e2a92bbae.jpg", "n": ""}, {"t": "图片", "c": "images/a/e1b9d19ccb.jpg", "n": ""}, {"t": "图片", "c": "images/a/09fd8349f4.jpg", "n": ""}, {"t": "图片", "c": "images/a/e7d324f042.jpg", "n": ""}, {"t": "图片", "c": "images/a/530fd07cd6.jpg", "n": ""}, {"t": "图片", "c": "images/a/218c3cbc84.jpg", "n": ""}, {"t": "图片", "c": "images/a/1186281b3f.jpg", "n": ""}], "subs": [], "cols": 0}, {"name": "双龙自助", "blocks": [{"t": "图片", "c": "images/a/d073fd25c6.jpg", "n": ""}, {"t": "图片", "c": "images/a/22ca176ff9.jpg", "n": ""}, {"t": "图片", "c": "images/a/0001b653f3.jpg", "n": ""}, {"t": "图片", "c": "images/a/ab5d57d710.jpg", "n": ""}, {"t": "图片", "c": "images/a/b57d98f5e9.jpg", "n": ""}, {"t": "图片", "c": "images/a/24314872cd.jpg", "n": ""}, {"t": "图片", "c": "images/a/9a013c1197.jpg", "n": ""}, {"t": "图片", "c": "images/a/8ec2d75e24.jpg", "n": ""}, {"t": "图片", "c": "images/a/9d8cd21a97.jpg", "n": ""}, {"t": "图片", "c": "images/a/e3c8a61937.jpg", "n": ""}, {"t": "图片", "c": "images/a/1f88fed31c.jpg", "n": ""}, {"t": "图片", "c": "images/a/78fc76727a.jpg", "n": ""}, {"t": "图片", "c": "images/a/7117afba0d.jpg", "n": ""}, {"t": "图片", "c": "images/a/ab3a7a3cc8.jpg", "n": ""}, {"t": "图片", "c": "images/a/176ebb0a22.jpg", "n": ""}, {"t": "图片", "c": "images/a/be1164fad2.jpg", "n": ""}, {"t": "图片", "c": "images/a/0c5b2fc0e6.jpg", "n": ""}, {"t": "图片", "c": "images/a/e163a9d78e.jpg", "n": ""}], "subs": [], "cols": 0}]}, "航班|市内交通": [{"t": "图片", "c": "images/a/750b08362c.jpg", "n": ""}], "members|小郭": {"tabs": [{"name": "车票", "blocks": [], "subs": [{"name": "上海到北京", "blocks": [{"t": "提示", "c": "🔒 此内容涉及敏感信息,仅在完整版攻略中提供", "n": ""}], "subs": []}, {"name": "北京到崇礼", "blocks": [{"t": "提示", "c": "🔒 此内容涉及敏感信息,仅在完整版攻略中提供", "n": ""}], "subs": []}], "cols": 0}, {"name": "酒店", "blocks": [], "subs": [{"name": "Day 1 · 11·06", "blocks": [{"t": "提示", "c": "🔒 此内容涉及敏感信息,仅在完整版攻略中提供", "n": ""}], "subs": []}, {"name": "Day 2 · 11·07", "blocks": [{"t": "提示", "c": "🔒 此内容涉及敏感信息,仅在完整版攻略中提供", "n": ""}], "subs": []}], "cols": 2}, {"name": "雪票", "blocks": [], "subs": [{"name": "日场 1.5 天", "blocks": [{"t": "提示", "c": "🔒 此内容涉及敏感信息,仅在完整版攻略中提供", "n": ""}], "subs": []}, {"name": "夜场 3 小时", "blocks": [{"t": "提示", "c": "🔒 此内容涉及敏感信息,仅在完整版攻略中提供", "n": ""}], "subs": []}], "cols": 2}]}, "members|辣椒面": {"tabs": [{"name": "车票", "blocks": [], "subs": [{"name": "上海到北京", "blocks": [{"t": "提示", "c": "🔒 此内容涉及敏感信息,仅在完整版攻略中提供", "n": ""}], "subs": []}, {"name": "北京到崇礼", "blocks": [{"t": "提示", "c": "🔒 此内容涉及敏感信息,仅在完整版攻略中提供", "n": ""}], "subs": []}], "cols": 0}, {"name": "酒店", "blocks": [], "subs": [{"name": "Day 1 · 11·06", "blocks": [{"t": "提示", "c": "🔒 此内容涉及敏感信息,仅在完整版攻略中提供", "n": ""}], "subs": []}, {"name": "Day 2 · 11·07", "blocks": [{"t": "提示", "c": "🔒 此内容涉及敏感信息,仅在完整版攻略中提供", "n": ""}], "subs": []}], "cols": 2}, {"name": "雪票", "blocks": [], "subs": [{"name": "日场 1.5 天", "blocks": [{"t": "提示", "c": "🔒 此内容涉及敏感信息,仅在完整版攻略中提供", "n": ""}], "subs": []}, {"name": "夜场 3 小时", "blocks": [{"t": "提示", "c": "🔒 此内容涉及敏感信息,仅在完整版攻略中提供", "n": ""}], "subs": []}], "cols": 2}]}, "members|阿蒙": {"tabs": [{"name": "车票", "blocks": [], "subs": [{"name": "上海到北京", "blocks": [{"t": "提示", "c": "🔒 此内容涉及敏感信息,仅在完整版攻略中提供", "n": ""}], "subs": []}, {"name": "北京到崇礼", "blocks": [{"t": "提示", "c": "🔒 此内容涉及敏感信息,仅在完整版攻略中提供", "n": ""}], "subs": []}], "cols": 0}, {"name": "酒店", "blocks": [], "subs": [{"name": "Day 1 · 11·06", "blocks": [{"t": "提示", "c": "🔒 此内容涉及敏感信息,仅在完整版攻略中提供", "n": ""}], "subs": []}, {"name": "Day 2 · 11·07", "blocks": [{"t": "提示", "c": "🔒 此内容涉及敏感信息,仅在完整版攻略中提供", "n": ""}], "subs": []}], "cols": 2}, {"name": "雪票", "blocks": [], "subs": [{"name": "日场 1.5 天", "blocks": [{"t": "提示", "c": "🔒 此内容涉及敏感信息,仅在完整版攻略中提供", "n": ""}], "subs": []}, {"name": "夜场 3 小时", "blocks": [{"t": "提示", "c": "🔒 此内容涉及敏感信息,仅在完整版攻略中提供", "n": ""}], "subs": []}], "cols": 2}]}, "members|范达尔": {"tabs": [{"name": "车票", "blocks": [], "subs": [{"name": "上海到北京", "blocks": [{"t": "提示", "c": "🔒 此内容涉及敏感信息,仅在完整版攻略中提供", "n": ""}], "subs": []}, {"name": "北京到崇礼", "blocks": [{"t": "提示", "c": "🔒 此内容涉及敏感信息,仅在完整版攻略中提供", "n": ""}], "subs": []}], "cols": 0}, {"name": "酒店", "blocks": [], "subs": [{"name": "Day 1 · 11·06", "blocks": [{"t": "提示", "c": "🔒 此内容涉及敏感信息,仅在完整版攻略中提供", "n": ""}], "subs": []}, {"name": "Day 2 · 11·07", "blocks": [{"t": "提示", "c": "🔒 此内容涉及敏感信息,仅在完整版攻略中提供", "n": ""}], "subs": []}], "cols": 2}, {"name": "雪票", "blocks": [], "subs": [{"name": "日场 1.5 天", "blocks": [{"t": "提示", "c": "🔒 此内容涉及敏感信息,仅在完整版攻略中提供", "n": ""}], "subs": []}, {"name": "夜场 3 小时", "blocks": [{"t": "提示", "c": "🔒 此内容涉及敏感信息,仅在完整版攻略中提供", "n": ""}], "subs": []}], "cols": 2}]}, "members|幽助": {"tabs": [{"name": "车票", "blocks": [], "subs": [{"name": "上海到北京", "blocks": [{"t": "提示", "c": "🔒 此内容涉及敏感信息,仅在完整版攻略中提供", "n": ""}], "subs": []}, {"name": "北京到崇礼", "blocks": [{"t": "提示", "c": "🔒 此内容涉及敏感信息,仅在完整版攻略中提供", "n": ""}], "subs": []}], "cols": 0}, {"name": "酒店", "blocks": [], "subs": [{"name": "Day 1 · 11·06", "blocks": [{"t": "提示", "c": "🔒 此内容涉及敏感信息,仅在完整版攻略中提供", "n": ""}], "subs": []}, {"name": "Day 2 · 11·07", "blocks": [{"t": "提示", "c": "🔒 此内容涉及敏感信息,仅在完整版攻略中提供", "n": ""}], "subs": []}], "cols": 2}, {"name": "雪票", "blocks": [], "subs": [{"name": "日场 1.5 天", "blocks": [{"t": "提示", "c": "🔒 此内容涉及敏感信息,仅在完整版攻略中提供", "n": ""}], "subs": []}, {"name": "夜场 3 小时", "blocks": [{"t": "提示", "c": "🔒 此内容涉及敏感信息,仅在完整版攻略中提供", "n": ""}], "subs": []}], "cols": 2}]}}</script>
+<script id="carddata" type="application/json">{"stay|景观四人间 ×1": {"tabs": [{"name": "房型照片", "blocks": [{"t": "提示", "c": "📷 房型视频待补充", "n": ""}], "subs": [], "cols": 0}, {"name": "订单信息", "blocks": [{"t": "头像", "c": "辣椒面、阿蒙|范达尔、幽助", "n": "住宿人", "imgs": ["images/a/2ac7c642cf.jpg", "images/a/593abc6d7a.jpg", "images/a/a17432ca0c.jpg", "images/a/3545cfca7f.jpg"]}], "subs": [], "cols": 0}]}, "stay|景观标间 ×1": {"tabs": [{"name": "房型照片", "blocks": [{"t": "提示", "c": "📷 房型视频待补充", "n": ""}], "subs": [], "cols": 0}, {"name": "订单信息", "blocks": [{"t": "头像", "c": "小郭、Z&L", "n": "住宿人", "imgs": ["images/a/1b5af55d3b.jpg", "images/a/adbb15c823.jpg"]}, {"t": "文本", "c": "房间信息:待补充", "n": ""}], "subs": [], "cols": 0}]}, "resorts|🏔️ 万龙滑雪场(张家口·崇礼)": {"tabs": [{"name": "雪道图", "blocks": [{"t": "提示", "c": "📷 雪道图待补充(已开放:威龙道、娇龙道上段、雨龙道上段)", "n": ""}], "subs": [], "cols": 0}, {"name": "雪票信息", "blocks": [{"t": "提示", "c": "📷 订单等信息待补充", "n": ""}], "subs": [], "cols": 0}]}, "航班|市内交通": [{"t": "图片", "c": "images/a/750b08362c.jpg", "n": ""}]}</script>
 
 <!-- ================= 图片全屏查看 ================= -->
 <div class="imgview" id="imgView">
@@ -1615,14 +1834,92 @@ li.fld .li-lab,li.lab .li-lab{font-size:12px;font-weight:700;color:var(--muted);
 </div>
 
 <script>
-/* 刷新/⟳重建后回顶部(关掉浏览器的滚动位置恢复);带 #锚点 直开的链接不受影响 */
+/* 刷新后不回顶部:滚动位置按「视口顶部的元素+偏移」记忆(锚点式)——
+   图片加载/内容变化把上方撑高时像素值会漂移、逐次累积,按元素定位则始终回原位;
+   带 #锚点 直开的链接不受影响;关闭浏览器自带滚动恢复,统一自己管 */
 if('scrollRestoration' in history){ try{ history.scrollRestoration = 'manual'; }catch(_){} }
-if(!location.hash){ try{ window.scrollTo(0, 0); }catch(_){} }
+(function(){
+  var KEY = 'pg-scroll';
+  var SEL = 'section, .hcard, .day, .ov-card, .ckgroup, .fcard, .mcard, .acard, .wx-card';
+  function els(){ return Array.prototype.slice.call(document.querySelectorAll(SEL)); }
+  function keyOf(el){   // 稳定身份:运行时脚本会移动/隐藏卡片(如备选方案收纳),序号会失效,按 id/数据属性认卡
+    if(el.id) return '#' + el.id;
+    var dc = el.getAttribute('data-card') || el.getAttribute('data-day');
+    if(dc) return '@' + dc;
+    return el.tagName + '|' + (el.textContent || '').replace(/\\s+/g, '').slice(0, 24);
+  }
+  function anchor(){   // 视口顶缘以下最近的区块(记录其身份 + 距顶像素 + 序号兜底)
+    var list = els(), best = -1, bestTop = Infinity;
+    for(var i = 0; i < list.length; i++){
+      var t = list[i].getBoundingClientRect().top;
+      if(t >= -60 && t < bestTop){ best = i; bestTop = t; }
+    }
+    if(best < 0) return null;
+    return { k: keyOf(list[best]), off: Math.round(bestTop), i: best };
+  }
+  var settled = false;   // 加载校准期不落盘:初始滚动事件会把半布局状态的垃圾位置写进存档,覆盖正确值
+  setTimeout(function(){ settled = true; }, 6000);
+  function save(force){
+    if(!settled && !force) return;
+    try{ sessionStorage.setItem(KEY, JSON.stringify({ y: Math.round(window.scrollY), a: anchor() })); }catch(_){}
+  }
+  var _tick = null;
+  window.addEventListener('scroll', function(){
+    if(_tick) return;
+    _tick = setTimeout(function(){ _tick = null; save(false); }, 250);
+  }, { passive: true });
+  window.addEventListener('pagehide', function(){ save(true); });
+  function anchorEl(d){   // 按身份找回锚点元素;找不到退回序号;仍不行或已隐藏返回 null
+    if(!d || !d.a) return null;
+    var list = els(), el = null;
+    for(var i = 0; i < list.length; i++){ if(keyOf(list[i]) === d.a.k){ el = list[i]; break; } }
+    if(!el && list[d.a.i] && keyOf(list[d.a.i]) === d.a.k) el = list[d.a.i];
+    return (el && el.offsetParent !== null) ? el : null;   // 隐藏卡(备选收纳等)不可作锚
+  }
+  function targetY(){
+    var d = null;
+    try{ d = JSON.parse(sessionStorage.getItem(KEY) || 'null'); }catch(_){}
+    if(!d) return null;
+    var el = anchorEl(d);
+    if(el) return Math.max(0, Math.round(el.getBoundingClientRect().top + window.scrollY + (d.a.off || 0)));
+    return d.y || 0;
+  }
+  /* 图片加载会持续推高页面:恢复后反复校准到锚点元素,稳定或用户主动滚动为止 */
+  var userTouched = false;
+  ['wheel', 'touchmove', 'keydown'].forEach(function(ev){
+    window.addEventListener(ev, function(){ userTouched = true; settled = true; }, { passive: true, once: true });
+  });
+  var tries = 0;
+  function calib(){
+    if(userTouched || document.hidden || tries >= 50) return;
+    var want = targetY();
+    if(want == null || want <= 0) return;   // 无有效存档(如顶部):不校准,绝不把用户按回顶部
+    if(Math.abs(window.scrollY - want) > 2){
+      tries++;
+      window.scrollTo(0, want);
+    }else{
+      settled = true;   // 位置已稳定:此后用户滚动照常记录
+    }
+    setTimeout(calib, 100);
+  }
+  function restore(){
+    if(location.hash) return;
+    var want = targetY();
+    if(want != null && want > 0) try{ window.scrollTo(0, want); }catch(_){}
+  }
+  /* DOMContentLoaded 时所有同步脚本(含桌面瀑布流重排)已执行完,DOM 顺序与保存时一致;
+     不在解析期恢复——那时瀑布流还没跑,锚点对不上会先跳错位置 */
+  if(document.readyState === 'loading'){
+    document.addEventListener('DOMContentLoaded', function(){ restore(); calib(); });
+  }else{
+    restore(); calib();
+  }
+})();
 
 /* ---------- 出发倒计时 ---------- */
 (function(){
-  var target = new Date("2026-11-06T18:52:00+08:00");
-  var back = new Date("2026-11-08T23:55:00+08:00");
+  var target = new Date("2026-12-11T08:00:00+08:00");
+  var back = new Date("2026-12-14T16:50:00+08:00");
   var CD = { running: "🎿 行程进行中|开板快乐,注意安全", ended: "🏠 行程已结束|下次再聚" };
   var daysEl = document.getElementById('cdDays'), hEl = document.getElementById('cdHours'),
       mEl = document.getElementById('cdMins'), sEl = document.getElementById('cdSecs'),
@@ -1668,6 +1965,58 @@ if(!location.hash){ try{ window.scrollTo(0, 0); }catch(_){} }
   tick(); setInterval(tick, 1000);
 })();
 
+/* ---------- 日出日落条:无凭证(离线/分享版)时按当日天文算法实时计算(NOAA公式),
+   不再读表格静态值——任何时候打开都是最新且准确的日出日落;轨道进度随之更新 ---------- */
+(function(){
+  if(window.__QW_CONF__) return;                    // 在线私有版由实况接口刷新,不抢
+  var box = document.getElementById('wxSun');
+  if(!box || box.hidden) return;
+  var LAT = 42.857, LON = 140.687, TZ = 540;        // 二世谷·比罗夫,UTC+9
+  function sunTimes(date){                          // → {rise,set} 当地分钟(当天),极昼极夜返回 null
+    var rad = Math.PI / 180;
+    var n = Math.floor((Date.UTC(date.getFullYear(), date.getMonth(), date.getDate())
+                        - Date.UTC(2000, 0, 1, 12)) / 86400000);
+    var Jstar = n - LON / 360;
+    var M = (357.5291 + 0.98560028 * Jstar) % 360;
+    var C = 1.9148 * Math.sin(M * rad) + 0.02 * Math.sin(2 * M * rad) + 0.0003 * Math.sin(3 * M * rad);
+    var lambda = (M + C + 180 + 102.9372) % 360;
+    var Jtransit = 2451545.0 + Jstar + 0.0053 * Math.sin(M * rad) - 0.0069 * Math.sin(2 * lambda * rad);
+    var delta = Math.asin(Math.sin(lambda * rad) * Math.sin(23.44 * rad)) / rad;
+    var cosH = (Math.sin(-0.833 * rad) - Math.sin(LAT * rad) * Math.sin(delta * rad))
+             / (Math.cos(LAT * rad) * Math.cos(delta * rad));
+    if(cosH > 1 || cosH < -1) return null;
+    var H = Math.acos(cosH) / rad;
+    function jd2min(j){
+      var t = new Date((j - 2440587.5) * 86400000 + TZ * 60000);
+      return t.getUTCHours() * 60 + t.getUTCMinutes();
+    }
+    return { rise: jd2min(Jtransit - H / 360), set: jd2min(Jtransit + H / 360) };
+  }
+  function fmt(m){ return ((m / 60 | 0) < 10 ? '0' : '') + (m / 60 | 0) + ':' + ((m % 60) < 10 ? '0' : '') + (m % 60); }
+  var st = sunTimes(new Date());
+  if(!st) return;                                    // 极昼/极夜:保持表格值兜底
+  var riseEl = document.getElementById('wxRiseTime'), setEl = document.getElementById('wxSetTime');
+  if(riseEl) riseEl.textContent = fmt(st.rise);
+  if(setEl) setEl.textContent = fmt(st.set);
+  var riseM = st.rise, setM = st.set;
+  var now = new Date(), nowM = now.getHours() * 60 + now.getMinutes();
+  var isDay = nowM >= riseM && nowM < setM;
+  var pct;
+  if(isDay){
+    pct = (nowM - riseM) / (setM - riseM);
+  }else{
+    var span = (24 * 60 - setM) + riseM;            // 夜长:今晚日落→明晨日出
+    var off = nowM >= setM ? nowM - setM : nowM + (24 * 60 - setM);
+    pct = off / span;
+  }
+  pct = Math.max(0, Math.min(1, pct));
+  box.classList.toggle('sun-day', isDay);
+  var moon = document.getElementById('wxSunMoon');
+  var fill = document.getElementById('wxSunFill');
+  if(moon){ moon.textContent = isDay ? '☀️' : '🌙'; moon.style.left = (pct * 100).toFixed(1) + '%'; }
+  if(fill) fill.style.width = (pct * 100).toFixed(1) + '%';
+})();
+
 /* ---------- 天气卡「刷新数据」:重新拉最新加密包整页重建(壳页 __wlReload);无壳页环境整页重载兜底 ---------- */
 (function(){
   var btn = document.getElementById('wxRefresh');
@@ -1687,22 +2036,532 @@ if(!location.hash){ try{ window.scrollTo(0, 0); }catch(_){} }
   });
 })();
 
+/* ---------- 行程班次切换:点左侧时间格切下一班;默认班按当前版本(不记忆);
+   跟随/时长/间隙均为行号绝对引用(data-follow/data-dur/data-gap),按当前版本规则重算 ---------- */
+(function(){
+  function hm2min(s){ var m = /^(\d{1,2}):(\d{2})$/.exec(String(s || '').trim()); return m ? (+m[1]) * 60 + (+m[2]) : null; }
+  function min2hm(v){ v = ((v % 1440) + 1440) % 1440; var h = Math.floor(v / 60), m = v % 60;
+    return (h < 10 ? '0' : '') + h + ':' + (m < 10 ? '0' : '') + m; }
+  function durTxt(v){ return v >= 60 ? (Math.floor(v / 60) + ' 小时 ' + (v % 60) + ' 分') : (v + ' 分钟'); }
+  document.querySelectorAll('.day').forEach(function(day){
+    var cells = day.querySelectorAll('.ttime.sw');
+    var link = null;
+    try{ link = JSON.parse(day.getAttribute('data-link') || 'null'); }catch(_){}
+    if(!link) return;
+  if(!cells.length && !link.vers) return;   // 无班次格且无版本才整卡跳过;只有版本(如最后一天 常规/退税)仍要接联动
+    var trows = day.querySelectorAll('.trow');
+    var curVers = 0;
+    var vers = link.vers || {};
+    function verEntry(){ return vers[String(curVers)] || null; }
+    var curDefs = (verEntry() && verEntry().defs) || {};
+    function rowsOf(gi){
+      return Array.prototype.filter.call(day.querySelectorAll('.ttime[data-opts]'), function(el){
+        var g = el.getAttribute('data-g');
+        return g !== null && +g === gi;
+      });
+    }
+    function applyIdx(gi, idx){
+      rowsOf(gi).forEach(function(el){
+        var opts = el.getAttribute('data-opts').split('|');
+        el.textContent = opts[Math.max(0, Math.min(idx, opts.length - 1))];
+        el.classList.toggle('alt', idx !== (parseInt(curDefs[gi], 10) || 1) - 1);
+      });
+    }
+    function setVisible(vgi){
+      if(vgi === undefined || vgi === null) return;
+      for(var g2 = 1; g2 < (link.groups || 0); g2++){
+        rowsOf(g2).forEach(function(el){
+          var tr = el.closest('.trow');
+          if(tr) tr.classList.toggle('hide', g2 !== vgi);
+        });
+      }
+    }
+    function applyFollow(){   // 行号绝对,规则取当前版本(payload),静态属性只作无JS兜底
+      var specs = (verEntry() && verEntry().follow) || link.follow || [];
+      specs.forEach(function(spec){
+        var el = trows[+spec.row - 1];
+        var tt = el && el.querySelector('.ttime');
+        if(!tt) return;
+        var bases = Array.isArray(spec.base) ? spec.base : [spec.base];
+        var bt = null;
+        for(var bi = 0; bi < bases.length; bi++){
+          var btr = trows[+bases[bi] - 1];
+          if(btr && !btr.classList.contains('hide')){ bt = btr.querySelector('.ttime'); break; }
+        }
+        if(!bt) return;
+        var v = hm2min(bt.textContent);
+        if(v === null) return;
+        var val = v + (+spec.add || 0);
+        if(spec.max){ var mv = hm2min(spec.max); if(mv !== null && val > mv) val = mv; }
+        tt.textContent = min2hm(val);
+      });
+    }
+    function applyDurs(){
+      day.querySelectorAll('.tnote[data-dur]').forEach(function(el){
+        var spec = null;
+        try{ spec = JSON.parse(el.getAttribute('data-dur')); }catch(_){}
+        if(!spec) return;
+        var a = hm2min((trows[+spec.d1 - 1] || {}).textContent) ||
+                hm2min(trows[+spec.d1 - 1] && trows[+spec.d1 - 1].querySelector('.ttime').textContent);
+        var b = hm2min(trows[+spec.d2 - 1] && trows[+spec.d2 - 1].querySelector('.ttime').textContent);
+        if(a === null || b === null) return;
+        var v = b - a; if(v < 0) v += 1440;
+        el.textContent = spec.f.replace('{d}', durTxt(v));
+      });
+      var gspecs = (verEntry() && verEntry().gaps) || link.gaps || [];
+      gspecs.forEach(function(spec){
+        var el = trows[+spec.row - 1];
+        var note = el && el.querySelector('.tnote[data-gap]');
+        if(!note) return;
+        var btr = trows[+spec.next - 1];
+        var bt = btr && btr.querySelector('.ttime');
+        var a = hm2min(el.querySelector('.ttime').textContent);
+        var b = hm2min(bt && bt.textContent);
+        if(a === null || b === null) return;
+        var v = b - a; if(v < 0) v += 1440;
+        note.textContent = spec.fmt.replace('{d}', durTxt(v));
+      });
+    }
+    function refresh(){ applyFollow(); applyDurs(); }
+    Array.prototype.forEach.call(cells, function(cell){
+      cell.addEventListener('click', function(ev){
+        ev.stopPropagation();
+        var g = cell.getAttribute('data-g');
+        if(g === null) return;
+        var gi = +g, rows = rowsOf(gi);
+        if(!rows.length) return;
+        var opts = rows[0].getAttribute('data-opts').split('|');
+        var cur = opts.indexOf(rows[0].textContent.trim());
+        var next = (cur + 1) % opts.length;
+        applyIdx(gi, next);
+        // 首组(当前版本可见的最小切换组)切班才带动后续组;直接点后组不回写。
+        // 不再固定 gi===0:JR直达版首段是 g2,点击同样要联动后续组
+        var isHead = gi === 0 || !Array.prototype.some.call(cells, function(el){
+          var tg = el.getAttribute('data-g');
+          return tg !== null && +tg < gi && !el.closest('.trow').classList.contains('hide');
+        });
+        if(isHead){
+          var fwdmap = (verEntry() && verEntry().fwd) || link.fwd;
+          if(fwdmap){
+            var t = fwdmap[String(next + 1)];
+            if(t) applyIdx(+t[0], +t[1] - 1);
+          }
+        }
+        if(gi === 0 && link.show){
+          var vis = link.show[String(next + 1)];
+          if(vis !== undefined) setVisible(+vis);
+        }else if(link.rev && link.rev[String(gi)]){
+          var ranges = link.rev[String(gi)];
+          for(var ri = 0; ri < ranges.length; ri++){
+            if(next + 1 >= +ranges[ri][0] && next + 1 <= +ranges[ri][1]){
+              applyIdx(0, +ranges[ri][2] - 1);
+              break;
+            }
+          }
+        }
+        refresh();
+      });
+    });
+    if(link.show && curDefs[0]){   // 初始分支显隐:按组0当前默认班(切版本时 __applyVersion 里也会重算)
+      var vis0 = link.show[String(curDefs[0])];
+      if(vis0 !== undefined) setVisible(+vis0);
+    }
+    if(link.vers){
+      day.__applyVersion = function(vi){
+        var v = vers[String(vi)];
+        if(!v) return;
+        curVers = +vi;
+        curDefs = v.defs || {};
+        var union = {}, showSet = {};
+        Object.keys(vers).forEach(function(k){
+          (vers[k].rows || []).forEach(function(p){ union[p] = true; });
+        });
+        (v.rows || []).forEach(function(p){ showSet[p] = true; });
+        for(var g2 = 0; g2 < (link.groups || 0); g2++){
+          var rows = rowsOf(g2);
+          if(!rows.length) continue;
+          var olist = rows[0].getAttribute('data-opts');
+          if(!olist) continue;
+          var ol = olist.split('|');
+          applyIdx(g2, Math.max(0, Math.min((parseInt(curDefs[g2], 10) || 1) - 1, ol.length - 1)));
+        }
+        Object.keys(union).forEach(function(p){
+          var tr = trows[+p - 1];
+          if(tr) tr.classList.toggle('hide', !showSet[p]);
+        });
+        if(link.show && curDefs[0]){
+          var vis0 = link.show[String(curDefs[0])];
+          if(vis0 !== undefined) setVisible(+vis0);
+        }
+        refresh();
+      };
+    }
+    refresh();
+  });
+})();
+
+/* ---------- 行李清单:勾选状态存 localStorage,计数器与进度条实时更新 ---------- */
+(function(){
+  var KEY = "ck-v1";
+  var saved = {};
+  try{ saved = JSON.parse(localStorage.getItem(KEY) || "{}"); }catch(_){}
+  document.querySelectorAll(".ckgroup").forEach(function(grp, gi){
+    var boxes = Array.from(grp.querySelectorAll("input[type=checkbox]"));
+    var prog = grp.querySelector(".ckprog");
+    var bar = grp.querySelector(".ckbar i");
+    var head = grp.querySelector(".ckhead");
+    var gname = head ? head.textContent.replace(/\d+\/\d+/, "").trim() : ("g" + gi);
+    function update(){
+      var done = boxes.filter(function(b){ return b.checked; }).length;
+      if(prog) prog.textContent = done + "/" + boxes.length;
+      if(bar){
+        var pct = boxes.length ? Math.round(done / boxes.length * 100) : 0;
+        bar.style.width = pct + "%";
+        if(pct === 100) grp.classList.add("ck-done");
+        else grp.classList.remove("ck-done");
+      }
+      // 持久化
+      var st = {};
+      boxes.forEach(function(b, bi){
+        if(b.checked) st[bi] = 1;
+      });
+      saved[gname] = st;
+      try{ localStorage.setItem(KEY, JSON.stringify(saved)); }catch(_){}
+    }
+    boxes.forEach(function(b, bi){
+      var sv = saved[gname];
+      if(sv && sv[bi]) b.checked = true;
+      b.addEventListener("change", update);
+    });
+    update();   // 初始渲染(恢复勾选 + 计数)
+  });
+})();
+
+/* ---------- 交通卡动态时刻:从行程 DOM 同步站牌时间;点击触发行程切班;版本按钮联动 ---------- */
+(function(){
+  // 车辆关键词 → 行程组号 映射(按天)
+  var DAY_GMAP = {
+    "D1": { "快速AIRPORT": 0, "函馆本线": 1 },
+    "D4": { "函馆本线": 0, "快速AIRPORT": 1 }   // D4 分支二=组2,由 show 决定
+  };
+  // 从行程天卡读可见行的时间(按文本匹配车辆名,不依赖组号——跨版本通用)
+  function readItinTimes(dayKw){
+    var day = document.querySelector('.day[data-card="days|' + dayKw + '"]');
+    if(!day) return null;
+    var rows = Array.prototype.filter.call(day.querySelectorAll(".trow"), function(tr){
+      return !tr.classList.contains("hide");
+    });
+    var out = { _rows: [] };
+    rows.forEach(function(tr){
+      var w = tr.querySelector(".twhat");
+      var tm = tr.querySelector(".ttime");
+      if(w && tm){
+        out._rows.push({ name: w.textContent.trim(), time: tm.textContent.trim() });
+      }
+    });
+    return out;
+  }
+  // 同步一个 fexp 内所有站牌时间(文本匹配行程行)
+  function syncFexp(fexp){
+    var dayKw = fexp.getAttribute("data-day");
+    if(!dayKw) return;
+    var itin = readItinTimes(dayKw);
+    if(!itin || !itin._rows) return;
+    var nextDay = false;   // 过了夜宿行(睡觉)之后的行属次日固定时刻(如返程 D5 步行/AIRPORT):不跟本日行程联动,但时长仍按站牌实际时刻重算
+    fexp.querySelectorAll(".trow2").forEach(function(row){
+      var seg = row.closest(".tseg");
+      if(seg && (seg.hidden || seg.getClientRects().length === 0)) return;   // 未渲染的版本段不同步(初始 class 隐藏/切版本属性隐藏)
+      if(row.classList.contains("tnight")) nextDay = true;
+      var skipMatch = nextDay;
+      var name = (row.querySelector(".tname") || {}).textContent || "";
+      var stops = row.querySelectorAll(".tstop i");
+      if(stops.length < 2) return;
+      // 在行程可见行中找包含相同车辆关键词的行
+      var match = null;
+      var kws = ["AIRPORT", "函馆本线", "接驳车", "巴士", "步行"];
+      var rowKw = null;
+      if(!skipMatch){
+        for(var i = 0; i < kws.length; i++){
+          if(name.indexOf(kws[i]) >= 0){ rowKw = kws[i]; break; }
+        }
+      }
+      // 找到行程中包含该关键词的行(取时间);次日固定行(跳过匹配)保持空集
+      var matches = (!skipMatch && rowKw)
+        ? itin._rows.filter(function(r){ return r.name.indexOf(rowKw) >= 0; }) : [];
+      if(matches.length === 0 && rowKw === "接驳车"){
+        matches = itin._rows.filter(function(r){ return r.name.indexOf("Uber") >= 0 || r.name.indexOf("二世谷") >= 0; });
+      }
+      // 兜底:关键词全不中时,按出发站名匹配(版本切换后车型可能变了但站名不变);次日固定行不走兜底
+      if(matches.length === 0 && !skipMatch && stops.length >= 2){
+        var depSt = (row.querySelectorAll(".tstop b")[0] || {}).textContent || "";
+        depSt = depSt.replace(/站$/, "").trim();
+        if(depSt){
+          matches = itin._rows.filter(function(r){
+            return r.name.indexOf(depSt) >= 0 && (r.name.indexOf("→") >= 0 || r.name.indexOf("→") >= 0);
+          });
+        }
+      }
+      // 站名校验:交通行的出发站要与行程行的出发侧(→之前)对得上(区分同车型不同段)
+      var depSt = (row.querySelectorAll(".tstop b")[0] || {}).textContent || "";
+      depSt = depSt.replace(/站$/, "").trim().slice(0, 3);
+      if(matches.length > 1 && depSt){
+        var filtered = matches.filter(function(r){
+          return (r.name.split("→")[0] || r.name).indexOf(depSt) >= 0;
+        });
+        if(filtered.length > 0) matches = filtered;
+      }
+      if(matches.length > 0){
+        match = matches[0];
+        var curDep = stops[0].textContent.trim();
+        var curArr = stops[stops.length - 1].textContent.trim();
+        stops[0].textContent = match.time;
+        // 到达站时间:优先取紧跟的「到达/抵达」行程行
+        var arrSet = false;
+        var idx = itin._rows.indexOf(match);
+        if(idx >= 0 && idx + 1 < itin._rows.length){
+          var next = itin._rows[idx + 1];
+          if(next.name.indexOf("到达") >= 0 || next.name.indexOf("抵达") >= 0){
+            stops[stops.length - 1].textContent = next.time;
+            arrSet = true;
+          }
+        }
+        // 无「到达」行:到达为空→按行内时长(约15分钟/1小时14分/约2.5小时)补;
+        // 旧到达=旧出发+时长(推算值)→跟随新出发重算;其余静态值(表格手工写死)不动
+        if(!arrSet){
+          var nt = (row.querySelector(".tnote-inline") || {}).textContent || "";
+          var hM = /(\d+(?:\.\d+)?)\s*小时/.exec(nt), mM = /(\d+)\s*分/.exec(nt);
+          var add = 0;
+          if(hM) add += Math.round(parseFloat(hM[1]) * 60);
+          if(mM) add += parseInt(mM[1], 10);
+          var pDep = /^(\d{1,2}):(\d{2})$/.exec(String(match.time || "").trim());
+          var pOldD = /^(\d{1,2}):(\d{2})$/.exec(curDep), pOldA = /^(\d{1,2}):(\d{2})$/.exec(curArr);
+          var wasDerived = pOldD && pOldA &&
+            (((((+pOldA[1]) * 60 + (+pOldA[2])) - ((+pOldD[1]) * 60 + (+pOldD[2]))) % 1440) + 1440) % 1440 === add;
+          if(add > 0 && pDep && (!curArr || wasDerived)){
+            var v = (((+pDep[1]) * 60 + (+pDep[2])) + add) % 1440;
+            var hh = Math.floor(v / 60), mm = v % 60;
+            stops[stops.length - 1].textContent =
+              (hh < 10 ? '0' : '') + hh + ':' + (mm < 10 ? '0' : '') + mm;
+          }
+        }
+      }
+      // 行内时长按当前实际时刻重算(首站发车 → 末站到达),切班/换版本后不再是表格静态值
+      var dNote = row.querySelector(".tnote-inline");
+      var dA = /^(\d{1,2}):(\d{2})$/.exec(String(stops[0].textContent || "").trim());
+      var dB = /^(\d{1,2}):(\d{2})$/.exec(String(stops[stops.length - 1].textContent || "").trim());
+      if(dNote && dA && dB){
+        var dv2 = ((((+dB[1]) * 60 + (+dB[2])) - ((+dA[1]) * 60 + (+dA[2]))) % 1440 + 1440) % 1440;
+        var dh = Math.floor(dv2 / 60), dm = dv2 % 60;
+        dNote.textContent = dh > 0 ? (dh + '小时' + (dm ? dm + '分' : '')) : (dm + '分钟');
+      }
+    });
+  }
+  // 同步所有交通 fexp
+  window.__syncTransport = function(){
+    document.querySelectorAll(".fexp[data-day]").forEach(syncFexp);
+  };
+  // 初始同步
+  window.__syncTransport();
+
+  // 点击交通站牌时间 → 触发行程对应组的切换(逐个 tstop i 绑定,不依赖冒泡);
+  // 只有火车类(快速AIRPORT/函馆本线)可点;接驳车/巴士/步行等时刻由行程跟随算出,不可点;
+  // 夜宿(睡觉)行之后的行属次日固定时刻(如返程 D5 步行/AIRPORT),同样不绑定
+  document.querySelectorAll(".fexp[data-day] .tstop i").forEach(function(stop){
+    var fexp0 = stop.closest(".fexp[data-day]");
+    var row0 = stop.closest(".trow2");
+    var arr = fexp0 ? Array.prototype.slice.call(fexp0.querySelectorAll(".trow2")) : [];
+    var afterNight = arr.slice(0, arr.indexOf(row0)).some(function(r){
+      return r.classList.contains("tnight");
+    });
+    if(afterNight) return;
+    var nm0 = (row0.querySelector(".tname") || {}).textContent || "";
+    if(!/(AIRPORT|函馆本线)/.test(nm0)) return;
+    stop.style.cursor = "pointer";
+    stop.addEventListener("click", function(e){
+      e.stopPropagation(); e.preventDefault();
+      var fexp = stop.closest(".fexp[data-day]");
+      if(!fexp) return;
+      var row = stop.closest(".trow2");
+      var name = (row.querySelector(".tname") || {}).textContent || "";
+      var kws = ["AIRPORT", "函馆本线", "接驳车", "巴士", "步行"];
+      var rowKw = null;
+      for(var i = 0; i < kws.length; i++){
+        if(name.indexOf(kws[i]) >= 0){ rowKw = kws[i]; break; }
+      }
+      if(!rowKw) return;
+      var day = document.querySelector('.day[data-card="days|' + (stop.closest(".fexp[data-day]") || {}).getAttribute("data-day") + '"]');
+      if(!day) return;
+      // 找可见的 sw 格,其所在行的 .twhat 包含该车辆关键词
+      var cell = Array.prototype.filter.call(day.querySelectorAll(".ttime.sw"), function(el){
+        if(el.closest(".trow").classList.contains("hide")) return false;
+        var w = el.closest(".trow").querySelector(".twhat");
+        return w && w.textContent.indexOf(rowKw) >= 0;
+      })[0];
+      if(cell){
+        cell.click();
+        setTimeout(window.__syncTransport, 400);
+      }
+    });
+  });
+
+  // 版本按钮:去程卡联动 D1,返程卡联动 D4
+  document.querySelectorAll(".fexp[data-day]").forEach(function(fexp){
+    var dayKw = fexp.getAttribute("data-day");
+    var day = document.querySelector('.day[data-card="days|' + dayKw + '"]');
+    if(!day || !day.__applyVersion) return;
+    var link = null;
+    try{ link = JSON.parse(day.getAttribute("data-link") || "null"); }catch(_){}
+    if(!link || !link.vers) return;
+    var keys = Object.keys(link.vers).sort(function(a, c){ return +a - +c; });
+    if(keys.length < 2) return;
+    var btn = document.createElement("button");
+    btn.className = "dver-btn";
+    btn.type = "button";
+    btn.textContent = "⇄ " + (link.vers[keys[0]].name || "版本1");
+    ["touchstart","touchmove","touchend","mousedown","mouseup","click"].forEach(function(ev){
+      btn.addEventListener(ev, function(e){ e.stopPropagation(); });
+    });
+    btn.addEventListener("click", function(){
+      var cur = parseInt(day.getAttribute("data-vers") || "0", 10) || 0;
+      var next = (cur + 1) % keys.length;
+      day.setAttribute("data-vers", String(next));
+      day.__applyVersion(next);
+      var nm = link.vers[keys[next]].name || ("版本" + (next + 1));
+      btn.textContent = "⇄ " + nm;
+      var dayBtn = day.querySelector(".dver-btn");
+      if(dayBtn) dayBtn.textContent = "⇄ " + nm;
+      // 同步预览条
+      day.querySelectorAll(".dprev[data-vi]").forEach(function(p){
+        var vis = (p.getAttribute("data-vi") || "").split(",");
+        p.classList.toggle("hide", vis.indexOf(String(next)) < 0);
+      });
+      setTimeout(window.__syncTransport, 350);
+    });
+    var head = fexp.querySelector(".fexp-body");
+    if(head) head.insertBefore(btn, head.firstChild);
+  });
+
+  // 拦截行程切班后的刷新,加交通同步
+  var origSync = window.__syncTransport;
+  // 在每次 refresh 后调用(origSync 已在初始调了;版本切换/时间点击通过 setTimeout 已覆盖)
+})();
+
+/* ---------- 行程↔交通版本双向联动:监听 data-vers 变化,同步交通版本段+按钮+时刻 ---------- */
+(function(){
+  function updateTransportForDay(day){
+    var dayKw = (day.getAttribute("data-card") || "").split("|")[1];
+    if(!dayKw) return;
+    var fexp = document.querySelector('.fexp[data-day="' + dayKw + '"]');
+    if(!fexp) return;
+    var link = null;
+    try{ link = JSON.parse(day.getAttribute("data-link") || "null"); }catch(_){}
+    if(!link || !link.vers) return;
+    var vi = parseInt(day.getAttribute("data-vers") || "0", 10) || 0;
+    var vname = link.vers[String(vi)] ? link.vers[String(vi)].name : "";
+    if(!vname) return;
+    // 显示对应版本的交通段
+    fexp.querySelectorAll(".tseg").forEach(function(seg){
+      seg.hidden = seg.getAttribute("data-ver") !== vname;
+    });
+    // 更新交通版本按钮
+    var btn = fexp.querySelector(".dver-btn");
+    if(btn) btn.textContent = "⇄ " + vname;
+    // 同步时刻
+    if(window.__syncTransport) setTimeout(window.__syncTransport, 100);
+  }
+  // 监听每个有版本的日卡
+  document.querySelectorAll(".day[data-link]").forEach(function(day){
+    var link = null;
+    try{ link = JSON.parse(day.getAttribute("data-link") || "null"); }catch(_){}
+    if(!link || !link.vers) return;
+    var obs = new MutationObserver(function(mutations){
+      mutations.forEach(function(m){
+        if(m.attributeName === "data-vers") updateTransportForDay(day);
+      });
+    });
+    obs.observe(day, { attributes: true, attributeFilter: ["data-vers"] });
+  });
+  // 初始同步一次
+  document.querySelectorAll(".day[data-link]").forEach(function(day){
+    var link = null;
+    try{ link = JSON.parse(day.getAttribute("data-link") || "null"); }catch(_){}
+    if(link && link.vers) updateTransportForDay(day);
+  });
+})();
+
+/* ---------- 行程版本循环按钮(标题栏内):点一下 → 下一版;内容+预览条 滑出→切换→滑入;
+   按钮级拦截一切事件冒泡——标题栏自己的 click/touch 监听会先于 document 委托收到冒泡,必须就地拦 ---------- */
+(function(){
+  function switchVer(b){
+    var day = b.closest('.day');
+    if(!day || !day.__applyVersion) return;
+    var link = null;
+    try{ link = JSON.parse(day.getAttribute('data-link') || 'null'); }catch(_){}
+    if(!link || !link.vers) return;
+    var keys = Object.keys(link.vers).sort(function(a, c){ return +a - +c; });
+    if(keys.length < 2) return;
+    var cur = (parseInt(day.getAttribute('data-vers') || '0', 10) || 0);
+    var next = (cur + 1) % keys.length;
+    var targets = [day.querySelector('.d-body')].concat(Array.prototype.slice.call(day.querySelectorAll('.dprev')));
+    targets = targets.filter(Boolean);
+    function showPrev(vi){
+      day.querySelectorAll('.dprev[data-vi]').forEach(function(p){
+        var vis = (p.getAttribute('data-vi') || '').split(',');
+        p.classList.toggle('hide', vis.indexOf(String(vi)) < 0);
+      });
+    }
+    function go(){
+      day.setAttribute('data-vers', String(next));
+      day.__applyVersion(next);
+      showPrev(next);
+      b.textContent = '⇄ ' + (link.vers[keys[next]].name || ('版本' + (next + 1)));
+      targets.forEach(function(el){
+        el.classList.remove('vout');
+        el.classList.add('vin');
+        el.addEventListener('animationend', function ev(){
+          el.classList.remove('vin');
+          el.removeEventListener('animationend', ev);
+        }, { once: true });
+      });
+    }
+    targets.forEach(function(el){
+      el.classList.remove('vin');
+      el.classList.add('vout');
+      el.addEventListener('animationend', function ev(){
+        el.removeEventListener('animationend', ev);
+        if(day.__pendingVer !== false){ go(); day.__pendingVer = false; }
+      }, { once: true });
+    });
+    day.__pendingVer = true;
+    setTimeout(function(){   // 动画事件丢失兜底
+      if(day.__pendingVer){ go(); day.__pendingVer = false; }
+    }, 260);
+  }
+  Array.prototype.forEach.call(document.querySelectorAll('.dver-btn'), function(btn){
+    ['touchstart', 'touchmove', 'touchend', 'mousedown', 'mouseup', 'click'].forEach(function(ev){
+      btn.addEventListener(ev, function(e){ e.stopPropagation(); });   // 不触发标题栏折叠/卡片弹窗
+    });
+    btn.addEventListener('click', function(){ switchVer(btn); });
+  });
+})();
+
 /* ---------- 天气卡实时数据(QWeather 和风天气;仅私有加密版注入 window.__QW_CONF__,其余版本保持表格静态值) ---------- */
 (function(){
   var conf = window.__QW_CONF__;
   if(!conf || !conf.host || !conf.key) return;
   var API = 'https://' + conf.host;
-  var LOC = conf.loc || '115.28,40.96';   // 万龙滑雪场坐标(和风 location=经度,纬度),可在凭证文件里覆盖
+  var LOC = conf.loc || '140.68,42.86';   // 二世谷·比罗夫坐标(和风 location=经度,纬度),可在凭证文件里覆盖
   var numEl = document.querySelector('.wx-card .wx-num'),
       descEl = document.querySelector('.wx-card .wx-desc'),
       icoEl = document.querySelector('.wx-card .wx-ico'),
       timeEl = document.querySelector('.wx-card .wx-time');
   if(!numEl) return;
-  function setItem(label, val){   // 按「风力风量」等标签文字找到对应格子的值行
+  function setItem(labels, val){   // 按标签文字找到对应格子的值行(labels=可接受的标签名数组,兼容改名)
+    if(typeof labels === 'string') labels = [labels];
     var items = document.querySelectorAll('.wx-card .wx-item');
     for(var i = 0; i < items.length; i++){
       var em = items[i].querySelector('em');
-      if(em && em.textContent.replace(/\s/g, '') === label){
+      if(em && labels.indexOf(em.textContent.replace(/\s/g, '')) >= 0){
         var b = items[i].querySelector('b');
         if(b) b.textContent = val;
         return;
@@ -1726,18 +2585,23 @@ if(!location.hash){ try{ window.scrollTo(0, 0); }catch(_){} }
       return r.json();
     });
   }
-  function render(now, daily){
+  function simp(s){   // 接口对日本点位偶发繁体(陣雪/驟雨)→常用字转简体
+    return String(s || '').replace(/陣/g, '阵').replace(/驟/g, '骤')
+                          .replace(/夾/g, '夹').replace(/雲/g, '云');
+  }
+  function render(now, idx){
     if(!now || !now.temp) return;
     numEl.innerHTML = now.temp + '<span>°C</span>';
-    descEl.textContent = [now.text || '', now.feelsLike ? ('体感 ' + now.feelsLike + '°C') : '']
+    descEl.textContent = [simp(now.text), now.feelsLike ? ('体感 ' + now.feelsLike + '°C') : '']
                          .filter(Boolean).join(' · ');
     if(icoEl) icoEl.textContent = condIcon(now.text || '雪');
+    /* 小格子(数据项与万龙站一致):风力风量/紫外线强度/相对湿度/穿衣指数;取不到保持「暂无数据」不造假 */
     if(now.windDir || now.windScale)
-      setItem('风力风量', (now.windDir ? now.windDir + ' ' : '') + (now.windScale || '') + '级');
-    if(now.humidity) setItem('相对湿度', now.humidity + '%');
-    (daily || []).forEach(function(d){
-      if(d.type === '5') setItem('紫外线强度', d.category || '');
-      if(d.type === '3') setItem('穿衣指数', d.category || '');
+      setItem(['风力风量', '风力'], (now.windDir ? now.windDir + ' ' : '') + (now.windScale || '') + '级');
+    if(now.humidity) setItem(['相对湿度', '湿度'], now.humidity + '%');
+    (idx || []).forEach(function(d){
+      if(d.type === '5') setItem(['紫外线强度', '紫外线'], d.category || '');   // 紫外线指数(lang=zh→中文)
+      if(d.type === '3') setItem(['穿衣指数'], d.category || '');               // 穿衣指数(lang=zh→中文)
     });
     var t = fmtObs(now.obsTime);
     if(t && timeEl) timeEl.textContent = t;
@@ -1747,7 +2611,7 @@ if(!location.hash){ try{ window.scrollTo(0, 0); }catch(_){} }
       var ck = cards[ci].querySelector('.k');
       if(!ck || ck.textContent.indexOf('天气') < 0) continue;
       var cv = cards[ci].querySelector('.v'), cs = cards[ci].querySelector('small');
-      if(cv) cv.textContent = now.temp + '°C · ' + (now.text || '');
+      if(cv) cv.textContent = now.temp + '°C · ' + simp(now.text);
       if(cs) cs.textContent = [now.feelsLike ? ('体感 ' + now.feelsLike + '°C') : '',
                                (now.windDir || now.windScale) ? ((now.windDir || '') + (now.windScale || '') + '级') : '']
                               .filter(Boolean).join(' · ');
@@ -1797,21 +2661,22 @@ if(!location.hash){ try{ window.scrollTo(0, 0); }catch(_){} }
     document.getElementById('wxSunMoon').style.left = (pct * 100).toFixed(1) + '%';
   }
   Promise.all([
-    fetchJSON(API + '/v7/weather/now?location=' + LOC + '&key=' + conf.key),
-    fetchJSON(API + '/v7/indices/1d?type=3,5&location=' + LOC + '&key=' + conf.key)
+    fetchJSON(API + '/v7/weather/now?location=' + LOC + '&lang=zh&key=' + conf.key),
+    fetchJSON(API + '/v7/indices/1d?type=3,5&lang=zh&location=' + LOC + '&key=' + conf.key)
       .catch(function(){ return null }),   // 指数失败不拖垮实况
-    fetchJSON(API + '/v7/weather/3d?location=' + LOC + '&key=' + conf.key)
+    fetchJSON(API + '/v7/weather/3d?location=' + LOC + '&lang=zh&key=' + conf.key)
       .catch(function(){ return null })    // 日出日落失败不拖垮实况
   ]).then(function(rs){
     if(rs[0] && rs[0].code === '200')
       render(rs[0].now, (rs[1] && rs[1].code === '200') ? rs[1].daily : null);
     if(rs[2] && rs[2].code === '200' && rs[2].daily && rs[2].daily[0])
       renderSun(rs[2].daily[0], rs[2].daily[1] || null);
-  }).catch(function(){ /* 静默降级:保持表格静态值 */ });
+  }).catch(function(){ /* 静默降级:保持「暂无数据」 */ });
   /* ⟳ 按钮走 __wlReload 整页重建,重建后本段脚本重新执行即自动再拉一次 */
 })();
 
-/* ---------- 天气卡「未来 7 天」:点开复用卡片详情弹窗展示和风7天预报(grid定列对齐;无凭证版本隐藏入口) ---------- */
+/* ---------- 天气卡「未来 30 天」:点开复用卡片详情弹窗展示和风月预报(30d→15d→7d 自动降级;
+   无凭证版本隐藏入口) ---------- */
 (function(){
   var btn = document.getElementById('wxMore');
   if(!btn) return;
@@ -1833,28 +2698,42 @@ if(!location.hash){ try{ window.scrollTo(0, 0); }catch(_){} }
     var d = new Date(s + 'T00:00:00');
     return '周' + WK[d.getDay()] + ' ' + md;
   }
-  var cache = null;   // 本次页面周期内的7天数据(⟳ 重建页面后自然重拉)
+  var cache = null;   // 本次页面周期内的预报数据(⟳ 重建页面后自然重拉)
+  function load(){   // 30d 拉不到(套餐不含)自动退 15d、7d
+    var apis = ['/v7/weather/30d', '/v7/weather/15d', '/v7/weather/7d'], i = 0;
+    function next(){
+      if(i >= apis.length) return Promise.reject(new Error('no api'));
+      return fetch('https://' + conf.host + apis[i++] + '?location='
+                   + (conf.loc || '115.28,40.96') + '&lang=zh&key=' + conf.key)
+        .then(function(r){ if(!r.ok) throw new Error('http ' + r.status); return r.json(); })
+        .then(function(j){
+          if(j.code !== '200' || !j.daily || !j.daily.length) throw new Error('api ' + j.code);
+          return j.daily;
+        })
+        .catch(function(){ return next(); });
+    }
+    return next();
+  }
   btn.addEventListener('click', function(){
     var mask = document.getElementById('popMask'),
         title = document.getElementById('popTitle'),
         body = document.getElementById('popBody');
     if(!mask || !title || !body) return;
-    title.textContent = '未来 7 天 · 崇礼';
     title.classList.add('wx7-title');   // 单行+加粗加大;其他弹窗打开时自行移除
     body.innerHTML = '<div class="wx7-tip">正在获取预报…</div>';
     mask.classList.add('open');
     document.body.style.overflow = 'hidden';
     body.scrollTop = 0;
-    if(cache){ render(body, cache); return; }
+    if(cache){ title.textContent = '未来 ' + cache.length + ' 天 · 二世谷'; render(body, cache); return; }
     btn.classList.add('busy');
-    fetch('https://' + conf.host + '/v7/weather/7d?location=' + (conf.loc || '115.28,40.96') + '&key=' + conf.key)
-      .then(function(r){ if(!r.ok) throw new Error('http ' + r.status); return r.json(); })
-      .then(function(j){
-        if(j.code !== '200' || !j.daily || !j.daily.length) throw new Error('api ' + j.code);
-        cache = j.daily;
-        render(body, j.daily);
+    load().then(function(days){
+        cache = days;
+        btn.textContent = '未来' + days.length + '天';
+        title.textContent = '未来 ' + days.length + ' 天 · 二世谷';
+        render(body, days);
       })
       .catch(function(){
+        title.textContent = '未来天气 · 二世谷';
         body.innerHTML = '<div class="wx7-tip">拉取失败，网络恢复后再点重试</div>';
       })
       .then(function(){ btn.classList.remove('busy'); });
@@ -1940,7 +2819,7 @@ if(!location.hash){ try{ window.scrollTo(0, 0); }catch(_){} }
         var d = '';
         try{ d = localStorage.getItem('bar-dots') || ''; }catch(_){}
         chipbar.classList.toggle('dots-mode', d !== 'full');
-        try{ localStorage.setItem('bar-dir', 'v'); }catch(_){}   // 记住展开方向:竖向
+        try{ localStorage.setItem('bar-dir2', 'v'); }catch(_){}   // 记住展开方向:竖向
       }else{
         // 收起:高度/宽度/圆角动画全保留;空窗用"追逐"解决——栏高过渡期间 scrollTop 上限逐帧放开,
         // 每帧顶在当前上限,当前标签贴着收缩中的窗口滑进圆心,全程可见,不出现空帧
@@ -2006,7 +2885,7 @@ if(!location.hash){ try{ window.scrollTo(0, 0); }catch(_){} }
         var rd = '';
         try{ rd = localStorage.getItem('bar-row-dots') || ''; }catch(_){}
         chipbar.classList.toggle('dots-mode', rd !== 'full');   // 恢复上次的名字/图标子状态;无记录默认图标
-        try{ localStorage.setItem('bar-dir', 'row'); }catch(_){}   // 记住展开方向:横向码头
+        try{ localStorage.setItem('bar-dir2', 'row'); }catch(_){}   // 记住展开方向:横向码头
         requestAnimationFrame(function(){ fitRowW(); recalcChipPos(); });   // 宽度=恰好5个标签,同时按横排重建位置缓存
         setTimeout(fitRowW, 300);                        // 标签宽度过渡结束后校正
         centerRow();
@@ -2018,10 +2897,10 @@ if(!location.hash){ try{ window.scrollTo(0, 0); }catch(_){} }
       dockShift();                                       // 圆窗对准当前标签(布局已切回竖排)
       saveBar();
     };
-    var openLast = function(){   // 按记住的展开方向打开:横向码头为默认,只有明确记过竖向才竖着开
+    var openLast = function(){   // 按记住的展开方向打开:默认竖向向上展开,只有明确记过横向码头才横开
       var d = '';
-      try{ d = localStorage.getItem('bar-dir') || ''; }catch(_){}
-      if(d === 'v'){ openBar(true); } else { openRow(true); }
+      try{ d = localStorage.getItem('bar-dir2') || ''; }catch(_){}
+      if(d === 'row'){ openRow(true); } else { openBar(true); }
     };
     // 标签栏四角停靠:tr右上(默认)/tl左上/bl左下/br右下;nav-right=右侧,nav-top=顶部(顶部=向下展开)
     var applyCorner = function(corner){
@@ -2043,20 +2922,20 @@ if(!location.hash){ try{ window.scrollTo(0, 0); }catch(_){} }
            + (document.body.classList.contains('nav-right') ? 'r' : 'l');
     };
     var savedCorner = '';
-    try{ savedCorner = localStorage.getItem('nav-corner') || ''; }catch(_){}
+    try{ savedCorner = localStorage.getItem('nav-corner2') || ''; }catch(_){}
     if(!savedCorner){   // 旧版只记左右:有旧记录才迁移,没记录走新默认(右上角)
       var side = '';
       try{ side = localStorage.getItem('nav-side') || ''; }catch(_){}
       if(side){ savedCorner = side === 'right' ? 'br' : 'bl'; }
     }
-    if(!/^(tl|tr|bl|br)$/.test(savedCorner)){ savedCorner = 'tr'; }
+    if(!/^(tl|tr|bl|br)$/.test(savedCorner)){ savedCorner = 'br'; }
     applyCorner(savedCorner);
     if(sideSwap){   // 隐藏的换边按钮:点击=在当前高度上左右互换(保留兼容)
       sideSwap.addEventListener('click', function(){
         var c = (document.body.classList.contains('nav-top') ? 't' : 'b')
               + (document.body.classList.contains('nav-right') ? 'l' : 'r');
         applyCorner(c);
-        try{ localStorage.setItem('nav-corner', c); }catch(_){}
+        try{ localStorage.setItem('nav-corner2', c); }catch(_){}
       });
     }
     // 桌面端滚轮:在标签栏上滚动只滚页签列表,不带动整页(列表滚到头也不外溢)
@@ -2077,20 +2956,7 @@ if(!location.hash){ try{ window.scrollTo(0, 0); }catch(_){} }
     var saveRowDots = function(){   // 横向码头的图标/名字子状态单独记忆(与竖向的 bar-dots 互不干扰)
       try{ localStorage.setItem('bar-row-dots', chipbar.classList.contains('dots-mode') ? 'dots' : 'full'); }catch(_){}
     };
-    var savedBar = '';
-    try{ savedBar = localStorage.getItem('bar-state') || ''; }catch(_){}
-    if(savedBar === 'open' || savedBar === 'open-dots'){   // open-dots 为旧版记录,按展开恢复
-      openLast();             // 上次是展开:按记住的方向恢复(竖向/横向码头);收起态/首次访问保持默认圆形
-    }else{
-      // 打开页面2秒后自动展开一次,引导发现标签栏;期间碰过标签栏(已有自己的意图)则不打扰,
-      // 也不写入记忆——下次打开仍默认收起再引导,只有手动展开/收起才改变记忆
-      var hintTimer = setTimeout(function(){
-        hintTimer = 0;
-        if(!chipbar.classList.contains('show')){ openLast(); }   // 引导也沿记住的展开方向
-      }, 2000);
-      chipbar.addEventListener('touchstart', function(){ if(hintTimer){ clearTimeout(hintTimer); hintTimer = 0; } }, {capture: true, passive: true, once: true});
-      chipbar.addEventListener('mousedown', function(){ if(hintTimer){ clearTimeout(hintTimer); hintTimer = 0; } }, {capture: true, once: true});
-    }
+    // 默认收起:不做展开恢复、也不自动引导;点击/手势才展开(方向见 openLast)
     // 标签栏横向滑动:朝标签按钮所在一侧滑=收缩(变圆点),反向=展开
     // 左侧栏:左滑收缩/右滑展开;右侧栏:右滑收缩/左滑展开(滑向按钮=收拢,符合直觉)
     // 手势进行中(touchmove)即触发,不用等抬手;阈值放宽(30px/2倍),展开更容易触发
@@ -2347,7 +3213,7 @@ if(!location.hash){ try{ window.scrollTo(0, 0); }catch(_){} }
         var relQ = quadrantOf(t.clientX, t.clientY);
         if(!pullFired && movedFromStart(t.clientX, t.clientY) > 50 && relQ !== curCorner()){
           applyCorner(relQ);
-          try{ localStorage.setItem('nav-corner', relQ); }catch(_){}   // 记住手动选择的位置,刷新后保持
+          try{ localStorage.setItem('nav-corner2', relQ); }catch(_){}   // 记住手动选择的位置,刷新后保持
           return;
         }
         // 长按进了拖动模式却原地松手(没拖去任何角):按压不白费,按"按得重的点按"落地——
@@ -3404,6 +4270,130 @@ if(!location.hash){ try{ window.scrollTo(0, 0); }catch(_){} }
     entry.appendChild(btn);
     card.appendChild(entry);
   });
+
+  // 备选整卡收集(雪场/雪具):「备选」状态的整卡从版面收起,主卡左下角加入口,点开弹层整卡查看
+  function openBakCards(main, baks){
+    if(window.__avaTipHide){ window.__avaTipHide(); }
+    var title = main.querySelector('h3');
+    mask.querySelector('#cmpTitle').textContent = (title ? title.innerText.trim() : '') + ' · 备选方案';
+    var body = mask.querySelector('#cmpBody');
+    body.innerHTML = '';
+    baks.forEach(function(bc){
+      var row = document.createElement('div');
+      row.className = 'cmp-row';
+      var c = bc.cloneNode(true);
+      c.classList.remove('card-anim', 'in', 'is-clamp', 'is-alt', 'bak-card', 'card-pop');   // 解除入场/折叠/弱化状态
+      row.appendChild(c);
+      body.appendChild(row);
+    });
+    mask.classList.add('open');
+    document.body.style.overflow = 'hidden';
+    mask.scrollTop = 0;
+  }
+  document.querySelectorAll('#resorts .hcard.is-alt, #gear .hcard.is-alt').forEach(function(card){
+    var main = card.parentElement.querySelector('.hcard:not(.is-alt)');
+    if(!main) return;   // 整区都是备选时保持原样
+    card.classList.add('bak-card');
+    (main.__bakCards = main.__bakCards || []).push(card);
+  });
+  document.querySelectorAll('#resorts .hcard:not(.is-alt), #gear .hcard:not(.is-alt)').forEach(function(main){
+    var baks = main.__bakCards;
+    if(!baks || !baks.length) return;
+    var entry = document.createElement('div');
+    entry.className = 'bak-entry';
+    var btn = document.createElement('button');
+    btn.type = 'button';
+    btn.textContent = '备选方案 ×' + baks.length + ' ›';
+    btn.addEventListener('click', function(e){ e.stopPropagation(); openBakCards(main, baks); });
+    entry.appendChild(btn);
+    main.appendChild(entry);
+  });
+})();
+
+/* ---------- 购物:日元↔人民币 汇率显示 + 双向试算;生成时内置一次汇率,在线时尝试刷新实时值 ---------- */
+(function(){
+  var card = document.getElementById('fxCard');
+  if(!card) return;
+  var rate = parseFloat(card.getAttribute('data-rate')) || 0.048;
+  var rateEl = document.getElementById('fxRate');
+  var metaEl = document.getElementById('fxMeta');
+  var jEl = document.getElementById('fxJpy');
+  var cEl = document.getElementById('fxCny');
+  var tEl = document.getElementById('fxTax');
+  function fmt(n){
+    var r = Math.round(n * 100) / 100;
+    return r.toLocaleString('zh-CN', { maximumFractionDigits: 2 });
+  }
+  function paint(){
+    rateEl.textContent = '1 人民币 = ' + (1 / rate).toFixed(2) + ' 日元';
+    // 行程总览的「汇率换算」小卡同步显示最新比率
+    var ovs = document.querySelectorAll('#overview .ov-card');
+    for(var oi = 0; oi < ovs.length; oi++){
+      var k = ovs[oi].querySelector('.k');
+      if(k && k.textContent.indexOf('汇率') >= 0){
+        var v = ovs[oi].querySelector('.v');
+        if(v) v.textContent = '1 人民币 ≈ ' + (1 / rate).toFixed(1) + ' 日元';
+        break;
+      }
+    }
+  }
+  function eff(){   // 退税后实际支付系数:税率 0~100,默认5%;日元价×(1-税率)=退税后实付
+    var t = parseFloat(String(tEl.value).replace(/,/g, ''));
+    if(isNaN(t) || t < 0) t = 0;
+    if(t > 100) t = 100;
+    return 1 - t / 100;
+  }
+  function calcJ(){
+    var v = parseFloat(String(jEl.value).replace(/,/g, ''));
+    cEl.value = isNaN(v) ? '' : fmt(v * rate * eff());
+  }
+  function calcC(){
+    var v = parseFloat(String(cEl.value).replace(/,/g, ''));
+    jEl.value = isNaN(v) ? '' : fmt(v / (rate * eff()));
+  }
+  jEl.addEventListener('input', calcJ);
+  cEl.addEventListener('input', calcC);
+  tEl.addEventListener('input', function(){   // 税率变了:按当前有值的方向重算
+    if(jEl.value) calcJ(); else if(cEl.value) calcC();
+  });
+  // 点击/聚焦输入框时全选已有内容,直接输入即整体替换
+  [jEl, cEl, tEl].forEach(function(el){
+    el.addEventListener('focus', function(){ el.select(); });
+    el.addEventListener('click', function(){ el.select(); });
+  });
+  document.getElementById('fxQuick').addEventListener('click', function(e){
+    var b = e.target.closest('button');
+    if(!b) return;
+    jEl.value = b.textContent.replace(/,/g, '');
+    calcJ();
+  });
+  paint();
+  metaEl.textContent = (card.getAttribute('data-src') === '实时' ? '生成时参考' : '内置参考');
+  // 在线时依次尝试公开汇率接口,任一成功即刷新;全部失败保持生成时值(离线可用)
+  var apis = [
+    ['https://open.er-api.com/v6/latest/JPY', function(j){ return j && j.rates && j.rates.CNY; }],
+    ['https://cdn.jsdelivr.net/npm/@fawazahmed0/currency-api@latest/v1/currencies/jpy.json',
+     function(j){ return j && j.jpy && j.jpy.cny; }],
+    ['https://api.frankfurter.app/latest?from=JPY&to=CNY', function(j){ return j && j.rates && j.rates.CNY; }]
+  ];
+  function tryApi(i){
+    if(i >= apis.length) return;
+    var ctl = ('AbortController' in window) ? new AbortController() : null;
+    var timer = ctl ? setTimeout(function(){ ctl.abort(); }, 5000) : null;
+    fetch(apis[i][0], ctl ? { signal: ctl.signal } : {})
+      .then(function(r){ return r.json(); })
+      .then(function(j){
+        var v = parseFloat(apis[i][1](j));
+        if(v > 0.005 && v < 0.2){
+          rate = v; paint();
+          card.classList.add('fx-live');
+          metaEl.textContent = '今日汇率';   // 数据源每日更新一次,如实标注,不写"实时"
+          if(jEl.value) calcJ(); else if(cEl.value) calcC();
+        } else tryApi(i + 1);
+      })
+      .catch(function(){ tryApi(i + 1); });
+  }
+  tryApi(0);
 })();
 
 /* ---------- 头像悬浮气泡:桌面悬停显示昵称;手机长按约半秒显示,松手后收起 ---------- */
@@ -3469,15 +4459,17 @@ if(!location.hash){ try{ window.scrollTo(0, 0); }catch(_){} }
 /* ---------- 默认收起的卡片:两行 + 渐变 + 箭头展开/收起 ---------- */
 (function(){
   function measure(){
-  // 收起高度 = 前两行实际高度之和(字段行带说明小字时行高更高,保证两行完整可见)
+  // 收起高度 = 前N行实际高度之和(字段行带说明小字时行高更高,保证行完整可见);
+  // 备选卡(is-alt)只露第一行(标题+车程),其余靠箭头展开
   document.querySelectorAll('.hcard.is-clamp').forEach(function(card){
     var ul = card.querySelector('.dots');
     var lis = ul ? ul.querySelectorAll('li') : [];
     if(!ul || !lis.length) return;
+    var rows = card.classList.contains('is-alt') ? 1 : 2;
     var h = 0;
-    for(var i = 0; i < Math.min(2, lis.length); i++) h += lis[i].getBoundingClientRect().height;
+    for(var i = 0; i < Math.min(rows, lis.length); i++) h += lis[i].getBoundingClientRect().height;
     if(h < 20) return;
-    if(lis.length <= 2 || ul.scrollHeight <= h + 2){
+    if(lis.length <= rows || ul.scrollHeight <= h + 2){
       // 内容本来就装得下(两行以内):不收起,箭头隐藏
       card.classList.remove('is-clamp');
       var mb = card.querySelector('.clamp-more');
@@ -3512,7 +4504,8 @@ if(!location.hash){ try{ window.scrollTo(0, 0); }catch(_){} }
   });
 })();
 
-/* ---------- 桌面端双列瀑布流(≥920px):板块整块参与,优先左右交替流入较矮列 ---------- */
+/* ---------- 桌面端双列瀑布流(≥920px):左右交替分列(1,3,5…左;2,4,6…右),
+   两列并行推进,阅读顺序与板块表严格一致 ---------- */
 (function(){
   var wrap = document.querySelector('body > .wrap') || (document.getElementById('overview') || {}).parentNode;
   if(!wrap) return;
@@ -3525,9 +4518,8 @@ if(!location.hash){ try{ window.scrollTo(0, 0); }catch(_){} }
       wrap.classList.add('masonry');
       cols = [document.createElement('div'), document.createElement('div')];
       cols.forEach(function(c){ c.className = 'mcol'; wrap.appendChild(c); });
-      secs.forEach(function(sec){
-        var t = cols[0].getBoundingClientRect().height <= cols[1].getBoundingClientRect().height ? cols[0] : cols[1];
-        t.appendChild(sec);
+      secs.forEach(function(sec, i){
+        cols[i % 2].appendChild(sec);   // 1,3,5…左列;2,4,6…右列:两列并行推进,阅读顺序与板块表一致
       });
     }else if(wrap.classList.contains('masonry')){
       wrap.classList.remove('masonry');
@@ -3542,6 +4534,40 @@ if(!location.hash){ try{ window.scrollTo(0, 0); }catch(_){} }
   window.addEventListener('resize', function(){
     clearTimeout(timer);
     timer = setTimeout(masonry, 200);
+  });
+})();
+
+/* ---------- 购物路线图分支:JS 画一条整 SVG 虚线路径(竖下→圆角→横穿→圆角→竖上),
+   虚线相位全程连续,拐弯圆滑无拼接缺口;竖线x取隐藏占位中心=主线原节点中心 ---------- */
+(function(){
+  function draw(){
+    var br = document.querySelector('#shopping .sp-branch');
+    if(!br) return;
+    var pads = br.querySelectorAll('.sp-bpad');
+    if(pads.length < 2 || !pads[0].offsetWidth) return;
+    var x1 = pads[0].offsetLeft + pads[0].offsetWidth / 2;
+    var x2 = pads[1].offsetLeft + pads[1].offsetWidth / 2;
+    var y = 24, r = 10;   // 横线高度 / 拐弯圆角半径
+    var d = 'M' + x1 + ' 0 V' + (y - r) + ' Q' + x1 + ' ' + y + ' ' + (x1 + r) + ' ' + y
+          + ' H' + (x2 - r) + ' Q' + x2 + ' ' + y + ' ' + x2 + ' ' + (y - r) + ' V0';
+    var svg = br.querySelector('svg.sp-lines');
+    if(!svg){
+      var NS = 'http://www.w3.org/2000/svg';
+      svg = document.createElementNS(NS, 'svg');
+      svg.setAttribute('class', 'sp-lines');
+      svg.appendChild(document.createElementNS(NS, 'path'));
+      br.appendChild(svg);
+    }
+    svg.setAttribute('viewBox', '0 0 ' + br.clientWidth + ' ' + br.clientHeight);
+    svg.setAttribute('width', br.clientWidth);
+    svg.setAttribute('height', br.clientHeight);
+    svg.firstChild.setAttribute('d', d);
+  }
+  draw();
+  var tm = null;
+  window.addEventListener('resize', function(){
+    clearTimeout(tm);
+    tm = setTimeout(draw, 150);
   });
 })();
 (function(){
@@ -3647,7 +4673,7 @@ if(!location.hash){ try{ window.scrollTo(0, 0); }catch(_){} }
   var origBtn = document.getElementById('imgViewOrig');
   var origBlob = {}, curPsrc = null;
   function updOrigBtn(){
-    origBtn.hidden = !(curPsrc && window.__PK);   // 分享版/离线版(无 __PK)或非懒加载图不显示
+    origBtn.hidden = !curPsrc;   // 有原图来源即显示:私有版=加密懒加载图;公开版=images/a/ 普通图(o/ 有同名原图)
     origBtn.classList.remove('busy');
     origBtn.classList.toggle('on', !!origBlob[curPsrc]);
   }
@@ -3663,7 +4689,7 @@ if(!location.hash){ try{ window.scrollTo(0, 0); }catch(_){} }
     if(origBlob[curPsrc]){ showOrig(origBlob[curPsrc]); return; }
     origBtn.classList.add('busy');
     origBtn.textContent = '0%';
-    fetch(curPsrc.replace('images/a/', 'images/o/') + '.b')
+    fetch(curPsrc.replace('images/a/', 'images/o/') + (window.__PK ? '.b' : ''))
       .then(function(r){
         if(!r.ok) throw 0;
         var total = +(r.headers.get('content-length') || 0);
@@ -3683,7 +4709,7 @@ if(!location.hash){ try{ window.scrollTo(0, 0); }catch(_){} }
         }
         return pump();
       })
-      .then(decWl2)
+      .then(window.__PK ? decWl2 : function(b){ return b; })   // 私有版解密;公开版 o/ 为明文原图
       .then(function(pt){
         origBlob[curPsrc] = URL.createObjectURL(new Blob([pt]));
         showOrig(origBlob[curPsrc]);
@@ -3719,6 +4745,10 @@ if(!location.hash){ try{ window.scrollTo(0, 0); }catch(_){} }
     if(pvB) pvB.style.display = grp.length > 1 ? '' : 'none';   /* 单图:两侧切换钮隐藏 */
     if(nxB) nxB.style.display = grp.length > 1 ? '' : 'none';
     curPsrc = psrcOf[gi] || null;   // 翻页后同步原图按钮指向
+    if(!curPsrc){   // 公开版普通图:src 为 images/a/x.jpg → 原图按 o/ 同名推导;离线版(data:/base64)不匹配
+      var mm = /images\/a\/[^\/?#]+/.exec(grp[gi] || '');
+      if(mm) curPsrc = mm[0];
+    }
     updOrigBtn();
     if(window.__syncSlider) window.__syncSlider();
   }
@@ -3769,7 +4799,7 @@ if(!location.hash){ try{ window.scrollTo(0, 0); }catch(_){} }
       var pad2 = function(n){ return n < 10 ? '0' + n : '' + n; };
       var a = document.createElement('a');
       a.href = img.src;
-      a.download = '万龙行程图_' + ts.getFullYear() + pad2(ts.getMonth() + 1) + pad2(ts.getDate())
+      a.download = '北海道行程图_' + ts.getFullYear() + pad2(ts.getMonth() + 1) + pad2(ts.getDate())
                  + '_' + pad2(ts.getHours()) + pad2(ts.getMinutes()) + pad2(ts.getSeconds()) + '.' + ext;
       document.body.appendChild(a);
       a.click();
@@ -4271,7 +5301,13 @@ if(!location.hash){ try{ window.scrollTo(0, 0); }catch(_){} }
     var btn = document.createElement('button'); btn.className = 'zoom-btn'; btn.type = 'button';
     btn.setAttribute('aria-label', '放大查看');
     btn.innerHTML = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9V5a1 1 0 0 1 1-1h4M15 4h4a1 1 0 0 1 1 1v4M20 15v4a1 1 0 0 1-1 1h-4M9 20H5a1 1 0 0 1-1-1v-4"/></svg>';
-    card.appendChild(btn);
+    var h3 = card.querySelector('h3');
+    if(card.closest('#stay') && h3){   // 酒店卡:详情按钮行内跟在酒店名之后,不再浮在卡片角上
+      btn.classList.add('zoom-inline');
+      h3.insertBefore(btn, h3.querySelector('.h-avas') || null);
+    } else {
+      card.appendChild(btn);
+    }
     btn.addEventListener('click', function(e){ e.stopPropagation(); open(card); });
     card.addEventListener('click', function(e){
       if(e.target.closest('a,button,input,label,summary')) return;
